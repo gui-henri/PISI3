@@ -2,6 +2,14 @@ import streamlit as st
 import pandas as pd
 import ast
 
+# crescimento do lucro dos filmes no tempo
+# analisar os outliners
+# corrigir pela inflação
+# correlação entre faturamento e orçamento e tentar achar um valor ótimo/ mais eficiente
+# tentar prever o crescimento da industria
+# crescimento do orçamento no tempo
+# crescimento do faturamento no tempo
+
 st.title("TMDB Dataset")
 st.write("A tabela a seguir é uma pequena visualização, mostrando o formato dos dados extraidos.")
 
@@ -21,7 +29,6 @@ if filme:
     st.header(filme_info['title'])
     st.subheader(filme_info['tagline'])
     st.write(filme_info['overview'])
-
     generos_list = [x["name"] for x in ast.literal_eval(filme_info["genres"])]
     generos_formated_to_print = [f"{x}, " for x in generos_list]
     generos_formated_to_print[-1] = generos_formated_to_print[-1].replace(", ", "")
