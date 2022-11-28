@@ -63,34 +63,46 @@ else:
 
 # Orçamento, Faturamento, Popularidade, Tempo de duração, Número de votos, Nota
 #df.set_index('original_title', inplace=True)
-filme_info = df.loc[filme]
-
-g1, g2, g3, g4, g5 = st.columns(5)
-with g1:
-    data_bu_rev = filme_info[["budget", "revenue"]]
-    st.bar_chart(data_bu_rev)
-
-with g2:
-    data_pop = filme_info["popularity"]
-    data_pop_df = pd.DataFrame([data_pop], columns=["Popularidade"])
-    st.bar_chart(data_pop_df)
-    
-with g3:
-    data_tempo = filme_info["runtime"]
-    data_tempo_df = pd.DataFrame([data_tempo], columns=["Tempo de duração"])
-    st.bar_chart(data_tempo_df)
-
-with g4:
-    data_num_votes = filme_info["vote_count"]
-    data_num_votes_df = pd.DataFrame([data_num_votes], columns=["Quantidade de votos"])
-    st.bar_chart(data_num_votes_df)
-    
-with g5:
-    data_nota = filme_info["vote_average"]
-    data_nota_df = pd.DataFrame([data_nota], columns=["Nota IMDB"])
-    st.bar_chart(data_nota_df)
 
 st.title("Comparar filmes")
 
-selected_movies = st.multiselect("Selecione filmes para comparar: ", df['original_title'])
+def orc_x_fat(films):
+    partial_data = [df.loc[film] for film in films]
+    data_films = [x[["budget", "revenue"]] for x in partial_data]
+    st.bar_chart(data_films)
 
+def popularity(films):
+    partial_data = [df.loc[film] for film in films]
+    data_films = [x[["popularity"]] for x in partial_data]
+    st.bar_chart(data_films)
+
+def duration(films):
+    partial_data = [df.loc[film] for film in films]
+    data_films = [x[["runtime"]] for x in partial_data]
+    st.bar_chart(data_films)
+
+def votes(films):
+    partial_data = [df.loc[film] for film in films]
+    data_films = [x[["vote_count"]] for x in partial_data]
+    st.bar_chart(data_films)
+
+def note(films):
+    partial_data = [df.loc[film] for film in films]
+    data_films = [x[["vote_average"]] for x in partial_data]
+    st.bar_chart(data_films)
+
+def execute_comparason(comparason):
+    comparason(selected_movies)
+
+lista = {
+    "Orçamento x Faturamento": orc_x_fat,
+    "Popularidade": popularity,
+    "Tempo de duração": duration,
+    "Quantidade de votos": votes,
+    "Nota IMDB": note
+}
+
+selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
+chosen_comparason = st.selectbox("Selecione o parâmetro", ["Orçamento x Faturamento", "Popularidade", "Tempo de duração", "Quantidade de votos", "Nota IMDB"])
+
+execute_comparason(lista[chosen_comparason])
