@@ -58,3 +58,39 @@ if filme:
         st.write(f"Número de votos: {filme_info['vote_count']}")
 else:
     st.write("Por favor, selecione um filme")
+
+# Avatar, Indiana Jones
+
+# Orçamento, Faturamento, Popularidade, Tempo de duração, Número de votos, Nota
+#df.set_index('original_title', inplace=True)
+filme_info = df.loc[filme]
+
+g1, g2, g3, g4, g5 = st.columns(5)
+with g1:
+    data_bu_rev = filme_info[["budget", "revenue"]]
+    st.bar_chart(data_bu_rev)
+
+with g2:
+    data_pop = filme_info["popularity"]
+    data_pop_df = pd.DataFrame([data_pop], columns=["Popularidade"])
+    st.bar_chart(data_pop_df)
+    
+with g3:
+    data_tempo = filme_info["runtime"]
+    data_tempo_df = pd.DataFrame([data_tempo], columns=["Tempo de duração"])
+    st.bar_chart(data_tempo_df)
+
+with g4:
+    data_num_votes = filme_info["vote_count"]
+    data_num_votes_df = pd.DataFrame([data_num_votes], columns=["Quantidade de votos"])
+    st.bar_chart(data_num_votes_df)
+    
+with g5:
+    data_nota = filme_info["vote_average"]
+    data_nota_df = pd.DataFrame([data_nota], columns=["Nota IMDB"])
+    st.bar_chart(data_nota_df)
+
+st.title("Comparar filmes")
+
+selected_movies = st.multiselect("Selecione filmes para comparar: ", df['original_title'])
+
