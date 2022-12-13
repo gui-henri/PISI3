@@ -99,14 +99,17 @@ def note(films):
     
 def orc_x_fat(films):
 
+    if len(films) == 0:
+        return "Nada para ver aqui"
+
     partial_data = [df.loc[film] for film in films]
     lista = [[f["title"], f["budget"], f["revenue"]] for f in partial_data]
-    to_stream = pd.DataFrame(lista, columns=("title", "budget", "revenue"))    
+    to_stream = pd.DataFrame(lista, columns=("Títulos", "Orçamento", "Faturamento"))    
     
     plt.rcParams.update({"font.size": 14, "font.weight": "bold"})
     fig, ax = plt.subplots(figsize=(12, 8),)
     sns.set_style("whitegrid")
-    to_stream.plot.barh(x="title", figsize=(12, 8), width=0.9, ax=ax)
+    to_stream.plot.barh(x="Títulos", figsize=(12, 8), width=0.9, ax=ax)
     plt.title("Orçamento x Faturamento", fontsize=24, fontweight="bold")
     plt.legend(loc="lower right")
     for patch in ax.patches:
