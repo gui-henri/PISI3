@@ -2,10 +2,16 @@ import streamlit as st
 import pandas as pd
 import ast
 
+import streamlit as st
+import pandas as pd
+import matplotlib.pylab as plt
+import seaborn as sns
+
 # crescimento do lucro dos filmes no tempo
 # analisar os outliners
 # corrigir pela inflação
-# correlação entre faturamento e orçamento e tentar achar um valor ótimo/ mais eficiente
+# correlação entre faturam
+# ento e orçamento e tentar achar um valor ótimo/ mais eficiente
 # tentar prever o crescimento da industria
 # crescimento do orçamento no tempo
 # crescimento do faturamento no tempo
@@ -90,6 +96,26 @@ def note(films):
     partial_data = [df.loc[film] for film in films]
     data_films = [x[["vote_average"]] for x in partial_data]
     st.bar_chart(data_films)
+    
+def orc_x_fat(films):
+
+    partial_data = [df.loc[film] for film in films]
+    lista = [[f["title"], f["budget"], f["revenue"]] for f in partial_data]
+    to_stream = pd.DataFrame(lista, columns=("title", "budget", "revenue"))    
+    
+    plt.rcParams.update({"font.size": 14, "font.weight": "bold"})
+    fig, ax = plt.subplots(figsize=(12, 8),)
+    sns.set_style("whitegrid")
+    to_stream.plot.barh(x="title", figsize=(12, 8), width=0.9, ax=ax)
+    plt.title("Orçamento x Faturamento", fontsize=24, fontweight="bold")
+    plt.legend(loc="lower right")
+    for patch in ax.patches:
+        w, h = patch.get_width(), patch.get_height()
+        y = patch.get_y()
+        ax.text(w + -0.1, h / 2 + y, f"{w:.3f}", va="center")
+
+    st.pyplot(fig)
+
 
 def execute_comparason(comparason):
     comparason(selected_movies)
