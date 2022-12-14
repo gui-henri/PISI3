@@ -48,6 +48,7 @@ with st.expander("Descrição das colunas"):
 
 with st.expander("Visualizar cabeçalho dos dados"):
     st.write(df.head())
+    st.write("É importante ressaltar que esse cabeçalho foi feito utilizando uma versão do dataset antes de ser pré-processado.")
 
 with st.expander("Análise inicial do Dataset"):
 
@@ -69,3 +70,8 @@ with st.expander("Análise inicial do Dataset"):
 
     st.write("Abaixo segue o resultado da função `describe()` do dataframe.")
     st.write(df.describe())
+
+    st.markdown("#### Correlação entre as colunas")
+    st.write("Abaixo, segue uma matriz que mostra a correlação de pearson entre várias das colunas do dataset.")
+    st.write(df.corr())
+    st.write("Os principais destaques vão para as colunas com correlação positiva mais altas. Dentre estas, o faturamento tem grande destaque, pois tem uma alta correlação com o orçamento e com a quantidade de votos, além de uma moderada correlação com a popularidade. Vemos também que a correlação da média dos votos com as demais colunas não passa de moderada, o que reforça a ideia de que um filme não precisa ser um sucesso de crítica para ser um sucesso comercial, e mesmo que seja um sucesso de crítica, ainda pode fracassar comercialmente.")
