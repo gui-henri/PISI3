@@ -20,7 +20,7 @@ st.markdown(
     - Dataset: Descrição detalhada das mais diversas informações a respeito do dataset e suas variáveis.
     - Visualizar filme: Busque as principais informações a respeito de um filme.
     - Comparador de filmes: Compare diretamente as principais métricas de vários filmes.
-    - Margem de lucro: Observe a margem de lucro de um filme. Também contém diferentes modelos
+    - Visão global: Observe a relaçao de lucro e investimento de todos os filmes.
     - Mais em breve :D
 
     #### Mais informações?
