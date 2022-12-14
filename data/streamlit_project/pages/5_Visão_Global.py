@@ -11,7 +11,7 @@ sns.set_theme(style="whitegrid")
 cmap = sns.cubehelix_palette(rot=-.2, as_cmap=True)
 g = sns.relplot(
     data=df,
-    x="budget", y="revenue", color="blue", legend="auto", 
+    x="budget", y="revenue", hue= "revenue"-"budget", legend="auto", 
     palette=cmap,
 )
 
