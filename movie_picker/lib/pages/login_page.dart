@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../styles/default_background_decoration.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -11,16 +12,7 @@ class LoginPage extends StatelessWidget {
     }
     
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 20, 42, 99), 
-            Color.fromARGB(255, 38, 17, 35)
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter
-        )
-      ),
+      decoration: mpDefaultBackgroundDecoration(),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
