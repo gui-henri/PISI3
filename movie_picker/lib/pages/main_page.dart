@@ -35,6 +35,19 @@ class _MainPageState extends State<MainPage> {
             children: [
               AppBar(
                 title: const Text("MoviePicker"),
+                leading: const Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                  child: Icon(Icons.movie, size: 40),
+                ),
+                leadingWidth: 52,
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                actions: const [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
+                    child: Icon(Icons.search, size: 40),
+                  ),
+                ],
               ),
               IndexedStack(
                 index: _selectedIndex,
