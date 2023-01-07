@@ -16,7 +16,7 @@ class StartPage extends StatelessWidget {
             const Icon(Icons.movie_creation, color: Colors.white, size: 64),
             AnimatedTextKit(
               totalRepeatCount: 1,
-              onFinished: () => Navigator.popAndPushNamed(context, '/login'),
+              onFinished: () => Navigator.popAndPushNamed(context, '/main'),
               animatedTexts: [
                 TyperAnimatedText(
                   speed: const Duration(milliseconds: 115),
