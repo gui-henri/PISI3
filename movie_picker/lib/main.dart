@@ -22,7 +22,7 @@ class MoviePicker extends StatelessWidget {
       routes: {
         '/': (context) => const StartPage(),
         '/login': (context) => const LoginPage(),
-        '/main': (context) => const MainPage()
+        '/main': (context) => const MainPage(),
       },
     );
   }

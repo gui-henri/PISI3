@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_picker/components/movie_search.dart';
 import 'package:movie_picker/pages/main_page/explore_tab.dart';
 import 'package:movie_picker/pages/main_page/favorites_tab.dart';
 import 'package:movie_picker/pages/main_page/settings_tab.dart';
@@ -37,15 +38,23 @@ class _MainPageState extends State<MainPage> {
                 title: const Text("MoviePicker"),
                 leading: const Padding(
                   padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                  child: Icon(Icons.movie, size: 40),
-                ),
+                   child: Icon(Icons.movie, size: 40),
+                  ),
                 leadingWidth: 52,
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
-                actions: const [
+                actions: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
-                    child: Icon(Icons.search, size: 40),
+                    padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                    child: IconButton(
+                      icon: const Icon(Icons.search, size: 40),
+                      onPressed: () {
+                        showSearch(
+                          context: context, 
+                          delegate: MovieSearch()
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
