@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movie_picker/pages/explore_page.dart';
-import 'package:movie_picker/pages/favorites_page.dart';
-import 'package:movie_picker/pages/settings_page.dart';
+import 'package:movie_picker/pages/main_page/explore_tab.dart';
+import 'package:movie_picker/pages/main_page/favorites_tab.dart';
+import 'package:movie_picker/pages/main_page/settings_tab.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
-import 'home_page.dart';
+import 'home_tab.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -17,10 +17,10 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final _pages = const <Widget>[
-    HomePage(),
-    ExplorePage(),
-    FavoritesPage(),
-    SettingsPage()
+    HomeTab(),
+    ExploreTab(),
+    FavoritesTab(),
+    SettingsTab()
   ];
 
   @override
