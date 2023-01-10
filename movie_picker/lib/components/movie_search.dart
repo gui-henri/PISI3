@@ -68,6 +68,11 @@ class MovieSearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    if (query.isEmpty) {
+      return Container(
+        decoration: mpDefaultBackgroundDecoration(),
+      );
+    }
     return FutureBuilder(
       future: fetchMovies(query),
       builder: ((context, snapshot) {
@@ -75,9 +80,7 @@ class MovieSearch extends SearchDelegate {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(snapshot.data![index].title),
-              );
+              return _filmResult(snapshot.data![index]);
             },
           );
         } else {
@@ -91,6 +94,12 @@ class MovieSearch extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     return Container(
       decoration: mpDefaultBackgroundDecoration(),
+    );
+  }
+
+  ListTile _filmResult(Movie movie) {
+    return ListTile(
+      title: Text(movie.title),
     );
   }
 
