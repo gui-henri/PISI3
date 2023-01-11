@@ -30,7 +30,7 @@ class MovieSearchResults extends StatelessWidget {
           if (posterPath != null) {
             return GestureDetector(
               onTap: () {
-                onSelectMovie(movies[treatedIndex]);
+                onSelectMovie(movies[treatedIndex]); // a implementação dessa função receberá o filme através do parâmetro
               },
               child: Row(
                 children: [

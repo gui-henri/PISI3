@@ -101,7 +101,7 @@ class MovieSearch extends SearchDelegate {
             itemCount: snapshot.data!.length,
             movies: snapshot.data!,
             onSelectMovie: (movie) {
-              close(context, movie);
+              close(context, movie);  // Retornando o filme selecionado para a página principal.
             },
           );
         } else {

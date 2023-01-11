@@ -49,11 +49,17 @@ class _MainPageState extends State<MainPage> {
                     child: IconButton(
                       icon: const Icon(Icons.search, size: 40),
                       onPressed: () {
-                         final movieToShow = showSearch(
+                        // showSearch() retorna um Future<dynamic>, sendo assim, não podemos ter 
+                        // certeza do tipo, mas ele deve retornar ou um Movie ou null. 
+                        final movieToShow = showSearch(
                           context: context, 
                           delegate: MovieSearch()
                         );
-                        movieToShow.then((movie) => debugPrint(movie.title));
+                        movieToShow.then(
+                          (movie) {
+                            if (movie != null) debugPrint(movie.title);
+                          }
+                        );
                       },
                     ),
                   ),
