@@ -49,10 +49,11 @@ class _MainPageState extends State<MainPage> {
                     child: IconButton(
                       icon: const Icon(Icons.search, size: 40),
                       onPressed: () {
-                        showSearch(
+                         final movieToShow = showSearch(
                           context: context, 
                           delegate: MovieSearch()
                         );
+                        movieToShow.then((movie) => debugPrint(movie.title));
                       },
                     ),
                   ),
