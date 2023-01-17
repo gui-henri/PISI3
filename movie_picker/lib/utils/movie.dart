@@ -1,52 +1,91 @@
 
 class Movie {
-  final String? posterPath;
-  final bool? adult;
-  final String? overview;
-  final String? releaseDate;
-  final List<dynamic> genreIds;
-  final int? id;
-  final String? originalTitle;
-  final String? originalLanguage;
-  final String title;
-  final String? backdropPath;
-  final dynamic popularity;
-  final int? voteCount;
-  final dynamic voteAverage;
+  String posterPath;
+  bool adult;
+  String overview;
+  String releaseDate;
+  List<int> genreIds;
+  int id;
+  String originalTitle;
+  String originalLanguage;
+  String title;
+  String backdropPath;
+  double popularity;
+  int voteCount;
+  double voteAverage;
 
-  const Movie({
+
+  /*  
+      Caso os dados estejam vindo de uma API, não é recomendado instanciar a classe diretamente,
+      pois os valores da API podem ser null e causarem erros na instanciação. Para garantir o funcionamento
+      nesses casos, utilize o método estático Movie.create(), que vai realizar as devidas checagens e evitar erros
+      de tipagem e null-safety.
+  */ 
+  Movie({
     required this.id,
-    required this.posterPath,
-    required this.adult,
-    required this.overview,
-    required this.releaseDate,
-    required this.genreIds,
-    required this.originalTitle,
-    required this.originalLanguage,
+    this.posterPath = "",
+    this.adult = false,
+    this.overview = "Unavailable overview",
+    this.releaseDate = "Unavailable release date",
+    this.genreIds = const <int>[],
+    this.originalTitle = "Original title not available",
+    this.originalLanguage = "Original language not available",
     required this.title,
-    required this.backdropPath,
-    required this.popularity,
-    required this.voteAverage,
-    required this.voteCount
+    this.backdropPath = "",
+    this.popularity = 0.0,
+    this.voteAverage = 0.0,
+    this.voteCount = 0
   });
 
-  factory Movie.fromJson(Map<String, dynamic> json){
+  factory Movie.create(
+    int id,
+    String title,
+    {
+      String? posterPath,
+      bool? adult,
+      String? overview,
+      String? releaseDate,
+      List<int>? genreIds,
+      String? originalTitle,
+      String? originalLanguage,
+      String? backdropPath,
+      dynamic popularity,
+      dynamic voteAverage,
+      int? voteCount
+    }
+  ) {
     return Movie(
-      id: json['id'], 
+      id: id, 
+      title: title,
+      posterPath: (posterPath != null) ? posterPath : "",
+      adult: (adult != null) ? adult : false,
+      overview: (overview != null) ? overview : "Unavailable overview",
+      releaseDate: (releaseDate != null) ? releaseDate : "Unavailable release date",
+      genreIds: (genreIds != null) ? genreIds : const <int>[],
+      originalTitle: (originalTitle != null) ? originalTitle : "Original title not available",
+      backdropPath: (backdropPath != null) ? backdropPath : "Original language not available",
+      popularity: (popularity != null) ? popularity.toDouble() : 0.0,
+      voteAverage: (voteAverage != null) ? voteAverage.toDouble() : 0.0,
+      voteCount: (voteCount != null) ? voteCount.toInt() : 0,
+    );
+  }
+
+  factory Movie.fromJson(Map<String, dynamic> json){
+    return Movie.create(
+      json['id'], 
+      json['title'], 
       posterPath: json['poster_path'], 
       adult: json['adult'], 
       overview: json['overview'], 
       releaseDate: json['release_date'],
-      genreIds: json['genre_ids'], 
+      genreIds: json['genre_ids'].cast<int>(), 
       originalTitle: json['original_title'], 
       originalLanguage: json['original_language'], 
-      title: json['title'], 
       backdropPath: json['backdrop_path'], 
       popularity: json['popularity'], 
       voteAverage: json['vote_average'] , 
       voteCount: json['vote_count']
     );
-    
   }
 
   static fromJsonToObjectList(List<dynamic> movies){

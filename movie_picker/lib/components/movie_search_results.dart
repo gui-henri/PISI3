@@ -24,22 +24,28 @@ class MovieSearchResults extends StatelessWidget {
           }
 
           final treatedIndex = index ~/2;
-          String? posterPath = movies[treatedIndex].posterPath;
-          String? overview = movies[treatedIndex].overview ??  "Unavailable overview";
-
-          if (posterPath != null) {
-            return GestureDetector(
-              onTap: () {
-                onSelectMovie(movies[treatedIndex]); // a implementação dessa função receberá o filme através do parâmetro
-              },
-              child: Row(
-                children: [
+    
+          return GestureDetector(
+            onTap: () {
+              onSelectMovie(movies[treatedIndex]); // a implementação dessa função receberá o filme através do parâmetro
+            },
+            child: Row(
+              children: [
+                (movies[treatedIndex].posterPath.isNotEmpty) ? 
                   Image.network(
                     height: 200,
                     width: 150,
                     "https://image.tmdb.org/t/p/w500${movies[treatedIndex].posterPath}"
-                  ),
-                  Flexible(
+                  ):
+                  // TO DO: Substituir o widget abaixo por uma imagem fixa para caso o filme não tenha pôster 
+                  const SizedBox(
+                    width: 150,
+                    height: 200,
+                  ) 
+                ,
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -48,11 +54,11 @@ class MovieSearchResults extends StatelessWidget {
                           style: const TextStyle(
                             color: Colors.white,
                             fontFamily: "Roboto",
-                            fontSize: 24
+                            fontSize: 22
                           ),
                         ),
                         Text(
-                            overview,
+                            movies[treatedIndex].overview,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -63,15 +69,10 @@ class MovieSearchResults extends StatelessWidget {
                           ),
                       ],
                     ),
-                  )
-                ],
-              ),
-            );
-          }
-          return Row(
-            children: const [
-               Text("Image unavailable")
-            ],
+                  ),
+                )
+              ],
+            ),
           );
         }),
       ),

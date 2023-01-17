@@ -11,7 +11,7 @@ class MovieSearch extends SearchDelegate {
   Future<List<Movie>> fetchMovies(String query, BuildContext context) async {
     try {
       if (query.isNotEmpty) {
-      String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=TMDB_API_KEY&query=$query';
+      String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=0c216371bdd9733edef0f99f9096351b&query=$query';
       final response = await http.get(Uri.parse(ulr));
       if(response.statusCode == 200) {
         final json = jsonDecode(response.body);
