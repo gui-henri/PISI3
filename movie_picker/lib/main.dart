@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_picker/utils/routes.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: ".env");
   Paint.enableDithering = true;
   runApp(const MoviePicker());
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_picker/components/movie_search_results.dart';
 import 'package:movie_picker/pages/movie_page.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
@@ -11,8 +12,9 @@ class MovieSearch extends SearchDelegate {
 
   Future<List<Movie>> fetchMovies(String query, BuildContext context) async {
     try {
+      final tmdbKey = dotenv.env['TMDB_API_KEY'];
       if (query.isNotEmpty) {
-      String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=0c216371bdd9733edef0f99f9096351b&query=$query';
+      String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=$tmdbKey&query=$query';
       final response = await http.get(Uri.parse(ulr));
       if(response.statusCode == 200) {
         final json = jsonDecode(response.body);
