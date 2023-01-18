@@ -7,6 +7,9 @@ import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'home_tab.dart';
 
 class MainPage extends StatefulWidget {
+
+  static const routeName = '/main';
+
   const MainPage({super.key});
 
   @override

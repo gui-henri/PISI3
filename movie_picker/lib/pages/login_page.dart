@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../styles/default_background_decoration.dart';
 
 class LoginPage extends StatelessWidget {
+
+  static const routeName = '/login';
+
   const LoginPage({super.key});
 
   @override

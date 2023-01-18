@@ -7,8 +7,8 @@ import 'package:movie_picker/pages/start_page.dart';
 // As rotas do app devem ser colocadas neste arquivo
 
 Map<String, Widget Function(dynamic)> instanceRoutes(BuildContext context) => {
-        '/': (context) => const StartPage(),
-        '/login': (context) => const LoginPage(),
-        '/main': (context) => const MainPage(),
-        '/movie': (context) => const MoviePage()
+        StartPage.routeName: (context) => const StartPage(),
+        LoginPage.routeName: (context) => const LoginPage(),
+        MainPage.routeName: (context) => const MainPage(),
+        MoviePage.routeName: (context) => const MoviePage()
 };

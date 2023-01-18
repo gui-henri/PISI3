@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movie_picker/pages/login_page.dart';
-import 'package:movie_picker/pages/start_page.dart';
-import 'package:movie_picker/pages/main_page/main_page.dart';
 import 'package:movie_picker/utils/routes.dart';
 
 void main() {
