@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_picker/pages/login_page.dart';
 import 'package:movie_picker/pages/start_page.dart';
 import 'package:movie_picker/pages/main_page/main_page.dart';
+import 'package:movie_picker/utils/routes.dart';
 
 void main() {
   Paint.enableDithering = true;
@@ -19,11 +20,7 @@ class MoviePicker extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routes: {
-        '/': (context) => const StartPage(),
-        '/login': (context) => const LoginPage(),
-        '/main': (context) => const MainPage(),
-      },
+      routes: instanceRoutes(context),
     );
   }
 }
