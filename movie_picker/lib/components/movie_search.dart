@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:movie_picker/components/movie_search_results.dart';
+import 'package:movie_picker/pages/movie_page.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_picker/utils/movie.dart';
@@ -101,7 +102,7 @@ class MovieSearch extends SearchDelegate {
             itemCount: snapshot.data!.length,
             movies: snapshot.data!,
             onSelectMovie: (movie) {
-              close(context, movie);  // Retornando o filme selecionado para a página principal.
+              Navigator.pushNamed(context, MoviePage.routeName, arguments: movie);  // Retornando o filme selecionado para a página principal.
             },
           );
         } else {

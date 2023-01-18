@@ -3,6 +3,7 @@ import 'package:movie_picker/components/movie_search.dart';
 import 'package:movie_picker/pages/main_page/explore_tab.dart';
 import 'package:movie_picker/pages/main_page/favorites_tab.dart';
 import 'package:movie_picker/pages/main_page/settings_tab.dart';
+import 'package:movie_picker/pages/movie_page.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'home_tab.dart';
 
@@ -54,14 +55,9 @@ class _MainPageState extends State<MainPage> {
                       onPressed: () {
                         // showSearch() retorna um Future<dynamic>, sendo assim, não podemos ter 
                         // certeza do tipo, mas ele deve retornar ou um Movie ou null. 
-                        final movieToShow = showSearch(
+                        showSearch(
                           context: context, 
                           delegate: MovieSearch()
-                        );
-                        movieToShow.then(
-                          (movie) {
-                            if (movie != null) debugPrint(movie.title);
-                          }
                         );
                       },
                     ),
