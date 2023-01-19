@@ -16,6 +16,7 @@ class MovieSearchResults extends StatelessWidget {
       decoration: mpDefaultBackgroundDecoration(),
       child: ListView.builder(
         itemCount: itemCount * 2,
+        key: const PageStorageKey('search-scroll'),
         itemBuilder: ((context, index) {
           if (index.isOdd) {
             return const Divider(
@@ -26,6 +27,7 @@ class MovieSearchResults extends StatelessWidget {
           final treatedIndex = index ~/2;
     
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               onSelectMovie(movies[treatedIndex]); // a implementação dessa função receberá o filme através do parâmetro
             },

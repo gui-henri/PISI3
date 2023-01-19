@@ -10,17 +10,24 @@ import 'package:movie_picker/utils/movie.dart';
 
 class MovieSearch extends SearchDelegate {
 
+  List<Movie> movies = [];
+
   Future<List<Movie>> fetchMovies(String query, BuildContext context) async {
     try {
-      final tmdbKey = dotenv.env['TMDB_API_KEY'];
       if (query.isNotEmpty) {
-      String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=$tmdbKey&query=$query';
-      final response = await http.get(Uri.parse(ulr));
-      if(response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-        return Movie.fromJsonToObjectList(json['results']);
+        if (movies.isNotEmpty) {
+          return movies;
+        }
+        debugPrint("did fetched for movies.");
+        final tmdbKey = dotenv.env['TMDB_API_KEY'];
+        String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=$tmdbKey&query=$query';
+        final response = await http.get(Uri.parse(ulr));
+        if(response.statusCode == 200) {
+          final json = jsonDecode(response.body);
+          movies = Movie.fromJsonToObjectList(json['results']);
+          return movies;
       } else {
-        throw Exception('Failed to load movie search. The server did not responded with status code 200.');
+          throw Exception('Failed to load movie search. The server did not responded with status code 200.');
         }
       }
     } catch (e) {
@@ -75,6 +82,7 @@ class MovieSearch extends SearchDelegate {
             close(context, null);
           } else {
             query = '';
+            movies = [];
           }
         }
       )
@@ -121,6 +129,7 @@ class MovieSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    if (query == '') movies = [];
     return Container(
       decoration: mpDefaultBackgroundDecoration(),
     );
