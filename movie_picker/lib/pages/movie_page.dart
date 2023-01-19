@@ -24,8 +24,8 @@ class MoviePage extends StatelessWidget {
               icon: const Icon(Icons.arrow_back),
             ),
           ),
-          Flexible(
-            child: Column(
+          Expanded(
+            child: ListView(
               children: [
                 Text(movie.title),
                 Text(movie.overview),
