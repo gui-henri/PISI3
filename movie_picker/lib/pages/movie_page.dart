@@ -19,6 +19,7 @@ class MoviePage extends StatelessWidget {
         children: [
           AppBar(
             backgroundColor: const Color.fromARGB(255, 31, 3, 88),
+            title: const Text("Detalhes"),
             leading: IconButton(
               onPressed: () => Navigator.pop(context), 
               icon: const Icon(Icons.arrow_back),

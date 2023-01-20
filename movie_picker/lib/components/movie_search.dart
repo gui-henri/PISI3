@@ -18,7 +18,6 @@ class MovieSearch extends SearchDelegate {
         if (movies.isNotEmpty) {
           return movies;
         }
-        debugPrint("did fetched for movies.");
         final tmdbKey = dotenv.env['TMDB_API_KEY'];
         String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=$tmdbKey&query=$query';
         final response = await http.get(Uri.parse(ulr));
