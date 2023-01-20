@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
-import 'package:movie_picker/utils/movie.dart';
+import 'package:movie_picker/models/movie.dart';
 
 class MovieSearchResults extends StatelessWidget {
   const MovieSearchResults({super.key, required this.itemCount, required this.movies, required this.onSelectMovie, this.selectedMovie});

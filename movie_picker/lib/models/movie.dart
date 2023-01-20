@@ -88,7 +88,7 @@ class Movie {
     );
   }
 
-  static fromJsonToObjectList(List<dynamic> movies){
+  static List<Movie> fromJsonToObjectList(List<dynamic> movies){
 
     List<Movie> movieObjects = [];
     for (var movie in movies) {

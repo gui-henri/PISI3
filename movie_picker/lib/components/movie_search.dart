@@ -1,54 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_picker/components/movie_search_results.dart';
+import 'package:movie_picker/controllers/movie_search_controller.dart';
 import 'package:movie_picker/pages/movie_page.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
-import 'package:http/http.dart' as http;
-import 'package:movie_picker/utils/movie.dart';
 
 class MovieSearch extends SearchDelegate {
 
-  List<Movie> movies = [];
-
-  Future<List<Movie>> fetchMovies(String query, BuildContext context) async {
-    try {
-      if (query.isNotEmpty) {
-        if (movies.isNotEmpty) {
-          return movies;
-        }
-        final tmdbKey = dotenv.env['TMDB_API_KEY'];
-        String ulr = 'https://api.themoviedb.org/3/search/movie?api_key=$tmdbKey&query=$query';
-        final response = await http.get(Uri.parse(ulr));
-        if(response.statusCode == 200) {
-          final json = jsonDecode(response.body);
-          movies = Movie.fromJsonToObjectList(json['results']);
-          return movies;
-      } else {
-          throw Exception('Failed to load movie search. The server did not responded with status code 200.');
-        }
-      }
-    } catch (e) {
-      final errorMessage = e.toString();
-      showDialog(
-        context: context, 
-        builder: ((context) {
-          return AlertDialog(
-            title: const Text("Error"),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text("An error ocourred during the search. This is the error message: $errorMessage")
-                ],
-              ),
-            ),
-          );
-        })
-      );
-    }
-    return <Movie>[];
-  }
+  MovieSearchController controller = MovieSearchController();
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -81,7 +39,6 @@ class MovieSearch extends SearchDelegate {
             close(context, null);
           } else {
             query = '';
-            movies = [];
           }
         }
       )
@@ -104,12 +61,12 @@ class MovieSearch extends SearchDelegate {
       );
     }
     return FutureBuilder(
-      future: fetchMovies(query, context),
+      future: controller.searchMovieByQuery(query, context),
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return MovieSearchResults(
-            itemCount: snapshot.data!.length,
-            movies: snapshot.data!,
+            itemCount: snapshot.data!.data.length,
+            movies: snapshot.data!.data,
             onSelectMovie: (movie) {
               Navigator.pushNamed(context, MoviePage.routeName, arguments: movie);  // Retornando o filme selecionado para a página principal.
             },
@@ -128,7 +85,6 @@ class MovieSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query == '') movies = [];
     return Container(
       decoration: mpDefaultBackgroundDecoration(),
     );

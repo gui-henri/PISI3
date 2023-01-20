@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
-import 'package:movie_picker/utils/movie.dart';
+import 'package:movie_picker/models/movie.dart';
 
 //"https://image.tmdb.org/t/p/w500${movie.posterPath}"
 
