@@ -10,7 +10,7 @@ class TmdbServiceProvider implements MovieDataProvider{
   final tmdbKey = dotenv.env['TMDB_API_KEY'];
 
   @override
-  Future<List<Movie>> fetchMovies(String query) async {
+  Future<List<Movie>> fetchMovieListByQuery(String query) async {
     final ulr = 'https://api.themoviedb.org/3/search/movie?api_key=$tmdbKey&query=$query';
     final response = await http.get(Uri.parse(ulr));
     if(response.statusCode == 200) {

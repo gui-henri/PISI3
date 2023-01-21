@@ -19,7 +19,7 @@ class MovieSearchController {
 
         if (queryExistsOnHistory.isEmpty) {
           // caso não haja nenhuma pesquisa com a mesma query
-          movieList = await provider.fetchMovies(query);
+          movieList = await provider.fetchMovieListByQuery(query);
           didFetched = true;
           searchHistory.add(SearchResult(query, didFetched, movieList));
         } else {
