@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-df = pd.read_csv('data/archive/TMDB_5000_movies.csv')
+df = pd.read_csv('data/archive/tmdb_5000_movies.csv')
 df.set_index('original_title', inplace=True)
 
 st.title("Comparar filmes")
