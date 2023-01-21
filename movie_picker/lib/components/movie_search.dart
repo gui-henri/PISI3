@@ -67,6 +67,7 @@ class MovieSearch extends SearchDelegate {
           return MovieSearchResults(
             itemCount: snapshot.data!.data.length,
             movies: snapshot.data!.data,
+            scrollKey: snapshot.data!.query,
             onSelectMovie: (movie) {
               Navigator.pushNamed(context, MoviePage.routeName, arguments: movie);  // Retornando o filme selecionado para a página principal.
             },
