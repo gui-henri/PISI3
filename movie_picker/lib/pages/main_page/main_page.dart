@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_picker/components/movie_search.dart';
 import 'package:movie_picker/pages/main_page/explore_tab.dart';
 import 'package:movie_picker/pages/main_page/favorites_tab.dart';
 import 'package:movie_picker/pages/main_page/settings_tab.dart';
-import 'package:movie_picker/pages/movie_page.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'home_tab.dart';
 
@@ -12,6 +12,7 @@ class MainPage extends StatefulWidget {
   static const routeName = '/main';
 
   const MainPage({super.key});
+
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -30,7 +31,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-
+    final user = ModalRoute.of(context)!.settings.arguments as User;
     return Container(
       decoration: mpDefaultBackgroundDecoration(),
       child: Center(

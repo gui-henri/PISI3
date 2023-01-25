@@ -30,6 +30,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_text_kit: ^4.2.2
+  firebase_core: ^2.4.1
+  firebase_auth: ^4.2.5
+  google_sign_in: ^5.4.3
   flutter_dotenv: ^5.0.2
   http: ^0.13.5
   flutter:

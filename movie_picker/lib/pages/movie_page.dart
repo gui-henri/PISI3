@@ -42,13 +42,13 @@ class MoviePage extends StatelessWidget {
                     ),
                     Expanded(
                       child:
-                        AutoSizeText(movie.title,  style: TextStyle(color: Colors.white, fontSize: 200), maxLines: 1)
+                        AutoSizeText(movie.title,  style: const TextStyle(color: Colors.white, fontSize: 200), maxLines: 1)
                         ),
                       ],
                     ),
-                Text(movie.popularity.toString(), style: TextStyle(color: Colors.white)),
-                Text(movie.voteAverage.toString(), style: TextStyle(color: Colors.white)),
-                Text(movie.overview, style: TextStyle(color: Colors.white, fontSize: 20), )
+                Text(movie.popularity.toString(), style: const TextStyle(color: Colors.white)),
+                Text(movie.voteAverage.toString(), style: const TextStyle(color: Colors.white)),
+                Text(movie.overview, style: const TextStyle(color: Colors.white, fontSize: 20), )
               ],
             ),
           ),
