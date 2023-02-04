@@ -30,30 +30,65 @@ class MoviePage extends StatelessWidget {
               icon: const Icon(Icons.arrow_back),
             ),
           ),
-          Expanded(
-            child: ListView(
-              children: [
-                Row(
-                  children: [
-                      Image.network(
-                        alignment: Alignment.topLeft,
-                        height: 500,
-                        "https://image.tmdb.org/t/p/w500${movie.posterPath}"
-                    ),
-                    Expanded(
-                      child:
-                        AutoSizeText(movie.title,  style: const TextStyle(color: Colors.white, fontSize: 200), maxLines: 1)
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Expanded(
+              child:
+                 Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                        child: SizedBox(
+                          child: AutoSizeText(movie.title,
+                              style: TextStyle(color: Colors.white, fontSize: 200),
+                              maxLines: 1
+                          ),
                         ),
-                      ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.network(
+                              alignment: Alignment.topLeft,
+                              height: 300,
+                              "https://image.tmdb.org/t/p/w500${movie.posterPath}"
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text("Popularidade: " + movie.popularity.toString(), style: const TextStyle(color: Colors.white)
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child:
+                                    Text("Média: " + movie.voteAverage.toString(),  style: const TextStyle(color: Colors.white)
+                                    ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                      child: Text(movie.overview, style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
                     ),
-                Text(movie.popularity.toString(), style: const TextStyle(color: Colors.white)),
-                Text(movie.voteAverage.toString(), style: const TextStyle(color: Colors.white)),
-                Text(movie.overview, style: const TextStyle(color: Colors.white, fontSize: 20), )
-              ],
-            ),
+            ],
+                 ),
+              ),
           ),
-        ],
-      ),
+          ],
+    )
     )
     );
   }
