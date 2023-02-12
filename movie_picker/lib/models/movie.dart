@@ -1,4 +1,3 @@
-
 class Movie {
   String posterPath;
   bool adult;
