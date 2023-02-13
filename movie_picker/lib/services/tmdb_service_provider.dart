@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_picker/models/movie.dart';
 import 'package:movie_picker/models/providers.dart';
@@ -33,12 +31,11 @@ class TmdbServiceProvider implements MovieDataProvider{
     if(response.statusCode == 200) {
       final json = jsonDecode(response.body);
       var temp = Providers.createFromJson(json['results'], country);
-      print(temp.streams);
       return temp.streams;
     } else {
       return Future.error(
           Exception(
-              'Error fetching movies. Movie data could not be fetched because server did not respond with code 200.'
+              'Error fetching movie providers. Provider data could not be fetched because server did not respond with code 200.'
           )
       );
     }

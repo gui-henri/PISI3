@@ -15,7 +15,7 @@ class MovieSearch extends SearchDelegate {
         backgroundColor: Color.fromARGB(255, 31, 3, 88),
       ),
       textTheme: const TextTheme(
-        headline6: TextStyle(
+        titleLarge: TextStyle(
           fontSize: 18,
           color: Colors.white
         )

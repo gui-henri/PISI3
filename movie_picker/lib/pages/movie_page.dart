@@ -31,39 +31,39 @@ class MoviePage extends StatelessWidget {
                           icon: const Icon(Icons.arrow_back),
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                child: SizedBox(
-                                  child: AutoSizeText(movie.title,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 40),
-                                      maxLines: 1),
-                                ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                              child: SizedBox(
+                                child: AutoSizeText(movie.title,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 40),
+                                    maxLines: 1),
                               ),
-                              SizedBox(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Image.network(
-                                        alignment: Alignment.topLeft,
-                                        height: 300,
-                                        "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
-                                    Column(
+                            ),
+                            SizedBox(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.network(
+                                      alignment: Alignment.topLeft,
+                                      height: 300,
+                                      "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
+                                  Flexible(
+                                    child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("Popularidade:",
-                                            style: const TextStyle(
+                                        const Text("Popularidade:",
+                                            style: TextStyle(
                                                 color: Colors.white)),
                                         Row(
                                           children: [
-                                            Icon(
+                                            const Icon(
                                                 Icons.analytics_outlined,
                                                 color: Colors.white),
                                             Text(movie.popularity.toString(),
@@ -71,12 +71,12 @@ class MoviePage extends StatelessWidget {
                                                     color: Colors.white)),
                                           ],
                                         ),
-                                        Text("Nota:",
-                                            style: const TextStyle(
+                                        const Text("Nota:",
+                                            style: TextStyle(
                                                 color: Colors.white)),
                                         Row(
                                           children: [
-                                            Icon(Icons.auto_awesome,
+                                            const Icon(Icons.auto_awesome,
                                                 color: Colors.white),
                                             Text(movie.voteAverage.toString(),
                                                 style: const TextStyle(
@@ -85,29 +85,31 @@ class MoviePage extends StatelessWidget {
                                         ),
                                         Row(
                                           children: [
-                                            Icon(Icons.cast_sharp,
+                                            const Icon(Icons.cast_sharp,
                                                 color: Colors.white),
-                                            Text(text.data.toString(),
-                                                style: const TextStyle(
-                                                    color: Colors.white,),
+                                            Flexible(
+                                              child: Text(text.data.toString(),
+                                                  style: const TextStyle(
+                                                      color: Colors.white,),
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                                child: Text(
-                                  movie.overview,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                              child: Text(
+                                movie.overview,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
