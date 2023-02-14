@@ -7,7 +7,7 @@ class MovieDataProvider {
     return Future.value(<Movie>[]);
   }
 
-  Future<List> fetchMovieProviders(int id, {String country = 'BR'}) {
-    return Future.value(<String>[]);
+  Future<String> fetchMovieProviders(int id, {String country = 'BR'}) {
+    return Future.value();
   }
 }

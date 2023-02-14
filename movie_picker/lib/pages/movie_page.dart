@@ -14,10 +14,10 @@ class MoviePage extends StatelessWidget {
     final movie = ModalRoute.of(context)!.settings.arguments as Movie;
     final providers = TmdbServiceProvider().fetchMovieProviders(movie.id);
 
-    return FutureBuilder<List>(
+    return FutureBuilder<String>(
         future: providers,
-        initialData: const ["Carregando..."],
-        builder: (BuildContext context, AsyncSnapshot<List> text) {
+        initialData: "Carregando...",
+        builder: (BuildContext context, AsyncSnapshot<String> text) {
           return Scaffold(
               body: Container(
                   decoration: mpDefaultBackgroundDecoration(),
@@ -31,85 +31,113 @@ class MoviePage extends StatelessWidget {
                           icon: const Icon(Icons.arrow_back),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                              child: SizedBox(
-                                child: AutoSizeText(movie.title,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 40),
-                                    maxLines: 1),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                                child: SizedBox(
+                                  child: AutoSizeText(movie.title,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 40),
+                                      maxLines: 1),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.network(
-                                      alignment: Alignment.topLeft,
-                                      height: 300,
-                                      "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
-                                  Flexible(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text("Popularidade:",
-                                            style: TextStyle(
-                                                color: Colors.white)),
-                                        Row(
+                              SizedBox(
+                                width: 387.4, height: 300,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image.network(
+                                        alignment: Alignment.topLeft,
+                                        width: 200,
+                                        "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            const Icon(
-                                                Icons.analytics_outlined,
-                                                color: Colors.white),
-                                            Text(movie.popularity.toString(),
+                                            Text("Popularidade:",
                                                 style: const TextStyle(
-                                                    color: Colors.white)),
-                                          ],
-                                        ),
-                                        const Text("Nota:",
-                                            style: TextStyle(
-                                                color: Colors.white)),
-                                        Row(
-                                          children: [
-                                            const Icon(Icons.auto_awesome,
-                                                color: Colors.white),
-                                            Text(movie.voteAverage.toString(),
-                                                style: const TextStyle(
-                                                    color: Colors.white)),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            const Icon(Icons.cast_sharp,
-                                                color: Colors.white),
-                                            Flexible(
-                                              child: Text(text.data.toString(),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,),
-                                              ),
+                                                    color: Colors.white, fontSize: 12)),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0, 4, 4, 8),
+                                                  child: Icon(
+                                                      Icons.analytics_outlined,
+                                                      color: Colors.white),
+                                                ),
+                                                Text(movie.popularity.toStringAsFixed(0),
+                                                    style: const TextStyle(
+                                                        color: Colors.white)),
+                                              ],
                                             ),
+                                            Text("Nota:",
+                                                style: const TextStyle(
+                                                    color: Colors.white, fontSize: 12)),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0, 4, 4, 8),
+                                                  child: Icon(Icons.auto_awesome,
+                                                      color: Colors.white),
+                                                ),
+                                                Text(movie.voteAverage.toStringAsFixed(1),
+                                                    style: const TextStyle(
+                                                        color: Colors.white)),
+                                              ],
+                                            ),
+                                            Text('Streams:',
+                                          style: const TextStyle(
+                                              color: Colors.white, fontSize: 12)),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0, 4, 4, 8),
+                                                  child: Icon(Icons.cast_sharp,
+                                                      color: Colors.white),
+                                                ),
+                                                Flexible(
+                                                  child: Text(text.data.toString(),
+                                                      style: const TextStyle(
+                                                          color: Colors.white, fontSize: 13),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                children: [
+                                                  IconButton(onPressed: null, icon: const Icon(Icons.favorite, color: Colors.white, size: 40,)),
+                                                  IconButton(onPressed: null, icon: const Icon(Icons.add, color: Colors.white, size: 40,)),
+                                                ],
+                                              ),
+                                            )
                                           ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                              child: Text(
-                                movie.overview,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                                child: Text(
+                                  movie.overview,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
