@@ -130,11 +130,12 @@ class MoviePage extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                                child: Text(
-                                  movie.overview,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
+                                child:
+                                AutoSizeText(movie.overview,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 17,),
+                                          textAlign: TextAlign.justify,
+                                )
                               ),
                             ],
                           ),
