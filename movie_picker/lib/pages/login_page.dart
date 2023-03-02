@@ -24,8 +24,8 @@ class LoginPage extends StatelessWidget {
     }
 
     Future<void> googleLogin() async {
-      signInWithGoogle().then((value) {
-        final user = FirebaseAuth.instance.currentUser;
+      signInWithGoogle().then((UserCredential result) {
+        final user = result.user;
         if (user != null) {
           Navigator.popAndPushNamed(context, MainPage.routeName, arguments: user);
         }

@@ -58,7 +58,7 @@ st.write("As colunas com informações a respeito dos atores e da produção est
 st.markdown(
     """
     ```
-    dfc = pd.read_csv('../archive/TMDB_5000_credits.csv')
+    dfc = pd.read_csv('data/archive/TMDB_5000_credits.csv')
 
     df["cast"] = dfc["cast"]
     df["crew"] = dfc["crew"]
@@ -67,7 +67,7 @@ st.markdown(
     """
 )
 
-dfc = pd.read_csv('../archive/TMDB_5000_credits.csv')
+dfc = pd.read_csv('data/archive/TMDB_5000_credits.csv')
 
 df["cast"] = dfc["cast"]
 df["crew"] = dfc["crew"]
