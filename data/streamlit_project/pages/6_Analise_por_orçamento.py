@@ -153,4 +153,22 @@ if len(selected_movies) > 0:
     for l in lista:
         l.append(round(((l[2] - l[1])/l[1]) * 100, 1))
     to_stream = pd.DataFrame(lista, columns=("Títulos", "Orçamento", "Faturamento", "ROI"))    
-    st.plotly_chart(px.bar(data_frame=to_stream, x=["ROI"], y="Títulos", barmode='group', labels={"value":"%"}))
+    st.plotly_chart(px.bar(data_frame=to_stream, x=["ROI"], title="Porcentagem de filmes que conseguiram pagar seus custos de produção", y="Títulos", barmode='group', labels={"value":"%"}))
+
+st.markdown("""
+    ### Porcentagem de filmes que conseguem pagar seus custos de produção por categoria
+
+    A partir da análise anterior, concluimos que filmes da categoria de baixo orçamento possuem um ROI extremamente elevado se comparado com as demais categorias. Apesar disso, vimos também que são os filmes com menor quantidade de novos lançamentos e crescimento lento. Afim de investigar por que as grandes empresas geralmente não focam nessa categoria de filmes, montamos o gráfico abaixo.
+
+    """)
+
+low_budget_percent = round((low_budget_films['revenue'] > low_budget_films['budget']).mean() * 100, 1)
+mid_budget_percent = round((mid_budget_films['revenue'] > mid_budget_films['budget']).mean() * 100, 1)
+high_budget_percent = round((high_budget_films['revenue'] > high_budget_films['budget']).mean() * 100, 1)
+
+values = [["Baixo Orçamento", low_budget_percent], ["Médio Orçamento", mid_budget_percent], ["Grande Orçamento", high_budget_percent]]
+
+payoff_stream = pd.DataFrame(values, columns=("Categoria", "Porcentagem"))
+st.plotly_chart(px.bar(data_frame=payoff_stream, x="Categoria", y="Porcentagem"))
+
+st.markdown("O gráfico mostra que filmes de grande orçamento historicamente tem uma chance muito maior de arcarem com seus custos, enquanto que filmes de baixo orçamento não conseguem nem arcar com os custos de produção em aproximadamente 55% das vezes. Filmes de médio orçamento apresentam um meio-termo entre as duas categorias, possivelmente sendo a opção com melhor risco-retorno.")

@@ -11,10 +11,12 @@ Nesse documento será discutido os fazeres, não fazeres, objetivos e metas para
 
 Há algumas analises que ainda podemos realizar nos dados. Estas são importantes pois dão um contexto melhor do funcionamento da indústria. Além disso, há um esforço inicial para analise dos dados *após* estarem dispostos em um grafo. Esse esforço consiste de uma série de funcionalidades gráficas que permitirão a observação do grafo. Futuramente, podemos utilizar métricas como Centrality Analysis, Community Detection, Connectivity Analysis, Patter Matching, entre outros, para obter informações a respeito do grafo, mas estas estão fora do escopo no momento e só deverão ser pensadas caso tenhamos tempo sobrando.  
 
-* Análise de filmes baseada em categoria de orçamento (grande, médio e baixo orçamento)
-	* Apresentar a quantidade de filmes de cada categoria por ano
-	* Visualizar o ROE médio de cada categoria
-	* Ferramenta para visualizar o ROE de cada filme individualmente
+* ~Análise de filmes baseada em categoria de orçamento (grande, médio e baixo orçamento)~
+	* ~Apresentar a quantidade de filmes de cada categoria por ano~
+	* ~Visualizar o ROE médio de cada categoria~
+	* ~Ferramenta para visualizar o ROE de cada filme individualmente~
+    * ~Comparar a porcentagem média de filmes que conseguiram arrecadar acima dos custos de produção em cada categoria.~
+
 * Visualização de um grafo com as ligações entre os filmes
 	* O grafo deve ter opção para filtrar as conexões por categoria(gênero, diretor, keywords, etc).
 	* O grafo deve ter opção para manipular a quantidade de vértices mostrados.
