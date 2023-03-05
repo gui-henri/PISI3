@@ -4,7 +4,7 @@ class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => ClipRRect(
     /* return const Center(
       child: Text(
         "Home Tab",
@@ -15,12 +15,34 @@ class HomeTab extends StatelessWidget {
         ),
       ),
     ); */
-
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: NetworkImage(), //aqui
-        fit: BoxFit.cover,
-        )
-    )
+    borderRadius: BorderRadius.circular(20),
+    child: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(), //aqui
+          fit: BoxFit.cover,
+          )
+      )
+      child: Container(
+        padding: EdgeInsets.all(20),
+        child: Column(children: [
+          buildName(),
+          ]
+          ),
+      ),
+  )
   );
+
+  Widget buildName() => Row(
+    children: [
+      Text(
+        '${}',
+        style: TextStyle(
+          fontSize: 32,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      )
+      const SizedBox(width: 16),
+    ],)
 }
