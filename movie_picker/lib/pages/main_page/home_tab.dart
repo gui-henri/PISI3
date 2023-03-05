@@ -17,32 +17,46 @@ class HomeTab extends StatelessWidget {
     ); */
     borderRadius: BorderRadius.circular(20),
     child: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(), //aqui
+          image: NetworkImage("https://www.lamoda.co.uk/media/amasty/webp/catalog/product/cache/5ed917d940d58a890691074cb8cdcf0c/c/m/cmv_0962_jpg.webp"), //aqui
           fit: BoxFit.cover,
+          alignment: Alignment(-0.3, 0),
           )
-      )
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(children: [
-          buildName(),
-          ]
-          ),
       ),
-  )
-  );
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.transparent, Colors.black],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.7, 1],
+        )
+      ),
+      child: Container()
+    ),
+  ));
 
   Widget buildName() => Row(
-    children: [
+    children: const [
       Text(
-        '${}',
+        "Chunky shoes",
         style: TextStyle(
           fontSize: 32,
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
-      )
-      const SizedBox(width: 16),
-    ],)
+      ),
+      SizedBox(width: 16),
+      Text('{',
+      style: TextStyle(
+        fontSize: 32,
+        color: Colors.black,
+      ),
+    ),
+  ],
+);
+
+Widget buildDirector() => Container();
+  
 }
