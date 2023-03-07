@@ -65,9 +65,11 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ],
               ),
-              IndexedStack(
-                index: _selectedIndex,
-                children: _pages,
+              Flexible(
+                child: IndexedStack(
+                  index: _selectedIndex,
+                  children: _pages,
+                ),
               ),
               BottomNavigationBar(
                 currentIndex: _selectedIndex,

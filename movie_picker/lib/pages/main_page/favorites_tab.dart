@@ -6,7 +6,7 @@ class FavoritesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text("Favorites Tab"),
+      child: Text("Aqui vem o GridView...")
     );
   }
 }
