@@ -16,16 +16,20 @@ tags = ['budget', 'genres', 'id', 'keywords', 'original_language', 'original_tit
         'popularity', 'production_companies', 'production_countries', 'release_date', 'revenue',
         'runtime', 'title', 'vote_average', 'vote_count']
 
-pesos = {'budget': 0, 'genres': 1, 'id': 0, 'keywords': 2, 'original_language': 0, 'original_title': 0, 'overview': 0,
+pesos = {'budget': 0, 'genres': 1, 'id': 0, 'keywords': 0, 'original_language': 0, 'original_title': 0, 'overview': 0,
         'popularity': 0, 'production_companies': 0, 'production_countries': 0, 'release_date': 0, 'revenue': 0,
         'runtime': 0, 'title': 0, 'vote_average': 0, 'vote_count': 0}
 
 
 st.markdown(
     """
-    # Criação do grafo
+    # Grafo de relacionamento entre os filmes
 
     O principal diferencial desta página é o uso de grafos para facilitar a visualização da similaridade entre filmes. Iniciaremos explicando passo a passo o processo de montagem do grafo e depois forneceremos as ferramentas de visualização que surgiram a partir dele.
+
+    ## Criação do grafo
+
+    A primeira etapa na concepção do grafo foi decidir de que forma ele seria representado. Optamos por representar cada filme como um vértice, e para cada atributo em comum entre dois filmes, haverá uma conexão. Alguns atributos são compostos por listas, então a medida para a conexão será um valor entre 0 e 1, sendo 0 listas sem nenhum item em comum e 1 listas com os mesmos valores. 
 
     """
 )
@@ -42,7 +46,7 @@ if len(movies) > 1:
     layout = ""
 
     with c1:
-        cut_value = st.slider("Valor mínimo para conexão: ", 0.0, 3.0, step=0.01)
+        cut_value = st.slider("Valor mínimo para conexão: ", 0.0, 1.0, step=0.01)
 
     with c2:
         possibilities = ["Shell", "Spiral", "Random", "Spring"]

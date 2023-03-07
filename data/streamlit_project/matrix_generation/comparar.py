@@ -64,5 +64,10 @@ def comp(filmeA, filmeB, tags, peso):
     x = 0
     for k, tag in enumerate(tags):
         f = eval(tag)
-        x += f(filmeA[k], filmeB[k]) * peso[tag]
+        fA = filmeA[k]
+        fB = filmeB[k]
+        if tag == 'keywords' or tag == 'genres':
+            fA = eval(filmeA[k])
+            fB = eval(filmeB[k])
+        x += f(fA, fB) * peso[tag]
     return x

@@ -22,6 +22,12 @@ if filme:
     st.header("Gêneros:")
     st.write(*generos_formated_to_print)
 
+    keywords_list = [x["name"] for x in ast.literal_eval(filme_info["keywords"])]
+    keywords_formated_to_print = [f"{x}, " for x in keywords_list]
+    keywords_formated_to_print[-1] = keywords_formated_to_print[-1].replace(", ", "")
+    st.markdown("### Keywords:")
+    st.write(*keywords_formated_to_print)
+
     c1, c2, c3 = st.columns(3)
     with c1:
         st.subheader("Orçamento")
@@ -36,12 +42,12 @@ if filme:
     c4, c5, c6, c7 = st.columns(4)
 
     with c4:
-        st.write(f"Tempo de duração: {int(filme_info['runtime'])} minutos")
+        st.markdown(f"###### Tempo de duração: {int(filme_info['runtime'])} minutos")
     with c5:
-        st.write(f"Popularidade: {filme_info['popularity']}")
+        st.markdown(f"###### Popularidade: {filme_info['popularity']}")
     with c6:
-        st.write(f"Nota no IMDB: {filme_info['vote_average']}")
+        st.markdown(f"###### Nota no IMDB: {filme_info['vote_average']}")
     with c7:
-        st.write(f"Número de votos: {filme_info['vote_count']}")
+        st.markdown(f"###### Número de votos: {filme_info['vote_count']}")
 else:
     st.write("Por favor, selecione um filme")
