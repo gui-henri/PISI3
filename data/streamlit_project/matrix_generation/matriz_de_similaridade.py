@@ -1,5 +1,3 @@
-import pandas as pd
-from ast import literal_eval
 from .comparar import comp
 
 def generate_matrix(filmes, tags, pesos):

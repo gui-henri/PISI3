@@ -4,7 +4,7 @@ import streamlit.components.v1 as components
 import matplotlib.pyplot as plt
 import mpld3
 import networkx as nx
-
+from ast import literal_eval
 
 from pathlib import Path
 import sys
@@ -33,7 +33,7 @@ st.markdown(
 
     """
 )
-df = pd.read_csv('data/archive/tmdb_3000_movies.csv')
+df = pd.read_csv('data/archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
 
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
@@ -56,17 +56,17 @@ if len(movies) > 1:
     graph_data = pd.DataFrame(lista_matriz)
 
     G = nx.Graph()
-    G.add_nodes_from(graph_data.index.to_list(), name=selected_movies)
+    for i, node in enumerate(graph_data.index.to_list()):
+        G.add_node(node, name=f'{selected_movies[i]}')
 
+    i_corrector = 0
     for i, column in enumerate(graph_data.columns):
-        value_list = graph_data[column].values.tolist()
         i_corrector = 0
+        value_list = graph_data[column].values.tolist()
         for j, item in enumerate(value_list):
             i_corrector += 1
-            if item == item:            # Checa se o valor não é NaN
-                if item >= cut_value:      
-                    G.add_edge(j, i + i_corrector, weight=item)
-            else: break                 # Caso seja NaN, quer dizer que chegou ao fim dos valores válidos e podemos pular para a próxima
+            if item != None and item >= cut_value:
+                G.add_edge(j, i + i_corrector, weight=item)
 
     fig, ax = plt.subplots()
 
@@ -78,7 +78,7 @@ if len(movies) > 1:
     }
     pos=layouts[layout]
 
-    selected_movies.reverse()
+
     node_names = dict(zip(range(len(selected_movies)), selected_movies))
     nx.draw(G, pos=pos, labels=node_names, with_labels=True, edge_color= 'b', font_weight='bold', font_size=16)
 
