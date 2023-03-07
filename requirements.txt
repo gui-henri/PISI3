@@ -1,2 +1,4 @@
 plotly
 cpi
+networkx
+mpld3
