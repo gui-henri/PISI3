@@ -6,28 +6,30 @@ class FavoritesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    mpDefaultBackgroundDecoration();
     final List<Map> myProducts =
         List.generate(5000, (index) => {"id": index, "name": "Movie $index"})
             .toList();
 
     return Scaffold(
-      body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 160,
-              childAspectRatio: 5 / 7,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 2),
-          itemCount: myProducts.length,
-          itemBuilder: (BuildContext ctx, index) {
-            return Container(
-              margin: const EdgeInsets.all(7),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.amber, borderRadius: BorderRadius.circular(13)),
-              child: Text(myProducts[index]["name"]),
-            );
-          }),
+      body: Ink(
+          decoration: mpDefaultBackgroundDecoration(),
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 160,
+                  childAspectRatio: 5 / 7,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 2),
+              itemCount: myProducts.length,
+              itemBuilder: (BuildContext ctx, index) {
+                return Container(
+                  margin: const EdgeInsets.all(7),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 234, 226, 203),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text(myProducts[index]["name"]),
+                );
+              })),
     );
   }
 }
