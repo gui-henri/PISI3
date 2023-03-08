@@ -33,12 +33,11 @@ st.markdown(
 
     """
 )
-df = pd.read_csv('data/archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
+df = pd.read_csv('../archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
 
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
-
 if len(movies) > 1:
 
     c1, c2 = st.columns(2)
@@ -53,20 +52,18 @@ if len(movies) > 1:
         layout = st.selectbox("Selecionar formato do grafo", possibilities)
 
     lista_matriz = generate_matrix(movies, tags, pesos)
-    graph_data = pd.DataFrame(lista_matriz)
-
+    
     G = nx.Graph()
-    for i, node in enumerate(graph_data.index.to_list()):
-        G.add_node(node, name=f'{selected_movies[i]}')
+    for i, node in enumerate([i[5] for i in movies]):
+        G.add_node(i, name=f'{node}')
 
-    i_corrector = 0
-    for i, column in enumerate(graph_data.columns):
-        i_corrector = 0
-        value_list = graph_data[column].values.tolist()
-        for j, item in enumerate(value_list):
-            i_corrector += 1
+    #newDf = pd.DataFrame(data= lista_matriz, columns=[i for i in movies], index=[i for i in movies])
+    #print(newDf)
+        
+    for i, column in enumerate(lista_matriz):
+        for j, item in enumerate(column):
             if item != None and item >= cut_value:
-                G.add_edge(j, i + i_corrector, weight=item)
+                G.add_edge(i, j, weight=item)
 
     fig, ax = plt.subplots()
 
@@ -79,7 +76,7 @@ if len(movies) > 1:
     pos=layouts[layout]
 
 
-    node_names = dict(zip(range(len(selected_movies)), selected_movies))
+    node_names = dict(zip(range(len(selected_movies)), [i[5] for i in movies]))
     nx.draw(G, pos=pos, labels=node_names, with_labels=True, edge_color= 'b', font_weight='bold', font_size=16)
 
     labels = nx.get_edge_attributes(G,'weight')

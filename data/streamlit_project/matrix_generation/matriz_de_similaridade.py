@@ -7,13 +7,14 @@ def generate_matrix(filmes, tags, pesos):
 
     for i, filmeA in enumerate(filmes):
         print(f"Processando... {i}/{t}", end = '\r')
-        #for j in range(i):
-        #   temp.append(None)
-        for filmeB in filmes[i+1:]:
+        for j in range(i):
+           temp.append(None)
+        for filmeB in filmes[i:]:
             temp.append(round(comp(filmeA, filmeB, tags, pesos), 2))
             #temp.append(f'({filmeA[5]}, {filmeB[5]})') #debugOnly
         matriz.append(temp)
         temp = []
+        
     return matriz
 
 """
