@@ -2,3 +2,4 @@ plotly
 cpi
 networkx
 mpld3
+matplotlib
