@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../styles/default_background_decoration.dart';
 
 class ExploreTab extends StatelessWidget {
   const ExploreTab({super.key});
@@ -10,9 +11,9 @@ class ExploreTab extends StatelessWidget {
 
     final List<Widget> cards1 = List.generate(10, (index) {
       return Card(
+        margin: const EdgeInsets.all(7),
         child: SizedBox(
-          height: 115,
-          width: 82,
+          width: 50, //NÃO TÁ PEGANDOOOOOOOO
           child: Center(
             child: Text("Card ${index + 1}"),
           ),
@@ -22,9 +23,8 @@ class ExploreTab extends StatelessWidget {
 
     final List<Widget> cards2 = List.generate(10, (index) {
       return Card(
+        margin: const EdgeInsets.all(7),
         child: SizedBox(
-          height: 5,
-          width: 5,
           child: Center(
             child: Text("Lista 2, Card ${index + 1}"),
           ),
@@ -32,11 +32,10 @@ class ExploreTab extends StatelessWidget {
       );
     });
 
-    final List<Widget> cards3 = List.generate(52, (index) {
+    final List<Widget> cards3 = List.generate(50, (index) {
       return Card(
+        margin: const EdgeInsets.all(7),
         child: SizedBox(
-          height: 115,
-          width: 82,
           child: Center(
             child: Text("Card ${index + 1}"),
           ),
@@ -45,51 +44,62 @@ class ExploreTab extends StatelessWidget {
     });
 
     return Scaffold(
-      body: ListView(
+        body: Ink(
+      decoration: mpDefaultBackgroundDecoration(),
+      child: ListView(
         children: [
           const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8),
             child: Text(
-              "Principais escolhas",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              "Principais escolhas >",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
           SizedBox(
-            height: 150,
+            height: 130, //ALTURA PEGA NORMAL
+            width: 50,
             child: PageView(
               controller: pageController1,
               children: cards1,
             ),
           ),
           const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8),
             child: Text(
-              "Assistir mais tarde",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              "Assistir mais tarde >",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
           SizedBox(
-            height: 150,
+            height: 130,
             child: PageView(
               controller: pageController2,
               children: cards2,
             ),
           ),
           const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8),
             child: Text(
               "Outros Filmes",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
           GridView.count(
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: cards3,
-          ),
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: cards3),
         ],
       ),
-    );
+    ));
   }
 }
