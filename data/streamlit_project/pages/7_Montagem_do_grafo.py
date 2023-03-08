@@ -120,4 +120,6 @@ if len(movies) > 1:
 
     components.html(fig_html, height=500)
 
+    st.write(f"Similaridade máxima: {gen + pop + pdc + o + pc}")
+
     st.write(pd.DataFrame(lista_matriz))
