@@ -7,7 +7,6 @@ class ExploreTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PageController pageController1 = PageController();
-    final PageController pageController2 = PageController();
 
     final List<Widget> cards1 = List.generate(10, (index) {
       return Card(
@@ -21,18 +20,7 @@ class ExploreTab extends StatelessWidget {
       );
     });
 
-    final List<Widget> cards2 = List.generate(10, (index) {
-      return Card(
-        margin: const EdgeInsets.all(7),
-        child: SizedBox(
-          child: Center(
-            child: Text("Lista 2, Card ${index + 1}"),
-          ),
-        ),
-      );
-    });
-
-    final List<Widget> cards3 = List.generate(50, (index) {
+    final List<Widget> cards2 = List.generate(50, (index) {
       return Card(
         margin: const EdgeInsets.all(7),
         child: SizedBox(
@@ -51,7 +39,7 @@ class ExploreTab extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(8),
             child: Text(
-              "Principais escolhas >",
+              "Assistir mais tarde",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -69,23 +57,6 @@ class ExploreTab extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(8),
             child: Text(
-              "Assistir mais tarde >",
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            height: 130,
-            child: PageView(
-              controller: pageController2,
-              children: cards2,
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8),
-            child: Text(
               "Outros Filmes",
               style: TextStyle(
                   fontSize: 18,
@@ -97,7 +68,7 @@ class ExploreTab extends StatelessWidget {
               crossAxisCount: 3,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              children: cards3),
+              children: cards2),
         ],
       ),
     ));

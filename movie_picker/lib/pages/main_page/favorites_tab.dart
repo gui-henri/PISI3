@@ -33,7 +33,8 @@ class FavoritesTab extends StatelessWidget {
                         Text(myProducts[index]["name"]),
                         IconButton(
                           onPressed: () {},
-                          icon: const Icon(Icons.favorite, color: Colors.red),
+                          icon: const Icon(Icons.favorite,
+                              color: Color.fromARGB(255, 218, 55, 43)),
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
                           splashRadius: 15,
