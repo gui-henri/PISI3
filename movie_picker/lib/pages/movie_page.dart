@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_picker/services/firestore_services_provider.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'package:movie_picker/models/movie.dart';
 import 'package:movie_picker/services/tmdb_service_provider.dart';
@@ -13,6 +14,7 @@ class MoviePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final movie = ModalRoute.of(context)!.settings.arguments as Movie;
     final providers = TmdbServiceProvider().fetchMovieProviders(movie.id);
+    final db = FiresStoreServiceProvider();
 
     return FutureBuilder<String>(
         future: providers,
@@ -46,7 +48,8 @@ class MoviePage extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                width: 387.4, height: 300,
+                                width: 387.4,
+                                height: 300,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,67 +60,102 @@ class MoviePage extends StatelessWidget {
                                         "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
                                     Expanded(
                                       child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 0, 8, 0),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             const Text("Popularidade:",
                                                 style: TextStyle(
-                                                    color: Colors.white, fontSize: 12)),
+                                                    color: Colors.white,
+                                                    fontSize: 12)),
                                             Row(
                                               children: [
                                                 const Padding(
-                                                  padding: EdgeInsets.fromLTRB(0, 4, 4, 8),
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      0, 4, 4, 8),
                                                   child: Icon(
                                                       Icons.analytics_outlined,
                                                       color: Colors.white),
                                                 ),
-                                                Text(movie.popularity.toStringAsFixed(0),
+                                                Text(
+                                                    movie.popularity
+                                                        .toStringAsFixed(0),
                                                     style: const TextStyle(
                                                         color: Colors.white)),
                                               ],
                                             ),
                                             const Text("Nota:",
                                                 style: TextStyle(
-                                                    color: Colors.white, fontSize: 12)),
+                                                    color: Colors.white,
+                                                    fontSize: 12)),
                                             Row(
                                               children: [
                                                 const Padding(
-                                                  padding: EdgeInsets.fromLTRB(0, 4, 4, 8),
-                                                  child: Icon(Icons.auto_awesome,
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      0, 4, 4, 8),
+                                                  child: Icon(
+                                                      Icons.auto_awesome,
                                                       color: Colors.white),
                                                 ),
-                                                Text(movie.voteAverage.toStringAsFixed(1),
+                                                Text(
+                                                    movie.voteAverage
+                                                        .toStringAsFixed(1),
                                                     style: const TextStyle(
                                                         color: Colors.white)),
                                               ],
                                             ),
                                             const Text('Streams:',
-                                          style: TextStyle(
-                                              color: Colors.white, fontSize: 12)),
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12)),
                                             Row(
                                               children: [
                                                 const Padding(
-                                                  padding: EdgeInsets.fromLTRB(0, 4, 4, 8),
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      0, 4, 4, 8),
                                                   child: Icon(Icons.cast_sharp,
                                                       color: Colors.white),
                                                 ),
                                                 Flexible(
-                                                  child: Text(text.data.toString(),
-                                                      style: const TextStyle(
-                                                          color: Colors.white, fontSize: 13),
+                                                  child: Text(
+                                                    text.data.toString(),
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 13),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 40, 0, 0),
                                               child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                children: const [
-                                                  IconButton(onPressed: null, icon:  Icon(Icons.favorite, color: Colors.white, size: 40,)),
-                                                  IconButton(onPressed: null, icon:  Icon(Icons.add, color: Colors.white, size: 40,)),
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  const IconButton(
+                                                      onPressed: null,
+                                                      icon: Icon(
+                                                        Icons.favorite,
+                                                        color: Colors.white,
+                                                        size: 40,
+                                                      )),
+                                                  IconButton(
+                                                      onPressed: () async {
+                                                        db.adicionarFilme(
+                                                            movie);
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.add,
+                                                        color: Colors.white,
+                                                        size: 40,
+                                                      )),
                                                 ],
                                               ),
                                             )
@@ -129,14 +167,16 @@ class MoviePage extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                                child:
-                                AutoSizeText(movie.overview,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 16, 0, 0),
+                                  child: AutoSizeText(
+                                    movie.overview,
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 17,),
-                                          textAlign: TextAlign.justify,
-                                )
-                              ),
+                                      color: Colors.white,
+                                      fontSize: 17,
+                                    ),
+                                    textAlign: TextAlign.justify,
+                                  )),
                             ],
                           ),
                         ),
