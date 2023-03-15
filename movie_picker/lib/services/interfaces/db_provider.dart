@@ -5,7 +5,7 @@ import 'package:movie_picker/models/movie.dart';
 class DbProvider {
   Future<void> adicionarFilme(Movie movie) async {}
   Future<void> removerFilme(Movie movie) async {}
-  Future<List<Movie>> obterFilmes(String id) async {
+  Future<List<Movie>> obterFilmes() async {
     return Future.value(<Movie>[]);
   }
 }

@@ -26,11 +26,21 @@ class FiresStoreServiceProvider implements DbProvider {
   }
 
   @override
-  Future<List<Movie>> obterFilmes(String id) {
-    // TODO: implement obterFilmes
-    throw UnimplementedError();
+  Future<List<Movie>> obterFilmes() async {
+    return Future.value(<Movie>[]);
   }
 
   @override
-  Future<void> removerFilme(Movie movie) async {}
+  Future<void> removerFilme(Movie movie) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      db
+          .collection("users")
+          .doc(user.uid)
+          .collection("movies")
+          .doc(movie.id.toString())
+          .delete();
+    }
+  }
 }
