@@ -22,15 +22,15 @@ class _TinderCardState extends State<TinderCard> {
 
   Widget buildFrontCard() => GestureDetector(
     onPanStart: (details) {
-      final provider = Provider.of<CardProvider>(context);
+      final provider = Provider.of<CardProvider>(context, listen: false);
         provider.startPosition(details);
     },
     onPanUpdate: (details) {
-      final provider = Provider.of<CardProvider>(context);
+      final provider = Provider.of<CardProvider>(context, listen: false);
         provider.updatePosition(details);
     },
     onPanEnd: (details) {
-      final provider = Provider.of<CardProvider>(context);
+      final provider = Provider.of<CardProvider>(context, listen: false);
         // talvez precise adicionar o details mais tarde
         provider.endPosition();
     },

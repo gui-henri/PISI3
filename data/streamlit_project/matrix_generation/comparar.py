@@ -58,7 +58,7 @@ def funDiff(valA, valB, scale = 0):
     if scale == 0:
         scale = max(valA, valB)
         
-    return 1/(1+(abs(valA - valB)/scale))
+    return 1/(1+(abs(valA - valB) ** 2/scale))
 
 def comp(filmeA, filmeB, tags, peso):
     x = 0

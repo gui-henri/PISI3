@@ -110,7 +110,7 @@ if len(movies) > 1:
     pos=layouts[layout]
 
 
-    node_names = dict(zip(range(len(selected_movies)), [i[5] for i in movies]))
+    node_names = dict(zip(range(len(selected_movies)), [i[13] for i in movies]))
     nx.draw(G, pos=pos, labels=node_names, with_labels=True, edge_color= 'b', font_weight='bold', font_size=16)
 
     labels = nx.get_edge_attributes(G,'weight')
