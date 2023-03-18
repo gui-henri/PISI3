@@ -14,10 +14,21 @@ class TinderCard extends StatefulWidget {
 
 class _TinderCardState extends State<TinderCard> {
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) { 
+      final size = MediaQuery.of(context).size;
+
+      final provider = Provider.of<CardProvider>(context,listen: false);
+    });
+  }
+
+
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: buildFrontCard(),
-    );
+    ); 
   }
 
   Widget buildFrontCard() => GestureDetector(
@@ -77,7 +88,7 @@ class _TinderCardState extends State<TinderCard> {
               buildName(),
               const SizedBox(height: 8),
               buildDirector(),
-          ],
+            ],
           )
         )
       ),
@@ -89,7 +100,7 @@ class _TinderCardState extends State<TinderCard> {
       children: const [
         Expanded(
           child: Text(
-            "Rainha da cocada preta",
+            "Rainha da cocada preta, 2099",
             maxLines: 3,
             overflow: TextOverflow.clip,
             style: TextStyle(
@@ -100,15 +111,8 @@ class _TinderCardState extends State<TinderCard> {
             ),
           ),
         ),
-        SizedBox(width: 16),
-        Text(
-          '2099',
-          style: TextStyle(
-            fontSize: 32,
-            color: Colors.white,
-          ),
-        )
-    ],); 
+      ],
+    ); 
 
  Widget buildDirector() => Row(
   children: [
@@ -122,10 +126,12 @@ class _TinderCardState extends State<TinderCard> {
     ),
   const SizedBox(width: 8),
   const Text(
-    'Nome do diretor',
+    'Beyoncé',
     style: TextStyle(
       fontSize: 20,
-      color:  Colors.white,),
+      decoration: TextDecoration.none,
+      color:  Colors.white,
+      ),
      ),
    ],
   );
