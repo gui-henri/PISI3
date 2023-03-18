@@ -38,11 +38,11 @@ class _TinderCardState extends State<TinderCard> {
       builder: (context) {
         final provider = Provider.of<CardProvider>(context);
         final position = provider.position;
-        const milliseconds = 0;
+        final milliseconds = provider.isDragging ? 0 : 400;
 
         return AnimatedContainer(
           curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: milliseconds),
+          duration: Duration(milliseconds: milliseconds),
           transform: Matrix4.identity()..translate(position.dx, position.dy),
           child: buildCard(),
         );
@@ -87,12 +87,17 @@ class _TinderCardState extends State<TinderCard> {
   //buildName
   Widget buildName() => Row(
       children: const [
-        Text(
-          "Rainha da cocada preta",
-          style: TextStyle(
-            fontSize: 32,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+        Expanded(
+          child: Text(
+            "Rainha da cocada preta",
+            maxLines: 3,
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 32,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none
+            ),
           ),
         ),
         SizedBox(width: 16),
@@ -124,6 +129,7 @@ class _TinderCardState extends State<TinderCard> {
      ),
    ],
   );
+
 }
 
 
