@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 class TinderCard extends StatefulWidget {
 
   final String urlImage;
+  final bool isFront;
 
-  const TinderCard({super.key, required this.urlImage});
+  const TinderCard({super.key, required this.urlImage, required this.isFront});
 
   @override
   State<TinderCard> createState() => _TinderCardState();
@@ -17,17 +18,18 @@ class _TinderCardState extends State<TinderCard> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) { 
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
       final size = MediaQuery.of(context).size;
 
       final provider = Provider.of<CardProvider>(context,listen: false);
+      provider.setScreenSize(size);
     });
   }
 
-
+  @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-      child: buildFrontCard(),
+      child: widget.isFront ? buildFrontCard() : buildCard(),
     ); 
   }
 
@@ -45,16 +47,24 @@ class _TinderCardState extends State<TinderCard> {
         // talvez precise adicionar o details mais tarde
         provider.endPosition();
     },
-    child: Builder(
-      builder: (context) {
+    child: LayoutBuilder(
+      builder: (context, constraints) {
         final provider = Provider.of<CardProvider>(context);
         final position = provider.position;
         final milliseconds = provider.isDragging ? 0 : 400;
+        
+        //minuto 12:00 do vídeo aproximadamente
+        final center = constraints.smallest.center(Offset.zero);
+        final angle = provider.angle * 3.1415 /180;
+        final rotatedMatrix = Matrix4.identity()
+          ..translate(center.dx, center.dy)
+          ..rotateZ(angle)
+          ..translate(-center.dx, -center.dy);
 
         return AnimatedContainer(
           curve: Curves.easeInOut,
           duration: Duration(milliseconds: milliseconds),
-          transform: Matrix4.identity()..translate(position.dx, position.dy),
+          transform: rotatedMatrix..translate(position.dx, position.dy),
           child: buildCard(),
         );
       },
