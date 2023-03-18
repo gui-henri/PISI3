@@ -18,7 +18,10 @@ class HomeTab extends StatelessWidget {
     final provider = Provider.of<CardProvider>(context);
     final urlImages = provider.urlImages;
     return Stack(
-      children: urlImages.map((urlImage) => TinderCard(urlImage: urlImage)).toList(),
+      children: urlImages.map((urlImage) => TinderCard(
+        urlImage: urlImage,
+        isFront: urlImages.last == urlImage
+      )).toList(),
     );
   }
 }
