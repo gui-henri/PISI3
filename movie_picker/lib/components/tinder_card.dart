@@ -5,8 +5,9 @@ import 'package:provider/provider.dart';
 class TinderCard extends StatefulWidget {
 
   final String urlImage;
+  final bool isFront;
 
-  const TinderCard({super.key, required this.urlImage});
+  const TinderCard({super.key, required this.urlImage, required this.isFront});
 
   @override
   State<TinderCard> createState() => _TinderCardState();
@@ -14,10 +15,22 @@ class TinderCard extends StatefulWidget {
 
 class _TinderCardState extends State<TinderCard> {
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      final size = MediaQuery.of(context).size;
+
+      final provider = Provider.of<CardProvider>(context,listen: false);
+      provider.setScreenSize(size);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-      child: buildFrontCard(),
-    );
+      child: widget.isFront ? buildFrontCard() : buildCard(),
+    ); 
   }
 
   Widget buildFrontCard() => GestureDetector(
@@ -34,16 +47,24 @@ class _TinderCardState extends State<TinderCard> {
         // talvez precise adicionar o details mais tarde
         provider.endPosition();
     },
-    child: Builder(
-      builder: (context) {
+    child: LayoutBuilder(
+      builder: (context, constraints) {
         final provider = Provider.of<CardProvider>(context);
         final position = provider.position;
-        const milliseconds = 0;
+        final milliseconds = provider.isDragging ? 0 : 400;
+        
+        //minuto 12:00 do vídeo aproximadamente
+        final center = constraints.smallest.center(Offset.zero);
+        final angle = provider.angle * 3.1415 /180;
+        final rotatedMatrix = Matrix4.identity()
+          ..translate(center.dx, center.dy)
+          ..rotateZ(angle)
+          ..translate(-center.dx, -center.dy);
 
         return AnimatedContainer(
           curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: milliseconds),
-          transform: Matrix4.identity()..translate(position.dx, position.dy),
+          duration: Duration(milliseconds: milliseconds),
+          transform: rotatedMatrix..translate(position.dx, position.dy),
           child: buildCard(),
         );
       },
@@ -77,7 +98,7 @@ class _TinderCardState extends State<TinderCard> {
               buildName(),
               const SizedBox(height: 8),
               buildDirector(),
-          ],
+            ],
           )
         )
       ),
@@ -87,23 +108,21 @@ class _TinderCardState extends State<TinderCard> {
   //buildName
   Widget buildName() => Row(
       children: const [
-        Text(
-          "Rainha da cocada preta",
-          style: TextStyle(
-            fontSize: 32,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+        Expanded(
+          child: Text(
+            "Rainha da cocada preta, 2099",
+            maxLines: 3,
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 32,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none
+            ),
           ),
         ),
-        SizedBox(width: 16),
-        Text(
-          '2099',
-          style: TextStyle(
-            fontSize: 32,
-            color: Colors.white,
-          ),
-        )
-    ],); 
+      ],
+    ); 
 
  Widget buildDirector() => Row(
   children: [
@@ -117,13 +136,16 @@ class _TinderCardState extends State<TinderCard> {
     ),
   const SizedBox(width: 8),
   const Text(
-    'Nome do diretor',
+    'Beyoncé',
     style: TextStyle(
       fontSize: 20,
-      color:  Colors.white,),
+      decoration: TextDecoration.none,
+      color:  Colors.white,
+      ),
      ),
    ],
   );
+
 }
 
 

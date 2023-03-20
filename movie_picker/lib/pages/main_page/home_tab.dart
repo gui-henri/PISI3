@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movie_picker/components/tinder_card.dart';
+import 'package:provider/provider.dart';
+
+import '../../utils/card_provider.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -8,10 +11,31 @@ class HomeTab extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     alignment: Alignment.center,
     padding: const EdgeInsets.all(16),
-    child: const TinderCard(
-      urlImage: "https://i.pinimg.com/236x/9d/5e/6c/9d5e6ccba128314dd3dfe59f404da6b6.jpg",
-    )
+    child: buildCards(context)
   );
+
+  Widget buildCards(BuildContext context) {
+    final provider = Provider.of<CardProvider>(context);
+    final urlImages = provider.urlImages;
+
+    return urlImages.isEmpty
+          ? Center(
+            child: ElevatedButton(
+              child: const Text('Restart'),
+            onPressed: () {
+              final provider = Provider.of<CardProvider>(context, listen: false);
+              provider.resetUsers();
+            }
+            )
+          ) :
+    
+    Stack(
+      children: urlImages.map((urlImage) => TinderCard(
+        urlImage: urlImage,
+        isFront: urlImages.last == urlImage
+      )).toList(),
+    );
+  }
 }
 
 /*

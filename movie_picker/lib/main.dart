@@ -31,5 +31,6 @@ class MoviePicker extends StatelessWidget {
         routes: instanceRoutes(context),
       )
     );
+
   }
 }

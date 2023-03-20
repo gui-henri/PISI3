@@ -1,10 +1,13 @@
 import pandas as pd
+from sklearn.cluster import SpectralClustering
 import streamlit as st
 import streamlit.components.v1 as components
 import matplotlib.pyplot as plt
 import mpld3
 import networkx as nx
 from ast import literal_eval
+from node2vec import Node2Vec as n2v
+from sklearn.decomposition import PCA
 
 from pathlib import Path
 import sys
@@ -123,3 +126,70 @@ if len(movies) > 1:
     st.write(f"Similaridade máxima: {gen + pop + pdc + o + pc}")
 
     st.write(pd.DataFrame(lista_matriz))
+
+    apply_node2vec = st.checkbox("Deseja aplicar Node2Vec a este grafo?")
+
+    if apply_node2vec:
+
+        st.markdown(
+            """
+            ## Teste do Machine Learning com Node2Vec
+
+            Aplicando Node2Vec ao grafo:
+
+            """
+        )
+
+        WINDOW = 1
+        MIN_COUNT = 1
+        BATCH_WORDS = 4
+
+        g_emb = n2v(G, dimensions=16)
+        mdl = g_emb.fit(
+            vector_size=16,
+            window=WINDOW,
+            min_count=MIN_COUNT,
+            batch_words=BATCH_WORDS
+        )
+
+        emb_df = (
+            pd.DataFrame(
+                [mdl.wv.get_vector(str(n)) for n in G.nodes()],
+                index = G.nodes
+            )
+        )
+
+        st.write(emb_df)
+
+        pca = PCA(n_components=2, random_state=7)
+        pca_mdl = pca.fit_transform(emb_df)
+
+        emb_df_PCA = (
+            pd.DataFrame(
+            pca_mdl,
+            columns=['x', 'y'],
+            index= emb_df.index
+            )
+        )
+
+        plt.clf()
+        fig = plt.figure(figsize=(6, 4))
+        plt.scatter(
+            x=emb_df_PCA['x'],
+            y=emb_df_PCA['y'],
+            s=0.4,
+            color='maroon',
+            alpha=0.5
+        )
+        st.pyplot(fig)
+
+        X = emb_df.values
+
+        clustering = SpectralClustering(
+            n_clusters=5,
+            assign_labels='discretize',
+            random_state=0
+        ).fit_predict(X)
+
+        st.write(clustering)
+
