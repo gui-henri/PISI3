@@ -128,6 +128,7 @@ class CardProvider extends ChangeNotifier {
       'https://i.pinimg.com/564x/03/59/69/0359694907a32c63610b8e7d72b3ed05.jpg'
     ].reversed.toList();
 
+    notifyListeners();
   }
 
 }
