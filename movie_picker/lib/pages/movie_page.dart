@@ -4,6 +4,7 @@ import 'package:movie_picker/services/firestore_services_provider.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'package:movie_picker/models/movie.dart';
 import 'package:movie_picker/services/tmdb_service_provider.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class MoviePage extends StatelessWidget {
   static const routeName = '/movie';
@@ -22,7 +23,13 @@ class MoviePage extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<String> text) {
           return Scaffold(
               body: Container(
-                  decoration: mpDefaultBackgroundDecoration(),
+                  height: MediaQuery.of(context).size.height / 2,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(
+                              "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
+                          opacity: 0.8,
+                          fit: BoxFit.cover)),
                   child: Column(
                     children: [
                       AppBar(
@@ -54,10 +61,6 @@ class MoviePage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.network(
-                                        alignment: Alignment.topLeft,
-                                        width: 200,
-                                        "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -98,7 +101,8 @@ class MoviePage extends StatelessWidget {
                                                   padding: EdgeInsets.fromLTRB(
                                                       0, 4, 4, 8),
                                                   child: Icon(
-                                                      Icons.auto_awesome,
+                                                      Icons
+                                                          .rate_review_outlined,
                                                       color: Colors.white),
                                                 ),
                                                 Text(
@@ -172,7 +176,7 @@ class MoviePage extends StatelessWidget {
                                   child: AutoSizeText(
                                     movie.overview,
                                     style: const TextStyle(
-                                      color: Colors.white,
+                                      color: Color.fromARGB(255, 0, 255, 64),
                                       fontSize: 17,
                                     ),
                                     textAlign: TextAlign.justify,
