@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 enum CardStatus { favorite, description, watchLater, nope }
 
 class CardProvider extends ChangeNotifier {
-
   List<String> _urlImages = [];
   bool _isDragging = false;
   double _angle = 0;
@@ -20,19 +19,23 @@ class CardProvider extends ChangeNotifier {
     resetUsers(); //???
   }
 
+  get status => null;
+
   void setScreenSize(Size screenSize) => _screenSize = screenSize;
 
   void startPosition(DragStartDetails details) {
     _isDragging = true;
     notifyListeners();
   }
+
   void updatePosition(DragUpdateDetails details) {
     _position += details.delta;
 
     final x = _position.dx;
-    _angle = 45 * x / _screenSize.width;    
+    _angle = 45 * x / _screenSize.width;
     notifyListeners();
   }
+
   void endPosition() {
     _isDragging = false;
     notifyListeners();
@@ -47,7 +50,7 @@ class CardProvider extends ChangeNotifier {
       );
     }
 
-    switch (status){
+    switch (status) {
       case CardStatus.favorite:
         favorite();
         break;
@@ -75,24 +78,24 @@ class CardProvider extends ChangeNotifier {
     final y = _position.dy;
     final forceDetails = x.abs() < 20;
 
-    if (force){
+    if (force) {
       final delta = 100;
 
-      if(x >= delta) {
+      if (x >= delta) {
         return CardStatus.favorite;
       } else if (x <= -delta) {
         return CardStatus.nope;
-      } else if (y <= -delta/2 && forceDetails) {
+      } else if (y <= -delta / 2 && forceDetails) {
         return CardStatus.description;
       }
-    }else {
+    } else {
       final delta = 20;
 
       if (y <= -delta * 2 && forceDetails) {
         return CardStatus.description;
-      }else if (x >= delta) {
+      } else if (x >= delta) {
         return CardStatus.favorite;
-      }else if (x <= -delta) {
+      } else if (x <= -delta) {
         return CardStatus.nope;
       }
     }
@@ -106,7 +109,7 @@ class CardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nope(){
+  void nope() {
     _angle = -20;
     _position -= Offset(2 * _screenSize.width, 0);
     _nextCard();
@@ -124,7 +127,7 @@ class CardProvider extends ChangeNotifier {
 
   Future _nextCard() async {
     if (_urlImages.isEmpty) return;
-    
+
     // ignore: todo
     // TODO: Adicionar filme no banco de dados
     await Future.delayed(const Duration(milliseconds: 200));
@@ -143,5 +146,4 @@ class CardProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-
 }
