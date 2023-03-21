@@ -65,7 +65,11 @@ class _TinderCardState extends State<TinderCard> {
           curve: Curves.easeInOut,
           duration: Duration(milliseconds: milliseconds),
           transform: rotatedMatrix..translate(position.dx, position.dy),
-          child: buildCard(),
+          child: Stack(
+            children:
+              buildCard(),
+              buildStamps(),
+          )
         );
       },
     ),
@@ -145,6 +149,55 @@ class _TinderCardState extends State<TinderCard> {
      ),
    ],
   );
+
+  Widget buildStamps() {
+    final Provider = Provider.of<CardProvider>(context);
+    final status = Provider.getStatus; 
+
+    switch (status) {
+      case CardStatus.favorite:
+       final child = buildStamp(angle: -0.5, color: Colors.green, text: 'FAVORITE');
+         
+       return Positioned(top: 64, left: 50, child: child);
+
+      case CardStatus.nope:
+        final child = buildStamp(color: Colors.red, text: 'NOPE');
+
+       return Positioned(top: 64, right: 50, child: child);
+
+      case CardStatus.watchLater:
+        final child = Center(child: buildStamp(color: Colors.blue, text: 'WATCH/nLATER'),);
+
+        return Positioned(top: 64, right: 0, left: 0, child: child);
+
+      default:
+        return Container();  
+    }
+  }
+
+  Widget buildStamp({
+    double angle = 0,
+    required Color color,
+    required String text,
+}) {
+    return Transform.rotate(
+      angle: angle,
+      child: Container(
+      padding:EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12), 
+        border: Border.all(color: color, width: 4),
+      ),
+      child: Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: color,
+        fontSize: 48,
+        fontWeight: FontWeight.bold,
+      ),
+    )));
+}
 
 }
 

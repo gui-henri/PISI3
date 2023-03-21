@@ -37,7 +37,7 @@ class CardProvider extends ChangeNotifier {
     _isDragging = false;
     notifyListeners();
 
-    final status = getStatus();
+    final status = getStatus(force: true);
 
     if (status != null) {
       Fluttertoast.cancel();
@@ -70,18 +70,31 @@ class CardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  CardStatus? getStatus() {
+  CardStatus? getStatus({bool force = false}) {
     final x = _position.dx;
     final y = _position.dy;
     final forceDetails = x.abs() < 20;
-    const delta = 100;
 
-    if(x >= delta) {
-      return CardStatus.favorite;
-    } else if (x <= -delta) {
-      return CardStatus.nope;
-    } else if (y <= -delta/2 && forceDetails) {
-      return CardStatus.description;
+    if (force){
+      final delta = 100;
+
+      if(x >= delta) {
+        return CardStatus.favorite;
+      } else if (x <= -delta) {
+        return CardStatus.nope;
+      } else if (y <= -delta/2 && forceDetails) {
+        return CardStatus.description;
+      }
+    }else {
+      final delta = 20;
+
+      if (y <= -delta * 2 && forceDetails) {
+        return CardStatus.description;
+      }else if (x >= delta) {
+        return CardStatus.favorite;
+      }else if (x <= -delta) {
+        return CardStatus.nope;
+      }
     }
   }
 
