@@ -13,7 +13,6 @@ class MainPage extends StatefulWidget {
 
   const MainPage({super.key});
 
-
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -56,10 +55,15 @@ class _MainPageState extends State<MainPage> {
                       onPressed: () {
                         // showSearch() retorna um Future<dynamic>, sendo assim, não podemos ter 
                         // certeza do tipo, mas ele deve retornar ou um Movie ou null. 
+                        // se o usuário entrar na aba de busca, ele deve atualizar os favoritos
                         showSearch(
                           context: context, 
                           delegate: MovieSearch()
-                        );
+                        ).then((value) => (value != null) ? setState(()  {
+                          final oldIndex = _selectedIndex;
+                          _selectedIndex = 1;
+                          _selectedIndex = oldIndex;
+                        }): null);
                       },
                     ),
                   ),
