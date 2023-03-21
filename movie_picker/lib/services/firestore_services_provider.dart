@@ -2,9 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movie_picker/models/movie.dart';
 import 'package:movie_picker/services/interfaces/db_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:movie_picker/services/interfaces/movie_data_provider.dart';
+import 'package:movie_picker/services/tmdb_service_provider.dart';
 
 class FiresStoreServiceProvider implements DbProvider {
   final db = FirebaseFirestore.instance;
+  final MovieDataProvider tmdb = TmdbServiceProvider();
 
   @override
   Future<void> adicionarFilme(Movie movie) async {
@@ -27,7 +30,31 @@ class FiresStoreServiceProvider implements DbProvider {
 
   @override
   Future<List<Movie>> obterFilmes() async {
-    return Future.value(<Movie>[]);
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return Future.error(Exception('Usuário não existe, impossível buscar favoritos'));
+    }
+    const source = Source.cache;
+
+    final querySnapshot = await db
+      .collection("users")
+      .doc(user.uid)
+      .collection("movies")
+      .get(const GetOptions(source: source));
+
+    final data = querySnapshot.docs.map((doc) => {
+        ...doc.data(),
+        'id': doc.id
+       }).toList();
+      
+    final movies = data.map((document) => 
+      Movie.fromJson({
+        'id': int.parse(document['id']),
+        'title': document['name'],
+        'poster_path': document['img_url']
+      })).toList();
+    return movies;
   }
 
   @override

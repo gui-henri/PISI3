@@ -77,7 +77,7 @@ class Movie {
       adult: json['adult'], 
       overview: json['overview'], 
       releaseDate: json['release_date'],
-      genreIds: json['genre_ids'].cast<int>(), 
+      genreIds: (json['genre_ids'] != null) ? json['genre_ids'].cast<int>() : null, 
       originalTitle: json['original_title'], 
       originalLanguage: json['original_language'], 
       backdropPath: json['backdrop_path'], 
