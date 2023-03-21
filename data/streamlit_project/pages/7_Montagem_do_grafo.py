@@ -1,3 +1,4 @@
+import itertools
 import pandas as pd
 from sklearn.cluster import SpectralClustering
 import streamlit as st
@@ -5,6 +6,7 @@ import streamlit.components.v1 as components
 import matplotlib.pyplot as plt
 import mpld3
 import networkx as nx
+from networkx.algorithms import community
 from ast import literal_eval
 from node2vec import Node2Vec as n2v
 from sklearn.decomposition import PCA
@@ -41,7 +43,6 @@ st.markdown(
     """
 )
 df = pd.read_csv('data/archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
-
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
@@ -112,8 +113,8 @@ if len(movies) > 1:
     }
     pos=layouts[layout]
 
-
-    node_names = dict(zip(range(len(selected_movies)), [i[13] for i in movies]))
+    film_names = [i[13] for i in movies]
+    node_names = dict(zip(range(len(selected_movies)), film_names))
     nx.draw(G, pos=pos, labels=node_names, with_labels=True, edge_color= 'b', font_weight='bold', font_size=16)
 
     labels = nx.get_edge_attributes(G,'weight')
@@ -133,37 +134,171 @@ if len(movies) > 1:
 
         st.markdown(
             """
-            ## Teste do Machine Learning com Node2Vec
+            ## Machine Learning com Node2Vec
 
-            Aplicando Node2Vec ao grafo:
+            Node2Vec é um algoritmo capaz de aprender a representar um grafo como um conjunto de vetores de N dimensões. Ele usa como base o **Word2Vec**, uma técnica de processamento de linguagem natural que usa como base a máxima de que palavras em contextos semelhantes tendem a ter significados semelhantes. O principal motivo para o uso do Node2Vec é o fato de que a representação do grafo retornada por ele **pode ser utilizada em algoritmos de Machine Learning tradicionais para realizar tarefas como Node Classification ou Clustering**. 
 
+            #### Representação em vetores do Grafo (Node2Vec)
+
+            Este é o resultado da aplicação do Node2Vec no Grafo anterior. O nome dos filmes foi usado como índice para podermos identificar cada vetor.
             """
         )
+
+        c3, c4, c5, c6 = st.columns(4)
 
         WINDOW = 1
         MIN_COUNT = 1
         BATCH_WORDS = 4
+        DIMENSIONS = 16
 
-        g_emb = n2v(G, dimensions=16)
+        with c3:
+            WINDOW = st.slider("Janela (distância máxima entre entre nós): ", 1, 25, step=1)
+        with c4:
+            MIN_COUNT = st.slider("Valor mínimo (ignora nós com frequência total menor que esta): ", 1, 25, step=1)
+        with c5:
+            BATCH_WORDS = st.slider("Tamanho do lote (tamanho dos conjunto de nós que serão passados para serem processados paralelamente): ", 1, 25, step=1)
+        with c6:
+            DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 4, 256, step=4)
+
+        g_emb = n2v(G, dimensions=DIMENSIONS, seed=128)
         mdl = g_emb.fit(
-            vector_size=16,
+            vector_size=DIMENSIONS,
             window=WINDOW,
             min_count=MIN_COUNT,
             batch_words=BATCH_WORDS
         )
 
+        nodes_and_index = G.nodes.data('name')
+
         emb_df = (
             pd.DataFrame(
                 [mdl.wv.get_vector(str(n)) for n in G.nodes()],
-                index = G.nodes
+                index = nodes_and_index
             )
         )
 
         st.write(emb_df)
 
+        st.markdown(
+            """
+            #### Grau de centralidade dos nós
+
+            O resultado da função Node2Vec retorna um modelo Word2Vec. Com base nesse modelo, podemos tirar diversas informações a respeito da representação, incluíndo o grau de centralidade de uma certa lista de nós.
+
+            """
+        )
+
+        to_rank_by_centrality = st.multiselect('Selecione filmes para ranquear por centralidade: ', film_names)
+        if len(to_rank_by_centrality) > 1:    
+            film_index_to_rank = []  
+            for film in to_rank_by_centrality:
+                for node in nodes_and_index:
+                    if node[1] == film:
+                        film_index_to_rank.append(str(node[0]))
+            ranked_indexes = mdl.wv.rank_by_centrality(film_index_to_rank)
+            ranked_movies = []
+            for i in ranked_indexes:
+                for node in nodes_and_index:
+                    if str(node[0]) == i[1]:
+                        ranked_movies.append((i[0], node[1]))
+            st.write(ranked_movies)
+
+        st.markdown(
+            """
+
+            O ranqueamento com base no valor de centralidade é geralmente usado para encontrar nós mais 'influentes' em uma rede. Num sistema de recomendação com base em conteúdo como o Movie Picker, podemos utilizar essa informação para decidirmos quais filmes são mais importantes na hora de buscar por uma recomendação. Por exemplo, se um filme possui grau de centralidade 0.8 e outro possui 0.2, podemos recomendar com mais frequência filmes relacionados ao com grau de centralidade 0.8.
+
+            ## Recomendação de filmes com base na semelhança de vetores
+
+            Calculando a Similaridade de Cosseno entre a média da projeção dos vetores do nó fornecido e de todos os outros nós, podemos ordenar os N nós mais próximos de um determinado nó. Na prática, percebemos que isso pode funcionar como um sistema de recomendação. Ao selecionar um filme utilizando a ferramenta abaixo, temos em ordem decrescente a lista de filmes mais semelhantes ao escolhido.
+            """
+        )
+
+        base_film = st.selectbox("Selecione um filme para encontrar os mais próximos: ", film_names)
+
+        if base_film:
+            base_film_index = ""
+            for node in nodes_and_index:
+                if base_film == node[1]:
+                    base_film_index = node[0]
+            similars = mdl.wv.most_similar(str(base_film_index), topn=10)
+            similars_list = [int(item[0]) for item in similars]
+            df_closest = emb_df.loc[similars_list]
+
+            st.write(df_closest)
+
+        st.markdown(
+            """
+
+            Os resultados variam bastante dependendo dos parâmetros em que o grafo foi montado, mas ainda assim se mostraram satisfatórios. Vemos que palavras-chave geralmente tem os resultados mais precisos de todos, principalmente quando comparado com os gêneros. Esta funcionalidade acabou por se tornar uma forte candidata a ser implementação do sistema de recomendação com base em conteúdo do Movie Picker.
+
+            ## Clustering/detecção de comunidades no grafo
+
+            Como explicado anteriormente, podemos usar a representação gerada pelo Node2Vec em algoritmos de Machine Learning tradicionais para realizar tarefas como classificação de vértices e detecção de comunidades. Porém, antes de utilizar Node2Vec para este propósito, nós procuramos verificar a viabilidade de algoritmos tradicionais para grafos na realização dessa tarefa.
+
+            ### Detecção de comunidade por algoritmo de Girvan-Newman
+
+            O algoritmo de Girvan-Newman serve para encontrar comunidades em grafos. Para realizar essa tarefa, ele progressivamente remove as arestas mais "importantes" do grafo, sendo estas as que conectam comunidades. No fim, apenas os nós de uma certa comunidade devem estar conectados. 
+
+            As comunidades encontradas pelo algoritmo sendo executado no grafo anterior estão representadas no DataFrame abaixo:
+            """
+        )
+
+        comp = community.girvan_newman(G)
+        k = 1
+        named_comm = []
+        for communities in itertools.islice(comp, k):
+            comm = (tuple(sorted(c) for c in communities))
+            for item in comm:
+                named_item = []
+                for element in item:
+                    for node in nodes_and_index:
+                        if node[0] == element:
+                            named_item.append(node[1])
+                named_comm.append(named_item)
+            named_comm_df = pd.DataFrame(named_comm)
+            st.write(named_comm_df)
+
+        st.markdown(
+            """
+            Verificamos então que esta é uma técnica viável de detecção de comunidades, e que poderia(e pode), de fato, ser a escolhida para ser implementada no Movie Picker. O principal fator que nos leva a considerar outras técnicas é o fato de que este método não leva em consideração a representação avançada do Node2Vec, e pode deixar filmes sem conexão em um cluster próprio, ao invés de agrupa-los(coisa que nos pode ser interessante).
+
+            ### Detecção de comunidades por Spectral Clustering
+
+            Graças ao Node2Vec, podemos utilizar técnicas de Clustering convencionais, como Spectral Clustering, em grafos. Decidimos por utilizar o Spectral Clustering nesse trabalho. Demos preferência a esta técnica pois, como será mostrado abaixo, ela permite uma representação mais visual capaz de fornecer dados importantes a respeito do modelo.
+            """
+        )
+
+        X = emb_df.values
+
+        clustering = SpectralClustering(
+            n_clusters=5,
+            assign_labels='discretize',
+            random_state=128
+        ).fit(X)
+
+        clustered_movies = pd.DataFrame(
+            clustering.labels_,
+            index=nodes_and_index
+        )
+
+        st.write(clustered_movies)
+
+        st.markdown(
+            """
+
+            Acima, temos o resultado do trabalho de Clustering no grafo de sempre. Assim como a recomendação, o resultado do processo de Clustering é muito influenciado pelos parâmetros usados para criar o grafo e os parâmetros do Node2Vec. Apesar disso, os resultados foram novamente satisfatórios, e temos a resposta para nossa primeira pergunta, de como seria possível classificar os filmes que estão dispostos num grafo.
+
+            ### Representação em 2 dimensões utilizando PCA
+
+            No caso do Spectral Clustering, podemos utilizar vetores de qualquer número dimensões para fazer a classificação. Isso vem as custas de não termos uma forma fácil de visualizar os dados. Felizmente, há técnicas que permitem a realização dessa tarefa. Utilizaremos Principal component analysis(PCA), um algoritmo de redução de dimensionalidade, para transformar o conteúdo gerado pelo Node2Vec em algo visível em 2 dimensões. Então, utilizaremos o resultado do Clustering para colorir cada nó. 
+
+            """
+        )
+
         pca = PCA(n_components=2, random_state=7)
         pca_mdl = pca.fit_transform(emb_df)
-
+        
         emb_df_PCA = (
             pd.DataFrame(
             pca_mdl,
@@ -177,19 +312,18 @@ if len(movies) > 1:
         plt.scatter(
             x=emb_df_PCA['x'],
             y=emb_df_PCA['y'],
-            s=0.4,
-            color='maroon',
-            alpha=0.5
+            s=20,
+            c=clustering.labels_,
+            alpha=1
         )
         st.pyplot(fig)
 
-        X = emb_df.values
-
-        clustering = SpectralClustering(
-            n_clusters=5,
-            assign_labels='discretize',
-            random_state=0
-        ).fit_predict(X)
-
-        st.write(clustering)
-
+        st.markdown(
+            """
+            Temos aqui uma representação visual do funcionamento do Clustering. Pela disposição das cores, podemos ver que a conversão reflete precisamente o resultado tanto da recomendação por Node2Vec quanto o trabalho de Clustering realizado anteriormente. 
+            
+            Como dito na seção de Detecção de comunidades por Spectral Clustering, essa representação pode nos fornecer rapidamente informações importantes a respeito do grafo e da representação gerada pelo Node2Vec. 
+            
+            Por exemplo, se os pontos estiverem muito esparços e distribuidos de forma aparentemente aleatória, isso é um sinal de que talvez a montagem do grafo esteja sendo feita de uma maneira não muito efetiva. Da mesma forma, é possível notar problemas no processo Clustering e corrigí-las, como por exemplo, insuficiência ou excesso de clusters.
+            """
+        )
