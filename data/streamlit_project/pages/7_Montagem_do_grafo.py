@@ -263,7 +263,7 @@ if len(movies) > 1:
 
         st.markdown(
             """
-            Verificamos então que esta é uma técnica viável de detecção de comunidades, e que poderia(e pode), de fato, ser a escolhida para ser implementada no Movie Picker. O principal fator que nos leva a considerar outras técnicas é o fato de que este método não leva em consideração a representação avançada do Node2Vec, e pode deixar filmes sem conexão em um cluster próprio, ao invés de agrupa-los(coisa que nos pode ser interessante).
+            Verificamos então que esta é uma técnica viável de detecção de comunidades, mas que tende a mostrar resultados insatisfatórios, nos levando a não implementa-lo no Movie Picker. Este método não leva em consideração a representação avançada do Node2Vec, e pode deixar filmes sem conexão em um cluster próprio, ao invés de agrupa-los(coisa que nos pode ser interessante). Além disso, em grafos com muitas conexões, ele tende a não funcionar corretamente.
 
             ### Detecção de comunidades por Spectral Clustering
 
@@ -273,8 +273,12 @@ if len(movies) > 1:
 
         X = emb_df.values
 
+        ks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+        NUM_CLUSTERS = st.selectbox('Número de clusters: ', ks)
+
         clustering = SpectralClustering(
-            n_clusters=4,
+            n_clusters=NUM_CLUSTERS,
             assign_labels='cluster_qr',
             random_state=128
         ).fit(X)
@@ -308,7 +312,7 @@ if len(movies) > 1:
             """
         )
 
-        ks = [2, 3, 4, 5]
+        
         # Executa o Spectral Clustering para cada valor de K
         for k in ks:
             sc = SpectralClustering(n_clusters=k, affinity='nearest_neighbors', assign_labels='cluster_qr', random_state=128)
@@ -321,8 +325,9 @@ if len(movies) > 1:
 
         st.markdown(
             """
-
             Como estes valores são dinâmicos, não temos como discorrer sobre os resultados acima, mas podemos realizar certas predições a respeito dos resultados e do comportamento dos valores. Cada valor de K é um número de clusters, e o valor de distorção é uma métrica que calcula a distância média de cada elemento do cluster para seu centróide. O número ideal de clusters, segundo essa técnica, é aquele que apresentou a última melhora substâncial em comparação com os outros.    
+
+            Uma observação interessante é que mesmo quando agrupamos filmes por vários fatores, como gêneros e produtoras juntos, o número de clusters tende a se manter similar ao número de clusters quando utilizamos apenas keywords.
 
             ### Representação em 2 dimensões utilizando PCA
 
@@ -362,8 +367,6 @@ if len(movies) > 1:
             Temos aqui uma representação visual do funcionamento do Clustering. Pela disposição das cores, podemos ver que a conversão reflete precisamente o resultado tanto da recomendação por Node2Vec quanto o trabalho de Clustering realizado anteriormente. 
             
             Como dito na seção de Detecção de comunidades por Spectral Clustering, essa representação pode nos fornecer rapidamente informações importantes a respeito do grafo e da representação gerada pelo Node2Vec. 
-            
-            Por exemplo, se os pontos estiverem muito esparços e distribuidos de forma aparentemente aleatória, isso é um sinal de que talvez a montagem do grafo esteja sendo feita de uma maneira não muito efetiva. Da mesma forma, é possível notar problemas no processo Clustering e corrigí-las, como por exemplo, insuficiência ou excesso de clusters.
 
             """
         )
