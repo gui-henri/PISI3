@@ -8,38 +8,29 @@ import 'package:palette_generator/palette_generator.dart';
 
 class MoviePage extends StatelessWidget {
   static const routeName = '/movie';
-
   const MoviePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     final movie = ModalRoute.of(context)!.settings.arguments as Movie;
     final providers = TmdbServiceProvider().fetchMovieProviders(movie.id);
     final db = FiresStoreServiceProvider();
-
     return FutureBuilder<String>(
         future: providers,
         initialData: "Carregando...",
         builder: (BuildContext context, AsyncSnapshot<String> text) {
           return Scaffold(
+              appBar: AppBar(
+                backgroundColor: const Color.fromARGB(255, 31, 3, 88),
+                title: const Text("Detalhes"),
+                leading: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back),
+                ),
+              ),
               body: Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
-                          opacity: 0.8,
-                          fit: BoxFit.cover)),
+                  decoration: mpDefaultBackgroundDecoration(),
                   child: Column(
                     children: [
-                      AppBar(
-                        backgroundColor: const Color.fromARGB(255, 31, 3, 88),
-                        title: const Text("Detalhes"),
-                        leading: IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: const Icon(Icons.arrow_back),
-                        ),
-                      ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -50,7 +41,7 @@ class MoviePage extends StatelessWidget {
                                 child: SizedBox(
                                   child: AutoSizeText(movie.title,
                                       style: const TextStyle(
-                                          color: Colors.white, fontSize: 40),
+                                          color: Colors.white, fontSize: 32),
                                       maxLines: 1),
                                 ),
                               ),
@@ -61,6 +52,11 @@ class MoviePage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Image.network(
+                                        alignment: Alignment.topLeft,
+                                        width: 160,
+                                        height: 240,
+                                        "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -176,8 +172,8 @@ class MoviePage extends StatelessWidget {
                                   child: AutoSizeText(
                                     movie.overview,
                                     style: const TextStyle(
-                                      color: Color.fromARGB(255, 0, 255, 64),
-                                      fontSize: 17,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                     ),
                                     textAlign: TextAlign.justify,
                                   )),
