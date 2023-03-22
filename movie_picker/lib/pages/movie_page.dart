@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_picker/services/firestore_services_provider.dart';
@@ -33,18 +35,9 @@ class MoviePage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.all(12),
                           child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                child: SizedBox(
-                                  child: AutoSizeText(movie.title,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 32),
-                                      maxLines: 1),
-                                ),
-                              ),
                               SizedBox(
                                 width: 387.4,
                                 height: 300,
@@ -54,8 +47,7 @@ class MoviePage extends StatelessWidget {
                                   children: [
                                     Image.network(
                                         alignment: Alignment.topLeft,
-                                        width: 160,
-                                        height: 240,
+                                        width: 185,
                                         "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
                                     Expanded(
                                       child: Padding(
@@ -67,6 +59,21 @@ class MoviePage extends StatelessWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 8),
+                                              child: SizedBox(
+                                                child: AutoSizeText(
+                                                  movie.title,
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14.5),
+                                                ),
+                                              ),
+                                            ),
                                             const Text("Popularidade:",
                                                 style: TextStyle(
                                                     color: Colors.white,
@@ -133,20 +140,21 @@ class MoviePage extends StatelessWidget {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      0, 40, 0, 0),
+                                                      8, 0, 0, 0),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
                                                 children: [
                                                   const IconButton(
+                                                      alignment:
+                                                          Alignment.topLeft,
                                                       onPressed: null,
                                                       icon: Icon(
                                                         Icons.favorite,
                                                         color: Colors.white,
-                                                        size: 40,
+                                                        size: 30,
                                                       )),
                                                   IconButton(
+                                                      alignment:
+                                                          Alignment.topLeft,
                                                       onPressed: () async {
                                                         db.adicionarFilme(
                                                             movie);
@@ -154,11 +162,11 @@ class MoviePage extends StatelessWidget {
                                                       icon: const Icon(
                                                         Icons.add,
                                                         color: Colors.white,
-                                                        size: 40,
+                                                        size: 30,
                                                       )),
                                                 ],
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -167,16 +175,18 @@ class MoviePage extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                                  child: AutoSizeText(
-                                    movie.overview,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                    textAlign: TextAlign.justify,
-                                  )),
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: SingleChildScrollView(
+                                    child: AutoSizeText(
+                                  movie.overview,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  minFontSize: 9,
+                                  maxFontSize: 12,
+                                  textAlign: TextAlign.justify,
+                                )),
+                              ),
                             ],
                           ),
                         ),
