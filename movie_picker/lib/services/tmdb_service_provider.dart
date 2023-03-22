@@ -34,4 +34,17 @@ class TmdbServiceProvider implements MovieDataProvider{
           'Error fetching movie providers. Provider data could not be fetched because server did not respond with code 200.'));
     }
   }
+  
+  @override
+  Future<Movie> fetchMovieById(String id) async {
+    final ulr = 'https://api.themoviedb.org/3/movie/$id?api_key=$tmdbKey';
+    final response = await http.get(Uri.parse(ulr));
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return Movie.fromJson(json);
+    }
+    return Future.error(Exception(
+      'Error fetching movies. Server did not respond with code 200'
+    ));
+  }
 }

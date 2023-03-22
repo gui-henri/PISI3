@@ -36,7 +36,7 @@ class MovieSearch extends SearchDelegate {
         icon: const Icon(Icons.clear),
         onPressed: () { 
           if (query.isEmpty) {
-            close(context, null);
+            close(context, 1);
           } else {
             query = '';
           }
@@ -49,7 +49,7 @@ class MovieSearch extends SearchDelegate {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
-      onPressed: () => close(context, null)
+      onPressed: () => close(context, 1)
     );
   }
 

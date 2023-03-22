@@ -11,6 +11,8 @@ from ast import literal_eval
 from node2vec import Node2Vec as n2v
 from sklearn.decomposition import PCA
 from Introdução import filesLocation
+from sklearn.metrics import pairwise_distances
+import numpy as np
 
 from pathlib import Path
 import sys
@@ -273,10 +275,19 @@ if len(movies) > 1:
         X = emb_df.values
 
         clustering = SpectralClustering(
-            n_clusters=5,
-            assign_labels='discretize',
+            n_clusters=4,
+            assign_labels='cluster_qr',
             random_state=128
         ).fit(X)
+
+        def calculate_total_distortion(X, labels, centroids):
+            # Calcula a distância euclidiana entre cada ponto e o seu respectivo centróide
+            distances = pairwise_distances(X, centroids, metric='euclidean')
+            # Calcula a soma das distâncias euclidianas ao quadrado para cada cluster
+            cluster_sums = np.array([np.sum(distances[labels == k, k]**2) for k in range(len(centroids))])
+            # Calcula a distorção total como a soma das distâncias euclidianas ao quadrado de todos os pontos
+            total_distortion = np.sum(cluster_sums)
+            return total_distortion
 
         clustered_movies = pd.DataFrame(
             clustering.labels_,
@@ -284,11 +295,35 @@ if len(movies) > 1:
         )
 
         st.write(clustered_movies)
+        
+        st.markdown(
+            """
+            Como dito na seção de Detecção de comunidades por Spectral Clustering, essa representação pode nos fornecer rapidamente informações importantes a respeito do grafo e da representação gerada pelo Node2Vec. 
+            
+            Por exemplo, se os pontos estiverem muito esparços e distribuidos de forma aparentemente aleatória, isso é um sinal de que talvez a montagem do grafo esteja sendo feita de uma maneira não muito efetiva. Da mesma forma, é possível notar problemas no processo Clustering e corrigí-las, como por exemplo, insuficiência ou excesso de clusters.
+
+            ### Método do 'Cotovelo' para achar número ótimo de clusters
+
+            O método do cotovelo, ou Elbow Method em inglês, é uma abordagem comum para determinar o número ideal de clusters em algoritmos de clustering, incluindo o Spectral Clustering. Este método ajuda a identificar o número de clusters que oferece um bom equilíbrio entre a redução da distorção e a manutenção da interpretabilidade dos clusters. Vale lembrar que este é apenas uma heurística, e pode não apresentar os melhores resultados sempre.
+
+            """
+        )
+
+        ks = [2, 3, 4, 5]
+        # Executa o Spectral Clustering para cada valor de K
+        for k in ks:
+            sc = SpectralClustering(n_clusters=k, affinity='nearest_neighbors', assign_labels='cluster_qr', random_state=128)
+            sc.fit(X)
+            # Calcula os centróides para cada cluster
+            centroids = np.array([np.mean(X[sc.labels_ == j], axis=0) for j in range(k)])
+            # Calcula a distorção total para cada cluster
+            total_distortion = calculate_total_distortion(X, sc.labels_, centroids)
+            st.write(f"K = {k}, Distorção Total = {total_distortion}")
 
         st.markdown(
             """
 
-            Acima, temos o resultado do trabalho de Clustering no grafo de sempre. Assim como a recomendação, o resultado do processo de Clustering é muito influenciado pelos parâmetros usados para criar o grafo e os parâmetros do Node2Vec. Apesar disso, os resultados foram novamente satisfatórios, e temos a resposta para nossa primeira pergunta, de como seria possível classificar os filmes que estão dispostos num grafo.
+            Como estes valores são dinâmicos, não temos como discorrer sobre os resultados acima, mas podemos realizar certas predições a respeito dos resultados e do comportamento dos valores. Cada valor de K é um número de clusters, e o valor de distorção é uma métrica que calcula a distância média de cada elemento do cluster para seu centróide. O número ideal de clusters, segundo essa técnica, é aquele que apresentou a última melhora substâncial em comparação com os outros.    
 
             ### Representação em 2 dimensões utilizando PCA
 
@@ -296,6 +331,8 @@ if len(movies) > 1:
 
             """
         )
+
+        
 
         pca = PCA(n_components=2, random_state=7)
         pca_mdl = pca.fit_transform(emb_df)
@@ -307,6 +344,8 @@ if len(movies) > 1:
             index= emb_df.index
             )
         )
+
+        st.write(emb_df_PCA)
 
         plt.clf()
         fig = plt.figure(figsize=(6, 4))
@@ -326,5 +365,8 @@ if len(movies) > 1:
             Como dito na seção de Detecção de comunidades por Spectral Clustering, essa representação pode nos fornecer rapidamente informações importantes a respeito do grafo e da representação gerada pelo Node2Vec. 
             
             Por exemplo, se os pontos estiverem muito esparços e distribuidos de forma aparentemente aleatória, isso é um sinal de que talvez a montagem do grafo esteja sendo feita de uma maneira não muito efetiva. Da mesma forma, é possível notar problemas no processo Clustering e corrigí-las, como por exemplo, insuficiência ou excesso de clusters.
+
             """
         )
+
+        
