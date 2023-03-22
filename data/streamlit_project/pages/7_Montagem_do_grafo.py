@@ -274,7 +274,7 @@ if len(movies) > 1:
 
         X = emb_df.values
 
-        ks = range(len(film_names))
+        ks = range(1, len(film_names))
 
         NUM_CLUSTERS = st.selectbox('Número de clusters: ', ks)
 
