@@ -1,7 +1,7 @@
 import streamlit as st
 
 def filesLocation(file):
-    path = r'C:\Users\Lombardi\Documents\GitHub\PISI3\data\archive'
+    path = r'data\archive'
     return path + file
 
 # crescimento do lucro dos filmes no tempo
