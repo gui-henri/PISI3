@@ -8,7 +8,7 @@ df.set_index('original_title', inplace=True)
 
 st.title("Visão global")
 
-g = plt.scatter(data_frame= df, x="budget", y= "revenue", hover_name= "title", labels={"revenue":"Faturamento", "budget":"Orçamento"})
+g = plt.scatter(data_frame= df, x="budget", y= "revenue", hover_name= "title", labels={"revenue":"Faturamento USD", "budget":"Orçamento USD"})
 
 st.plotly_chart(g)
-st.subheader("Plot de todos os filmes no banco de dados, em realação ao seu orçamento (eixo horizontal) e Faturamento (eixo vertical).")
+st.markdown("Plot de todos os filmes no banco de dados, em realação ao seu orçamento (eixo horizontal) e Faturamento (eixo vertical).")

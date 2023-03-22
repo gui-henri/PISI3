@@ -1,6 +1,6 @@
 from .comparar import comp
 
-def generate_matrix(filmes, tags, pesos):
+def generate_matrix(filmes, tags, pesos, maxPeso = 1):
     matriz = []
     temp = []
     t = len(filmes)
@@ -10,7 +10,7 @@ def generate_matrix(filmes, tags, pesos):
         for j in range(i):
            temp.append(None)
         for filmeB in filmes[i:]:
-            temp.append(round(comp(filmeA, filmeB, tags, pesos), 2))
+            temp.append(round(comp(filmeA, filmeB, tags, pesos, maxPeso), 2))
             #temp.append(f'({filmeA[5]}, {filmeB[5]})') #debugOnly
         matriz.append(temp)
         temp = []

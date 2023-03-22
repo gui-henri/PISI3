@@ -13,6 +13,9 @@ from sklearn.decomposition import PCA
 from Introdução import filesLocation
 from sklearn.metrics import pairwise_distances
 import numpy as np
+import plotly.express as ply
+import plotly.graph_objects as go
+
 
 from pathlib import Path
 import sys
@@ -92,7 +95,9 @@ if len(movies) > 1:
         'popularity': pop, 'production_companies': pdc, 'production_countries': 0, 'release_date': 0, 'revenue': 0,
         'runtime': 0, 'title': 0, 'vote_average': 0, 'vote_count': 0}
 
-    lista_matriz = generate_matrix(movies, tags, pesos)
+    maxPesos = sum(pesos.values())
+    
+    lista_matriz = generate_matrix(movies, tags, pesos, maxPesos)
     
     G = nx.Graph()
     for i, node in enumerate([i[5] for i in movies]):
@@ -126,8 +131,6 @@ if len(movies) > 1:
     fig_html = mpld3.fig_to_html(fig)
 
     components.html(fig_html, height=500)
-
-    st.write(f"Similaridade máxima: {gen + pop + pdc + o + pc}")
 
     st.write(pd.DataFrame(lista_matriz))
 
@@ -344,12 +347,19 @@ if len(movies) > 1:
             index= emb_df.index
             )
         )
-
+        emb_df_PCA.reset_index(inplace=True, level=1)
+        emb_df_PCA.rename(columns={'level_1': 'Title'}, inplace=True)
         st.write(emb_df_PCA)
-
+        
+        fig = ply.scatter(emb_df_PCA, x='x', y='y', color=clustering.labels_.astype(str), hover_name='Title', title="Representação em 2 dimensões")
+        fig.update_xaxes(showgrid=False, zeroline=False, showticklabels=False,)
+        fig.update_yaxes(showgrid=False, zeroline=False, showticklabels=False,)
+        
+        st.plotly_chart(fig)
+        '''
         plt.clf()
-        fig = plt.figure(figsize=(6, 4))
-        plt.scatter(
+        fig = ply.figure(figsize=(6, 4))
+        ply.scatter(
             x=emb_df_PCA['x'],
             y=emb_df_PCA['y'],
             s=20,
@@ -357,7 +367,7 @@ if len(movies) > 1:
             alpha=1
         )
         st.pyplot(fig)
-
+'''
         st.markdown(
             """
             Temos aqui uma representação visual do funcionamento do Clustering. Pela disposição das cores, podemos ver que a conversão reflete precisamente o resultado tanto da recomendação por Node2Vec quanto o trabalho de Clustering realizado anteriormente. 

@@ -34,7 +34,7 @@ def release_date (filmeA, filmeB):
     
     scale = 4
     
-    return round(1/(1+(abs(valA-valB)**scale)), 2)
+    return round(1/(1+(abs(valA - valB) ** 2/scale)), 2)
 
 def revenue (filmeA, filmeB): 
     return funDiff(filmeA, filmeB)
@@ -61,13 +61,13 @@ def funMatches (filmeA, filmeB):
 def funDiff(valA, valB, scale = 0):
     x = max(valA, valB)
     y = min(valA, valB)
-    return round(y/x, 2)
+    return y/x
 
-def comp(filmeA, filmeB, tags, peso):
+def comp(filmeA, filmeB, tags, peso, maxPeso):
     x = 0
     for k, tag in enumerate(tags):
         f = eval(tag)
         fA = filmeA[k]
         fB = filmeB[k]
         x += f(fA, fB) * peso[tag]
-    return x
+    return x/maxPeso
