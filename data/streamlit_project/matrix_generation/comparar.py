@@ -29,8 +29,12 @@ def production_countries (filmeA, filmeB):
     return funMatches(filmeA, filmeB)
 
 def release_date (filmeA, filmeB):
+    valA = int(filmeA[:4]) 
+    valB = int(filmeB[:4])
+    
     scale = 4
-    return funDiff(int(filmeA[:4]), int(filmeB[:4]), scale)
+    
+    return round(1/(1+(abs(valA-valB)**scale)), 2)
 
 def revenue (filmeA, filmeB): 
     return funDiff(filmeA, filmeB)
@@ -55,10 +59,9 @@ def funMatches (filmeA, filmeB):
     return x/max(len(filmeA), len(filmeB))
 
 def funDiff(valA, valB, scale = 0):
-    if scale == 0:
-        scale = max(valA, valB)
-        
-    return 1/(1+(abs(valA - valB) ** 2/scale))
+    x = max(valA, valB)
+    y = min(valA, valB)
+    return round(y/x, 2)
 
 def comp(filmeA, filmeB, tags, peso):
     x = 0
