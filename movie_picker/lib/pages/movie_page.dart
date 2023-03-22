@@ -5,6 +5,31 @@ import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'package:movie_picker/models/movie.dart';
 import 'package:movie_picker/services/tmdb_service_provider.dart';
 
+class MyButton extends StatefulWidget {
+  const MyButton({super.key});
+
+  @override
+  _MyButtonState createState() => _MyButtonState();
+}
+
+class _MyButtonState extends State<MyButton> {
+  bool isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: isPressed
+          ? const Icon(Icons.favorite)
+          : const Icon(Icons.favorite_border),
+      onPressed: () {
+        setState(() {
+          isPressed = !isPressed;
+        });
+      },
+    );
+  }
+}
+
 class MoviePage extends StatelessWidget {
   static const routeName = '/movie';
   const MoviePage({super.key});
@@ -44,7 +69,7 @@ class MoviePage extends StatelessWidget {
                                   children: [
                                     Image.network(
                                         alignment: Alignment.topLeft,
-                                        width: 185,
+                                        width: 180,
                                         "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
                                     Expanded(
                                       child: Padding(
@@ -67,7 +92,7 @@ class MoviePage extends StatelessWidget {
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 14.7),
+                                                      fontSize: 14),
                                                 ),
                                               ),
                                             ),
@@ -79,7 +104,7 @@ class MoviePage extends StatelessWidget {
                                               children: [
                                                 const Padding(
                                                   padding: EdgeInsets.fromLTRB(
-                                                      0, 4, 4, 8),
+                                                      0, 3, 3, 8),
                                                   child: Icon(
                                                       Icons.analytics_outlined,
                                                       color: Colors.white),
@@ -99,7 +124,7 @@ class MoviePage extends StatelessWidget {
                                               children: [
                                                 const Padding(
                                                   padding: EdgeInsets.fromLTRB(
-                                                      0, 4, 4, 8),
+                                                      0, 3, 3, 8),
                                                   child: Icon(
                                                       Icons
                                                           .rate_review_outlined,
@@ -120,7 +145,7 @@ class MoviePage extends StatelessWidget {
                                               children: [
                                                 const Padding(
                                                   padding: EdgeInsets.fromLTRB(
-                                                      0, 4, 4, 8),
+                                                      0, 3, 3, 8),
                                                   child: Icon(Icons.cast_sharp,
                                                       color: Colors.white),
                                                 ),
@@ -129,7 +154,7 @@ class MoviePage extends StatelessWidget {
                                                     text.data.toString(),
                                                     style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 13),
+                                                        fontSize: 12),
                                                   ),
                                                 ),
                                               ],
@@ -143,7 +168,7 @@ class MoviePage extends StatelessWidget {
                                                   const IconButton(
                                                       alignment:
                                                           Alignment.topLeft,
-                                                      onPressed: null,
+                                                      onPressed: (null),
                                                       icon: Icon(
                                                         Icons.favorite_border,
                                                         color: Colors.white,
