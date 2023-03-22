@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_picker/services/firestore_services_provider.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'package:movie_picker/models/movie.dart';
 import 'package:movie_picker/services/tmdb_service_provider.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class MoviePage extends StatelessWidget {
   static const routeName = '/movie';
@@ -67,7 +70,7 @@ class MoviePage extends StatelessWidget {
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 14.7),
+                                                      fontSize: 14.5),
                                                 ),
                                               ),
                                             ),
@@ -145,7 +148,7 @@ class MoviePage extends StatelessWidget {
                                                           Alignment.topLeft,
                                                       onPressed: null,
                                                       icon: Icon(
-                                                        Icons.favorite_border,
+                                                        Icons.favorite,
                                                         color: Colors.white,
                                                         size: 30,
                                                       )),
