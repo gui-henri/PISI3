@@ -10,6 +10,7 @@ from networkx.algorithms import community
 from ast import literal_eval
 from node2vec import Node2Vec as n2v
 from sklearn.decomposition import PCA
+from Introdução import filesLocation
 from sklearn.metrics import pairwise_distances
 import numpy as np
 
@@ -44,7 +45,7 @@ st.markdown(
 
     """
 )
-df = pd.read_csv('data/archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
+df = pd.read_csv(filesLocation(r'\tmdb_3000_movies.csv'), converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
