@@ -5,7 +5,7 @@ from datetime import datetime
 import cpi
 from Introdução import filesLocation
 
-df = pd.read_csv(filesLocation(r'\tmdb_5000_movies.csv'))
+df = pd.read_csv('data/archive/tmdb_5000_movies.csv')
 
 st.title("Análise por orçamento")
 

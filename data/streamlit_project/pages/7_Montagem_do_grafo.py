@@ -45,7 +45,7 @@ st.markdown(
 
     """
 )
-df = pd.read_csv(filesLocation(r'\tmdb_3000_movies.csv'), converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
+df = pd.read_csv('data/archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
@@ -274,7 +274,7 @@ if len(movies) > 1:
 
         X = emb_df.values
 
-        ks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        ks = range(len(film_names))
 
         NUM_CLUSTERS = st.selectbox('Número de clusters: ', ks)
 
