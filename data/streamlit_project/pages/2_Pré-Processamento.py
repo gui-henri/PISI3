@@ -3,7 +3,7 @@ import pandas as pd
 import ast
 from Introdução import filesLocation
 
-df = pd.read_csv(filesLocation(r'\tmdb_5000_movies.csv'))
+df = pd.read_csv('data/archive/tmdb_5000_movies.csv')
 
 st.title("Pré-Processamento")
 

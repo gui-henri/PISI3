@@ -4,4 +4,4 @@ networkx
 mpld3
 matplotlib
 node2vec
-sklearn
+scikit-learn
