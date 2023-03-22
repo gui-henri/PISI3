@@ -13,7 +13,7 @@ class MyButton extends StatefulWidget {
 }
 
 class _MyButtonState extends State<MyButton> {
-  bool isPressed = false;
+  bool isPressed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +154,7 @@ class MoviePage extends StatelessWidget {
                                                     text.data.toString(),
                                                     style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 12),
+                                                        fontSize: 9.4),
                                                   ),
                                                 ),
                                               ],
@@ -202,10 +202,7 @@ class MoviePage extends StatelessWidget {
                                     child: AutoSizeText(
                                   movie.overview,
                                   style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                  minFontSize: 9,
-                                  maxFontSize: 12,
+                                      color: Colors.white, fontSize: 12.5),
                                   textAlign: TextAlign.justify,
                                 )),
                               ),

@@ -8,6 +8,7 @@ class FavoritesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final movie = ModalRoute.of(context)!.settings.arguments as Movie;
     final db = FiresStoreServiceProvider();
 
     final Future<List<Movie>> userMovies = db.obterFilmes();
@@ -37,6 +38,8 @@ class FavoritesTab extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Image.network(
+                                    "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
                                 Text(snapshot.data![index].title),
                                 IconButton(
                                   onPressed: () {},
