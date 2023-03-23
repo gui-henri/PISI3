@@ -1,7 +1,6 @@
 import io
 import streamlit as st
 import pandas as pd
-from Introdução import filesLocation
 
 df = pd.read_csv('data/archive/tmdb_5000_movies.csv')
 

@@ -10,7 +10,6 @@ from networkx.algorithms import community
 from ast import literal_eval
 from node2vec import Node2Vec as n2v
 from sklearn.decomposition import PCA
-from Introdução import filesLocation
 from sklearn.metrics import pairwise_distances
 import numpy as np
 import plotly.express as ply
@@ -22,10 +21,6 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from matrix_generation.matriz_de_similaridade import generate_matrix
-    
-tags = ['budget', 'genres', 'id', 'keywords', 'original_language', 'original_title', 'overview',
-        'popularity', 'production_companies', 'production_countries', 'release_date', 'revenue',
-        'runtime', 'title', 'vote_average', 'vote_count']
 
 st.markdown(
     """
@@ -48,7 +43,7 @@ st.markdown(
 
     """
 )
-df = pd.read_csv('data/archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
+df = pd.read_csv('data/archive/tmdb_3000_movies_merged.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
@@ -70,6 +65,16 @@ if len(movies) > 1:
     pdc_b = st.checkbox("Produtoras")
     o_b = st.checkbox("Orçamento")
     pc_b = st.checkbox("Palavras-chave")
+    at_b = st.checkbox("Atores")
+    dt_b = st.checkbox("Diretores")
+    
+    at = 0
+    if at_b == True:
+        at = 1
+    
+    dt = 0
+    if dt_b == True:
+        dt = 1
 
     gen = 0
     if gen_b == True:
@@ -90,17 +95,18 @@ if len(movies) > 1:
     pc = 0
     if pc_b == True:
         pc = 1
+    
+    pesos = {'index': 0, 'movie_id': 0, 'title': 0, 'genres': gen, 'keywords': pc, 'budget': o, 'revenue': 0, 'popularity': pop,
+             'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': 0, 'original_language': 0,
+             'production_countries': 0, 'production_companies': pdc, 'director': dt, 'cast': at}
 
-    pesos = {'budget': o, 'genres': gen, 'id': 0, 'keywords': pc, 'original_language': 0, 'original_title': 0, 'overview': 0,
-        'popularity': pop, 'production_companies': pdc, 'production_countries': 0, 'release_date': 0, 'revenue': 0,
-        'runtime': 0, 'title': 0, 'vote_average': 0, 'vote_count': 0}
 
     maxPesos = sum(pesos.values())
     
-    lista_matriz = generate_matrix(movies, tags, pesos, maxPesos)
+    lista_matriz = generate_matrix(movies, pesos, maxPesos)
     
     G = nx.Graph()
-    for i, node in enumerate([i[5] for i in movies]):
+    for i, node in enumerate([i[2] for i in movies]):
         G.add_node(i, name=f'{node}')
 
     #newDf = pd.DataFrame(data= lista_matriz, columns=[i for i in movies], index=[i for i in movies])
@@ -121,7 +127,7 @@ if len(movies) > 1:
     }
     pos=layouts[layout]
 
-    film_names = [i[13] for i in movies]
+    film_names = [i[2] for i in movies]
     node_names = dict(zip(range(len(selected_movies)), film_names))
     nx.draw(G, pos=pos, labels=node_names, with_labels=True, edge_color= 'b', font_weight='bold', font_size=16)
 
@@ -132,7 +138,9 @@ if len(movies) > 1:
 
     components.html(fig_html, height=500)
 
-    st.write(pd.DataFrame(lista_matriz))
+    matrix_to_show = pd.DataFrame(lista_matriz, columns=(x := [i[2] for i in movies]), index=x)
+    
+    st.write(matrix_to_show)
 
     apply_node2vec = st.checkbox("Deseja aplicar Node2Vec a este grafo?")
 
@@ -361,18 +369,7 @@ if len(movies) > 1:
         fig.update_yaxes(showgrid=False, zeroline=False, showticklabels=False,)
         
         st.plotly_chart(fig)
-        '''
-        plt.clf()
-        fig = ply.figure(figsize=(6, 4))
-        ply.scatter(
-            x=emb_df_PCA['x'],
-            y=emb_df_PCA['y'],
-            s=20,
-            c=clustering.labels_,
-            alpha=1
-        )
-        st.pyplot(fig)
-'''
+
         st.markdown(
             """
             Temos aqui uma representação visual do funcionamento do Clustering. Pela disposição das cores, podemos ver que a conversão reflete precisamente o resultado tanto da recomendação por Node2Vec quanto o trabalho de Clustering realizado anteriormente. 

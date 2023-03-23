@@ -1,9 +1,5 @@
 import streamlit as st
 
-def filesLocation(file):
-    path = r'data/archive'
-    return path + file
-
 # crescimento do lucro dos filmes no tempo
 # analisar os outliners
 # corrigir pela inflação

@@ -24,5 +24,33 @@ def plotDist(data, nome):
     return 
 
 for tag in lista:
-    data = loadFile(f'distData/{tag}.txt')
+    data = loadFile(f'data/distData/{tag}.txt')
     plotDist(data, tag)
+
+tag = 'genres_dist'
+
+filehandle = open(f'data/distData/{tag}.txt', 'r')
+data = json.load(filehandle)
+filehandle.close()
+
+data = sorted(data, key=lambda x: x[1], reverse=True)
+
+st.header(tag)
+log = st.checkbox("Incidência em log", key=tag)
+g = plt.bar(data, x=[i[0] for i in data], y = [i[1] for i in data], log_y= log)
+g.update_layout(xaxis_title="Genero", yaxis_title="Incidência")
+st.plotly_chart(g)
+
+'''tag = 'keywords_dist'
+
+filehandle = open(f'data/distData/{tag}.txt', 'r')
+data = json.load(filehandle)
+filehandle.close()
+
+data = sorted(data, key=lambda x: x[1], reverse=True)
+
+st.header(tag)
+log = st.checkbox("Incidência em log", key=tag)
+g = plt.bar(data, x=[i[0] for i in data], y = [i[1] for i in data], log_y= log)
+g.update_layout(xaxis_title="Similaridade", yaxis_title="Incidência")
+st.plotly_chart(g)'''
