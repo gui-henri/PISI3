@@ -57,7 +57,7 @@ class ExploreTab extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(8),
             child: Text(
-              "Outros Filmes",
+              "Mais Populares",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
