@@ -154,7 +154,7 @@ class MoviePage extends StatelessWidget {
                                                     text.data.toString(),
                                                     style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 9.4),
+                                                        fontSize: 10),
                                                   ),
                                                 ),
                                               ],
