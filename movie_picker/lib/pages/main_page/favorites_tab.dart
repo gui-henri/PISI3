@@ -23,38 +23,51 @@ class FavoritesTab extends StatelessWidget {
                     child: GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 160,
-                                childAspectRatio: 5 / 7,
-                                crossAxisSpacing: 15,
+                                maxCrossAxisExtent: 140,
+                                childAspectRatio: 0.65,
+                                crossAxisSpacing: 4,
                                 mainAxisSpacing: 2),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (BuildContext ctx, index) {
                           return Container(
-                            margin: const EdgeInsets.all(7),
-                            alignment: Alignment.bottomRight,
-                            decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                snapshot.data != null
-                                    ? Image.network(
-                                        "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}")
-                                    : Image.asset(
-                                        "C:/Nanda/PISI3/PISI3/movie_picker/lib/pages/Detalhes_do_filme.png"),
-                                Text(snapshot.data![index].title),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.favorite,
-                                      color: Color.fromARGB(255, 218, 55, 43)),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  splashRadius: 15,
-                                )
-                              ],
-                            ),
-                          );
+                              margin: const EdgeInsets.all(7.5),
+                              alignment: Alignment.bottomRight,
+                              decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      snapshot.data != null
+                                          ? Image.network(
+                                              "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Image.asset(
+                                              "C:/Nanda/PISI3/PISI3/movie_picker/lib/pages/Detalhes_do_filme.png",
+                                              fit: BoxFit.fill,
+                                            ),
+                                      //Text(snapshot.data![index].title),
+                                      Positioned(
+                                          bottom: 5,
+                                          right: 5,
+                                          child: IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(Icons.favorite,
+                                                color: Color.fromARGB(
+                                                    255, 201, 43, 32)),
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                            splashRadius: 15,
+                                            iconSize: 22,
+                                          ))
+                                    ],
+                                  )
+                                ],
+                              ));
                         })));
           } else {
             return Container(
