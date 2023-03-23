@@ -1,0 +1,1 @@
+[["Action", 886], ["Adventure", 649], ["Animation", 180], ["Comedy", 1043], ["Crime", 505], ["Documentary", 31], ["Drama", 1375], ["Family", 352], ["Fantasy", 334], ["Foreign", 2], ["History", 141], ["Horror", 329], ["Music", 107], ["Mystery", 261], ["Romance", 545], ["Science Fiction", 425], ["Thriller", 912], ["War", 118], ["Western", 56]]

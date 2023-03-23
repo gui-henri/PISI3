@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-from Introdução import filesLocation
 
 df = pd.read_csv('data/archive/tmdb_5000_movies.csv')
 df.set_index('original_title', inplace=True)
