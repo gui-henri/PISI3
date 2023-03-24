@@ -47,7 +47,7 @@ class FavoritesTab extends StatelessWidget {
                                               fit: BoxFit.fill,
                                             )
                                           : Image.asset(
-                                              "C:/Nanda/PISI3/PISI3/movie_picker/lib/pages/Detalhes_do_filme.png",
+                                              "movie_picker/lib/styles/image-placeholder.png",
                                               fit: BoxFit.fill,
                                             ),
                                       //Text(snapshot.data![index].title),

@@ -165,15 +165,6 @@ class MoviePage extends StatelessWidget {
                                                       8, 0, 0, 0),
                                               child: Row(
                                                 children: [
-                                                  const IconButton(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      onPressed: (null),
-                                                      icon: Icon(
-                                                        Icons.favorite_border,
-                                                        color: Colors.white,
-                                                        size: 30,
-                                                      )),
                                                   IconButton(
                                                       alignment:
                                                           Alignment.topLeft,
@@ -182,6 +173,15 @@ class MoviePage extends StatelessWidget {
                                                             movie);
                                                       },
                                                       icon: const Icon(
+                                                        Icons.favorite_border,
+                                                        color: Colors.white,
+                                                        size: 30,
+                                                      )),
+                                                  const IconButton(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      onPressed: (null),
+                                                      icon: Icon(
                                                         Icons.add,
                                                         color: Colors.white,
                                                         size: 30,
