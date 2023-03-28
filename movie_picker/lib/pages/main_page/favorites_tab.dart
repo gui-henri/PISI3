@@ -55,7 +55,10 @@ class FavoritesTab extends StatelessWidget {
                                           bottom: 5,
                                           right: 5,
                                           child: IconButton(
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              await db.removerFilme(
+                                                  snapshot.data![index]);
+                                            },
                                             icon: const Icon(Icons.favorite,
                                                 color: Color.fromARGB(
                                                     255, 201, 43, 32)),
