@@ -6,9 +6,14 @@ import 'package:movie_picker/styles/default_background_decoration.dart';
 
 import '../movie_page.dart';
 
-class FavoritesTab extends StatelessWidget {
+class FavoritesTab extends StatefulWidget {
   const FavoritesTab({super.key});
 
+  @override
+  State<FavoritesTab> createState() => _FavoritesTabState();
+}
+
+class _FavoritesTabState extends State<FavoritesTab> {
   @override
   Widget build(BuildContext context) {
     //final movie = ModalRoute.of(context)!.settings.arguments as Movie;
@@ -76,6 +81,7 @@ class FavoritesTab extends StatelessWidget {
                                             onPressed: () async {
                                               await db.removerFilme(
                                                   snapshot.data![index]);
+                                              setState(() {});
                                             },
                                             icon: const Icon(Icons.favorite,
                                                 color: Color.fromARGB(
