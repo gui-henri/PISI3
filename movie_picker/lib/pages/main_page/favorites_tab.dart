@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movie_picker/models/movie.dart';
 import 'package:movie_picker/services/firestore_services_provider.dart';
+import 'package:movie_picker/services/tmdb_service_provider.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
+
+import '../movie_page.dart';
 
 class FavoritesTab extends StatelessWidget {
   const FavoritesTab({super.key});
@@ -42,9 +45,24 @@ class FavoritesTab extends StatelessWidget {
                                   Stack(
                                     children: [
                                       snapshot.data != null
-                                          ? Image.network(
-                                              "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
-                                              fit: BoxFit.fill,
+                                          ? GestureDetector(
+                                              onTap: () async {
+                                                final provider =
+                                                    TmdbServiceProvider();
+                                                provider
+                                                    .fetchMovieById(snapshot
+                                                        .data![index].id
+                                                        .toString())
+                                                    .then((value) {
+                                                  Navigator.pushNamed(context,
+                                                      MoviePage.routeName,
+                                                      arguments: value);
+                                                });
+                                              },
+                                              child: Image.network(
+                                                "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
+                                                fit: BoxFit.fill,
+                                              ),
                                             )
                                           : Image.asset(
                                               "movie_picker/lib/styles/image-placeholder.png",
