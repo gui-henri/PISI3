@@ -24,12 +24,12 @@ def plotDist(data, nome):
     return 
 
 for tag in lista:
-    data = loadFile(f'data/distData/{tag}.txt')
+    data = loadFile(f'streamlit_project/data/distData/{tag}.txt')
     plotDist(data, tag)
 
 tag = 'genres_dist'
 
-filehandle = open(f'data/distData/{tag}.txt', 'r')
+filehandle = open(f'streamlit_project/data/distData/{tag}.txt', 'r')
 data = json.load(filehandle)
 filehandle.close()
 
@@ -41,9 +41,9 @@ g = plt.bar(data, x=[i[0] for i in data], y = [i[1] for i in data], log_y= log)
 g.update_layout(xaxis_title="Genero", yaxis_title="Incidência")
 st.plotly_chart(g)
 
-'''tag = 'keywords_dist'
+tag = 'keywords_dist'
 
-filehandle = open(f'data/distData/{tag}.txt', 'r')
+filehandle = open(f'streamlit_project/data/distData/{tag}.txt', 'r')
 data = json.load(filehandle)
 filehandle.close()
 
@@ -53,4 +53,4 @@ st.header(tag)
 log = st.checkbox("Incidência em log", key=tag)
 g = plt.bar(data, x=[i[0] for i in data], y = [i[1] for i in data], log_y= log)
 g.update_layout(xaxis_title="Similaridade", yaxis_title="Incidência")
-st.plotly_chart(g)'''
+st.plotly_chart(g)
