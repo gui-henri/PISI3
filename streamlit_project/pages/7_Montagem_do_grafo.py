@@ -47,6 +47,24 @@ df = pd.read_csv('data/archive/tmdb_3000_movies_merged.csv', converters={'genres
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
+
+
+
+# teste com duplicatas -- remover depois
+selected_movies2 = st.multiselect("Selecione filmes para duplicar: ", selected_movies)
+#selected_movies = [i for i in df['title'][:500]]
+movie2 = df[df['title'].isin(selected_movies2)].values.tolist()
+
+for i in range(len(movie2)):
+    movie2[i][2] = movie2[i][2] + '_copy'
+
+movies = movies + movie2
+
+# final do teste
+
+
+
+
 if len(movies) > 1:
 
     c1, c2 = st.columns(2)
@@ -114,7 +132,7 @@ if len(movies) > 1:
         
     for i, column in enumerate(lista_matriz):
         for j, item in enumerate(column):
-            if item != None and item >= cut_value and i != j:
+            if item != None and item > cut_value and i != j:
                 G.add_edge(i, j, weight=item)
 
     fig, ax = plt.subplots()
