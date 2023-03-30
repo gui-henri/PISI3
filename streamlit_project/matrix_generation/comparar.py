@@ -37,7 +37,7 @@ def release_date (valA, valB, fun):
 def director (filmeA, filmeB, fun):
     return funMatches(filmeA, filmeB)
 
-def cast (filmeA, filmeB):
+def cast (filmeA, filmeB, fun):
     return funMatches(filmeA, filmeB)
 
 def revenue (filmeA, filmeB, fun): 
@@ -90,5 +90,6 @@ def comp(filmeA, filmeB, tags, peso, maxPeso, fun):
         f = eval(tag)
         fA = filmeA[k]
         fB = filmeB[k]
-        x += f(fA, fB, fun) * peso[tag]
+        if peso[tag] != 0:
+            x += f(fA, fB, fun) * peso[tag]
     return x/maxPeso
