@@ -37,8 +37,7 @@ def release_date (valA, valB, fun):
 def director (filmeA, filmeB, fun):
     return funMatches(filmeA, filmeB)
 
-def cast (filmeA, filmeB, fun):
-    print(type(filmeA), type(filmeB))
+def cast (filmeA, filmeB):
     return funMatches(filmeA, filmeB)
 
 def revenue (filmeA, filmeB, fun): 
