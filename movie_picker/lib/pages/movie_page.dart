@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:movie_picker/services/firestore_services_provider.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'package:movie_picker/models/movie.dart';
@@ -67,10 +68,22 @@ class MoviePage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.network(
-                                        alignment: Alignment.topLeft,
-                                        width: 180,
-                                        "https://image.tmdb.org/t/p/w500${movie.posterPath}"),
+                                    if (movie.posterPath.isNotEmpty)
+                                      Flexible(
+                                          child: Image.network(
+                                              alignment: Alignment.topLeft,
+                                              width: 180,
+                                              "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                                              fit: BoxFit.fill))
+                                    else
+                                      Flexible(
+                                        child: Image.network(
+                                          alignment: Alignment.topLeft,
+                                          width: 180,
+                                          "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg",
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
@@ -154,7 +167,7 @@ class MoviePage extends StatelessWidget {
                                                     text.data.toString(),
                                                     style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 9.4),
+                                                        fontSize: 10),
                                                   ),
                                                 ),
                                               ],
@@ -165,15 +178,6 @@ class MoviePage extends StatelessWidget {
                                                       8, 0, 0, 0),
                                               child: Row(
                                                 children: [
-                                                  const IconButton(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      onPressed: (null),
-                                                      icon: Icon(
-                                                        Icons.favorite_border,
-                                                        color: Colors.white,
-                                                        size: 30,
-                                                      )),
                                                   IconButton(
                                                       alignment:
                                                           Alignment.topLeft,
@@ -182,6 +186,15 @@ class MoviePage extends StatelessWidget {
                                                             movie);
                                                       },
                                                       icon: const Icon(
+                                                        Icons.favorite_border,
+                                                        color: Colors.white,
+                                                        size: 30,
+                                                      )),
+                                                  const IconButton(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      onPressed: (null),
+                                                      icon: Icon(
                                                         Icons.add,
                                                         color: Colors.white,
                                                         size: 30,

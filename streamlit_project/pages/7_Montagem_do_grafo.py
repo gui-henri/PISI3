@@ -43,7 +43,7 @@ st.markdown(
 
     """
 )
-df = pd.read_csv('data/archive/tmdb_3000_movies_merged.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+df = pd.read_csv('streamlit_project/data/archive/tmdb_3000_movies_merged.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
@@ -151,10 +151,9 @@ if len(movies) > 1:
 
     labels = nx.get_edge_attributes(G,'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=8, label_pos=0.4, font_weight='bold', )
-
-    fig_html = mpld3.fig_to_html(fig)
-
-    components.html(fig_html, height=500)
+    
+    html = mpld3.fig_to_html(fig)
+    components.html(html, height=500)
 
     matrix_to_show = pd.DataFrame(lista_matriz, columns=(x := [i[2] for i in movies]), index=x)
     
@@ -190,15 +189,17 @@ if len(movies) > 1:
         with c5:
             BATCH_WORDS = st.slider("Tamanho do lote (tamanho dos conjunto de nós que serão passados para serem processados paralelamente): ", 1, 25, step=1)
         with c6:
-            DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 4, 256, step=4)
+            DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 2, 256, step=8)
 
         g_emb = n2v(G, dimensions=DIMENSIONS, seed=128)
         mdl = g_emb.fit(
             vector_size=DIMENSIONS,
             window=WINDOW,
             min_count=MIN_COUNT,
-            batch_words=BATCH_WORDS
+            batch_words=BATCH_WORDS,
         )
+
+        st.write(mdl.get_latest_training_loss())
 
         nodes_and_index = G.nodes.data('name')
 
@@ -327,7 +328,7 @@ if len(movies) > 1:
             index=nodes_and_index
         )
 
-        st.write(clustered_movies)
+        st.write(clustered_movies.rename(columns = {0: 'Cluster'}))
         
         st.markdown(
             """
@@ -342,7 +343,7 @@ if len(movies) > 1:
             """
         )
 
-        
+        total_distortion_list = []
         # Executa o Spectral Clustering para cada valor de K
         for k in ks:
             sc = SpectralClustering(n_clusters=k, affinity='nearest_neighbors', assign_labels='cluster_qr', random_state=128)
@@ -351,7 +352,12 @@ if len(movies) > 1:
             centroids = np.array([np.mean(X[sc.labels_ == j], axis=0) for j in range(k)])
             # Calcula a distorção total para cada cluster
             total_distortion = calculate_total_distortion(X, sc.labels_, centroids)
-            st.write(f"K = {k}, Distorção Total = {total_distortion}")
+            total_distortion_list.append(total_distortion)
+
+        fig = ply.bar(total_distortion_list , x=[i for i in range(1,1+len(total_distortion_list))], y=total_distortion_list, title="Distorção X Cluster", )
+        fig.update_layout(xaxis_title="Número de Clusters", yaxis_title="Distorção")
+        
+        st.plotly_chart(fig)
 
         st.markdown(
             """
@@ -396,5 +402,37 @@ if len(movies) > 1:
 
             """
         )
+
+        adj_cls = SpectralClustering(n_clusters=3, affinity='nearest_neighbors', assign_labels='cluster_qr', random_state=128)
+        adj_cls.fit(matrix_to_show)
+
+        adj_clustered_movies = pd.DataFrame(
+            adj_cls.labels_,
+            index=nodes_and_index
+        )
+
+        st.write(adj_clustered_movies.rename(columns = {0: 'Cluster'}))
+
+        fig = ply.scatter(emb_df_PCA, x='x', y='y', color=adj_cls.labels_.astype(str), hover_name='Title', title="Representação em 2 dimensões")
+        fig.update_xaxes(showgrid=False, zeroline=False, showticklabels=False,)
+        fig.update_yaxes(showgrid=False, zeroline=False, showticklabels=False,)
+
+        st.plotly_chart(fig)
+
+        total_distortion_list = []
+        # Executa o Spectral Clustering para cada valor de K
+        for k in ks:
+            sc = SpectralClustering(n_clusters=k, affinity='nearest_neighbors', assign_labels='cluster_qr', random_state=128)
+            sc.fit(matrix_to_show)
+            # Calcula os centróides para cada cluster
+            centroids = np.array([np.mean(X[sc.labels_ == j], axis=0) for j in range(k)])
+            # Calcula a distorção total para cada cluster
+            total_distortion = calculate_total_distortion(X, sc.labels_, centroids)
+            total_distortion_list.append(total_distortion)
+
+        fig = ply.bar(total_distortion_list , x=[i for i in range(1,1+len(total_distortion_list))], y=total_distortion_list, title="Distorção X Cluster", )
+        fig.update_layout(xaxis_title="Número de Clusters", yaxis_title="Distorção")
+        
+        st.plotly_chart(fig)
 
         

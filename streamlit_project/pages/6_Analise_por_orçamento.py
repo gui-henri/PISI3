@@ -4,7 +4,7 @@ import plotly.express as px
 from datetime import datetime
 import cpi
 
-df = pd.read_csv('data/archive/tmdb_5000_movies.csv')
+df = pd.read_csv('streamlit_project/data/archive/tmdb_5000_movies.csv')
 
 st.title("Análise por orçamento")
 
