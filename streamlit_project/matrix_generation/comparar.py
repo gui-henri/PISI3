@@ -40,7 +40,6 @@ def director (filmeA, filmeB):
     return funMatches(filmeA, filmeB)
 
 def cast (filmeA, filmeB):
-    print(type(filmeA), type(filmeB))
     return funMatches(filmeA, filmeB)
 
 def revenue (filmeA, filmeB): 
