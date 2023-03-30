@@ -47,24 +47,6 @@ df = pd.read_csv('streamlit_project/data/archive/tmdb_3000_movies_merged.csv', c
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
 movies = df[df['title'].isin(selected_movies)].values.tolist()
-
-
-
-# teste com duplicatas -- remover depois
-selected_movies2 = st.multiselect("Selecione filmes para duplicar: ", selected_movies)
-#selected_movies = [i for i in df['title'][:500]]
-movie2 = df[df['title'].isin(selected_movies2)].values.tolist()
-
-for i in range(len(movie2)):
-    movie2[i][2] = movie2[i][2] + '_copy'
-
-movies = movies + movie2
-
-# final do teste
-
-
-
-
 if len(movies) > 1:
 
     c1, c2 = st.columns(2)
@@ -159,6 +141,33 @@ if len(movies) > 1:
     
     st.write(matrix_to_show)
 
+    nodes_and_index = G.nodes.data('name')
+
+    st.write(f'Número de arestas: {G.number_of_edges()}')
+    st.write(f'Número de nós: {G.number_of_nodes()}')
+    st.write(f'Média de graus dos nós: {sum(dict(G.degree()).values()) / float(len(G))}')
+
+    st.subheader('Grau médio dos vizinhos')
+    st.write('Representa a média da quantidade de vizinhos de cada nó. ')
+    st.write(nx.average_neighbor_degree(G))
+
+    
+    st.subheader('Conectividade média')
+    st.write('Representa a média da conectividade de cada nó. A conectividade entre dois nós é a quantidade de arestas que devem ser removidas até que não haja um caminho entre dois nós.')
+    st.write(nx.average_node_connectivity(G))
+
+    st.subheader('Centralidade de grau')
+    st.write('Representa a centralidade de grau de cada nó. A centralidade de grau de um nó é calculada dividindo o grau de um nó pelo grau máximo possível.')
+    st.write(nx.degree_centrality(G))
+
+    st.subheader('Centralidade por betweeness')
+    st.write('Representa a centralidade de grau de cada nó. A centralidade por betweeness de um nó é calculada buscando os nós onde há o maior número de caminhos mais curtos.')
+    st.write(nx.eigenvector_centrality(G))
+
+    st.subheader('Densidade')
+    st.write('Representa o quão denso é o grafo. O valor é 0 para grafos sem conexões e 1 para um grafo completo.')
+    st.write(nx.density(G))
+
     apply_node2vec = st.checkbox("Deseja aplicar Node2Vec a este grafo?")
 
     if apply_node2vec:
@@ -189,9 +198,9 @@ if len(movies) > 1:
         with c5:
             BATCH_WORDS = st.slider("Tamanho do lote (tamanho dos conjunto de nós que serão passados para serem processados paralelamente): ", 1, 25, step=1)
         with c6:
-            DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 2, 256, step=8)
+            DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 2, 256, step=1)
 
-        g_emb = n2v(G, dimensions=DIMENSIONS, seed=128)
+        g_emb = n2v(G, dimensions=DIMENSIONS, seed=128, weight_key='weight', walk_length=120, num_walks=15)
         mdl = g_emb.fit(
             vector_size=DIMENSIONS,
             window=WINDOW,
@@ -200,8 +209,6 @@ if len(movies) > 1:
         )
 
         st.write(mdl.get_latest_training_loss())
-
-        nodes_and_index = G.nodes.data('name')
 
         emb_df = (
             pd.DataFrame(
@@ -403,7 +410,7 @@ if len(movies) > 1:
             """
         )
 
-        adj_cls = SpectralClustering(n_clusters=3, affinity='nearest_neighbors', assign_labels='cluster_qr', random_state=128)
+        adj_cls = SpectralClustering(n_clusters=5, affinity='nearest_neighbors', assign_labels='cluster_qr', random_state=128)
         adj_cls.fit(matrix_to_show)
 
         adj_clustered_movies = pd.DataFrame(

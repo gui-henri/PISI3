@@ -81,5 +81,6 @@ def comp(filmeA, filmeB, tags, peso, maxPeso):
         f = eval(tag)
         fA = filmeA[k]
         fB = filmeB[k]
-        x += f(fA, fB) * peso[tag]
+        if peso[tag] != 0:
+            x += f(fA, fB) * peso[tag]
     return x
