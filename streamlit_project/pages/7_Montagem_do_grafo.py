@@ -43,10 +43,36 @@ st.markdown(
 
     """
 )
-df = pd.read_csv('streamlit_project/data/archive/tmdb_3000_movies_merged.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+t = pd.read_csv('streamlit_project/data/archive/tmdb_3000_bin.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
-selected_movies = st.multiselect("Selecione filmes para comparar: ", df['title'])
-movies = df[df['title'].isin(selected_movies)].values.tolist()
+
+c = ["Grupos Binarios", "3 Faixas", "Dist Euclid"]
+cc = ["binario", "vizinhos", "distancia"]
+
+select_data = st.multiselect("Selecione o DataFrame:", c , default= "3 Faixas" , max_selections=1)
+select_compare = st.multiselect("Selecione a função de comparação:", cc , default= "vizinhos" , max_selections=1)
+
+
+if select_data[:] == c[2]:
+    dfname = "movies_merged"
+    
+elif select_data[:] == c[1]:
+    dfname = "ranges"
+else:
+    dfname = "bin"
+
+if select_compare[:] == cc[0]:
+    fun = "A"
+elif select_compare[:] == cc[1]:
+    fun = "B"
+else:
+    fun = "C"
+
+
+df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_{dfname}.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+
+selected_movies = st.multiselect("Selecione filmes para comparar: ", t['title'])
+movies = df[t['title'].isin(selected_movies)].values.tolist()
 
 
 
@@ -78,50 +104,33 @@ if len(movies) > 1:
         possibilities = ["Shell", "Spiral", "Random", "Spring"]
         layout = st.selectbox("Selecionar formato do grafo", possibilities)
 
-    gen_b = st.checkbox("Gêneros")
-    pop_b = st.checkbox("Popularidade")
-    pdc_b = st.checkbox("Produtoras")
-    o_b = st.checkbox("Orçamento")
-    pc_b = st.checkbox("Palavras-chave")
-    at_b = st.checkbox("Atores")
-    dt_b = st.checkbox("Diretores")
+    cl1, cl2, cl3 = st.columns(3)
     
-    at = 0
-    if at_b == True:
-        at = 1
+    with cl1:
+        gen = int(st.checkbox("Gêneros"))
+        pop = int(st.checkbox("Popularidade"))
+        pdc = int(st.checkbox("Produtoras"))
+        o = int(st.checkbox("Orçamento"))
+    with cl2:
+        pc = int(st.checkbox("Palavras-chave"))
+        at = int(st.checkbox("Atores"))
+        dt = int(st.checkbox("Diretores"))
+        lc = int(st.checkbox("Lucro"))
+    with cl3:
+        vt = int(st.checkbox("Votos"))
+        tv = int(st.checkbox("total de votos"))
+        dr = int(st.checkbox("Tempo de duração"))
+        dt = int(st.checkbox("Data de lançamento"))
     
-    dt = 0
-    if dt_b == True:
-        dt = 1
-
-    gen = 0
-    if gen_b == True:
-        gen = 1
-
-    pop = 0
-    if pop_b == True:
-        pop = 1
-    
-    pdc = 0
-    if pdc_b == True:
-        pdc = 1
-    
-    o = 0
-    if o_b == True:
-        o = 1
-
-    pc = 0
-    if pc_b == True:
-        pc = 1
-    
-    pesos = {'index': 0, 'movie_id': 0, 'title': 0, 'genres': gen, 'keywords': pc, 'budget': o, 'revenue': 0, 'popularity': pop,
-             'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': 0, 'original_language': 0,
+        
+    pesos = {'index': 0, 'movie_id': 0, 'title': 0, 'genres': gen, 'keywords': pc, 'budget': o, 'revenue': lc, 'popularity': pop,
+             'vote_average': vt, 'vote_count': tv, 'runtime': dr, 'release_date': dt, 'original_language': 0,
              'production_countries': 0, 'production_companies': pdc, 'director': dt, 'cast': at}
 
 
     maxPesos = sum(pesos.values())
     
-    lista_matriz = generate_matrix(movies, pesos, maxPesos)
+    lista_matriz = generate_matrix(movies, pesos, maxPesos, fun)
     
     G = nx.Graph()
     for i, node in enumerate([i[2] for i in movies]):
