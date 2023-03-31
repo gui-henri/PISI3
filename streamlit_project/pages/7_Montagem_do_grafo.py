@@ -43,23 +43,22 @@ st.markdown(
 
     """
 )
-t = pd.read_csv('streamlit_project/data/archive/tmdb_3000_bin.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+t = pd.read_csv('streamlit_project/data/archive/tmdb_3000_binario.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 
-c = ["Grupos Binarios", "3 Faixas", "Dist Euclid"]
+c = ["binario", "trinario", "discreto"]
 cc = ["binario", "vizinhos", "distancia"]
 
-select_data = st.multiselect("Selecione o DataFrame:", c , default= "3 Faixas" , max_selections=1)
-select_compare = st.multiselect("Selecione a função de comparação:", cc , default= "vizinhos" , max_selections=1)
+cl1, cl2 = st.columns(2)
 
-
-if select_data[:] == c[2]:
-    dfname = "movies_merged"
+with cl1:
+    #select_data = st.multiselect("Selecione o DataFrame:", c , default= "3 Faixas" , max_selections=1)
+    select_data = st.radio("Selecione o DataFrame:", c , index=1)
     
-elif select_data[:] == c[1]:
-    dfname = "ranges"
-else:
-    dfname = "bin"
+    
+with cl2:
+    #select_compare = st.multiselect("Selecione a função de comparação:", cc , default= "vizinhos" , max_selections=1)
+    select_compare = st.radio("Selecione a função de comparação:", cc , index=1)
 
 if select_compare[:] == cc[0]:
     fun = "A"
@@ -69,7 +68,7 @@ else:
     fun = "C"
 
 
-df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_{dfname}.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_{select_data}.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", t['title'])
 movies = df[t['title'].isin(selected_movies)].values.tolist()
