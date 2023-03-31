@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:movie_picker/services/firestore_services_provider.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
 import 'package:movie_picker/models/movie.dart';
@@ -14,16 +13,28 @@ class MyButton extends StatefulWidget {
 }
 
 class _MyButtonState extends State<MyButton> {
-  bool isPressed = true;
+  bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
+    final movie = ModalRoute.of(context)!.settings.arguments as Movie;
+    final providers = TmdbServiceProvider().fetchMovieProviders(movie.id);
+    final db = FiresStoreServiceProvider();
+
+//Falta deixar o ícone preenchido ao atualizar a pag caso o filme esteja favoritado
     return IconButton(
       icon: isPressed
           ? const Icon(Icons.favorite)
           : const Icon(Icons.favorite_border),
+      color: Colors.white,
+      iconSize: 30,
       onPressed: () {
         setState(() {
+          if (!isPressed) {
+            db.adicionarFilme(movie);
+          } else {
+            db.removerFilme(movie);
+          }
           isPressed = !isPressed;
         });
       },
@@ -34,11 +45,12 @@ class _MyButtonState extends State<MyButton> {
 class MoviePage extends StatelessWidget {
   static const routeName = '/movie';
   const MoviePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final movie = ModalRoute.of(context)!.settings.arguments as Movie;
     final providers = TmdbServiceProvider().fetchMovieProviders(movie.id);
-    final db = FiresStoreServiceProvider();
+    //final db = FiresStoreServiceProvider();
     return FutureBuilder<String>(
         future: providers,
         initialData: "Carregando...",
@@ -177,20 +189,21 @@ class MoviePage extends StatelessWidget {
                                                   const EdgeInsets.fromLTRB(
                                                       8, 0, 0, 0),
                                               child: Row(
-                                                children: [
+                                                children: const [
+                                                  MyButton(),
+                                                  //IconButton(
+                                                  //    alignment:
+                                                  //        Alignment.topLeft,
+                                                  //    onPressed: () async {
+                                                  //      db.adicionarFilme(
+                                                  //          movie);
+                                                  //    },
+                                                  //   icon: const Icon(
+                                                  //      Icons.favorite_border,
+                                                  //      color: Colors.white,
+                                                  //     size: 30,
+                                                  //    )),
                                                   IconButton(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      onPressed: () async {
-                                                        db.adicionarFilme(
-                                                            movie);
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.favorite_border,
-                                                        color: Colors.white,
-                                                        size: 30,
-                                                      )),
-                                                  const IconButton(
                                                       alignment:
                                                           Alignment.topLeft,
                                                       onPressed: (null),

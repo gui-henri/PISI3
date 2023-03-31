@@ -69,8 +69,8 @@ class _FavoritesTabState extends State<FavoritesTab> {
                                                 fit: BoxFit.fill,
                                               ),
                                             )
-                                          : Image.asset(
-                                              "movie_picker/lib/styles/image-placeholder.png",
+                                          : Image.network(
+                                              "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg",
                                               fit: BoxFit.fill,
                                             ),
                                       //Text(snapshot.data![index].title),

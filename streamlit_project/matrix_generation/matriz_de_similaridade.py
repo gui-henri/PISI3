@@ -11,9 +11,9 @@ def generate_matrix(filmes, pesos, maxPeso, fun):
     
     for i, filmeA in enumerate(filmes):
         print(f"Processando... {i}/{t}", end = '\r')
-        #for j in range(i):
-        #   temp.append(None)
-        for filmeB in filmes: #[i:]:
+        for j in range(i):
+           temp.append(None)
+        for filmeB in filmes[i:]:
             temp.append(comp(filmeA, filmeB, tags, pesos, maxPeso, fun))
             #temp.append(f'({filmeA[5]}, {filmeB[5]})') #debugOnly
         matriz.append(temp)
