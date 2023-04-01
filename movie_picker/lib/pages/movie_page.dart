@@ -13,7 +13,7 @@ class MyButton extends StatefulWidget {
 }
 
 class _MyButtonState extends State<MyButton> {
-  bool isPressed = false;
+  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,19 +23,19 @@ class _MyButtonState extends State<MyButton> {
 
 //Falta deixar o ícone preenchido ao atualizar a pag caso o filme esteja favoritado
     return IconButton(
-      icon: isPressed
+      icon: isFavorite
           ? const Icon(Icons.favorite)
           : const Icon(Icons.favorite_border),
       color: Colors.white,
       iconSize: 30,
       onPressed: () {
         setState(() {
-          if (!isPressed) {
+          if (!isFavorite) {
             db.adicionarFilme(movie);
           } else {
             db.removerFilme(movie);
           }
-          isPressed = !isPressed;
+          isFavorite = !isFavorite;
         });
       },
     );
@@ -203,15 +203,15 @@ class MoviePage extends StatelessWidget {
                                                   //      color: Colors.white,
                                                   //     size: 30,
                                                   //    )),
-                                                  IconButton(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      onPressed: (null),
-                                                      icon: Icon(
-                                                        Icons.add,
-                                                        color: Colors.white,
-                                                        size: 30,
-                                                      )),
+                                                  //IconButton(
+                                                  //    alignment:
+                                                  //        Alignment.topLeft,
+                                                  //    onPressed: (null),
+                                                  //    icon: Icon(
+                                                  //      Icons.add,
+                                                  //      color: Colors.white,
+                                                  //      size: 30,
+                                                  //    )),
                                                 ],
                                               ),
                                             ),
