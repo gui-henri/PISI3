@@ -11,7 +11,7 @@ def get_graph() -> Graph:
     G = nx.read_gpickle(f'grafo_generos.pickle')
     return G
 
-df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_ranges.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 G = get_graph()
 nodes_and_index = G.nodes.data('name')
 
@@ -32,7 +32,7 @@ if config_manu:
     with c7: DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 2, 256, step=8)
 
 @st.cache_resource
-def execute_n2v(G):
+def execute_n2v(_G):
     g_emb = n2v(G, dimensions=DIMENSIONS, seed=128, weight_key='weight', walk_length=80, num_walks=10, workers=3, temp_folder='temp_folder/')
     mdl = g_emb.fit(
         vector_size=DIMENSIONS,

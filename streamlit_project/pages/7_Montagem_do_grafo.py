@@ -73,23 +73,6 @@ df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_{select_data}.csv', 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", t['title'])
 movies = df[t['title'].isin(selected_movies)].values.tolist()
 
-
-
-# teste com duplicatas -- remover depois
-selected_movies2 = st.multiselect("Selecione filmes para duplicar: ", selected_movies)
-#selected_movies = [i for i in df['title'][:500]]
-movie2 = df[df['title'].isin(selected_movies2)].values.tolist()
-
-for i in range(len(movie2)):
-    movie2[i][2] = movie2[i][2] + '_copy'
-
-movies = movies + movie2
-
-# final do teste
-
-
-
-
 if len(movies) > 1:
 
     c1, c2 = st.columns(2)

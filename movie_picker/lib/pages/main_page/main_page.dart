@@ -19,12 +19,22 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
-  final _pages = const <Widget>[
-    HomeTab(),
-    ExploreTab(),
-    FavoritesTab(),
-    SettingsTab()
+  final _pages = <Widget>[
+    const HomeTab(),
+    const ExploreTab(),
+    const FavoritesTab(),
+    const SettingsTab()
   ];
+
+  void refreshFavoritesPage(int value) {
+    setState(() {
+      if (_selectedIndex == 2){
+        _pages.removeAt(2);
+        _pages.insert(2, FavoritesTab(key: ObjectKey(_pages[2].hashCode)));
+      }
+      _selectedIndex = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +65,7 @@ class _MainPageState extends State<MainPage> {
                     // se o usuário entrar na aba de busca, ele deve atualizar os favoritos
                     showSearch(context: context, delegate: MovieSearch())
                         .then((value) => (value != null)
-                            ? setState(() {
-                                final oldIndex = _selectedIndex;
-                                _selectedIndex = 1;
-                                _selectedIndex = oldIndex;
-                              })
+                            ? refreshFavoritesPage(2)
                             : null);
                   },
                 ),
@@ -75,9 +81,7 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBar(
             currentIndex: _selectedIndex,
             onTap: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
+              refreshFavoritesPage(value);
             },
             type: BottomNavigationBarType.fixed,
             backgroundColor: const Color.fromARGB(0, 1, 1, 1),
