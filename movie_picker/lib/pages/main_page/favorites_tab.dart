@@ -77,24 +77,33 @@ class _FavoritesTabState extends State<FavoritesTab> {
                                                   arguments: value);
                                             });
                                           },
-                                          child: snapshot.data != null
-                                              ? Image.network(
-                                                  "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
-                                                  fit: BoxFit.fill,
-                                                  errorBuilder: (BuildContext
-                                                          context,
-                                                      Object exception,
-                                                      StackTrace? stackTrace) {
-                                                    return Image.network(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: AspectRatio(
+                                              aspectRatio:
+                                                  0.7, // Defina a proporção que você deseja manter
+                                              child: snapshot.data != null
+                                                  ? Image.network(
+                                                      "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder:
+                                                          (BuildContext context,
+                                                              Object exception,
+                                                              StackTrace?
+                                                                  stackTrace) {
+                                                        return Image.network(
+                                                          "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg", // caminho para a imagem padrão
+                                                          fit: BoxFit.cover,
+                                                        );
+                                                      },
+                                                    )
+                                                  : Image.network(
                                                       "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg", // caminho para a imagem padrão
-                                                      fit: BoxFit.fill,
-                                                    );
-                                                  },
-                                                )
-                                              : Image.network(
-                                                  "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg", // caminho para a imagem padrão
-                                                  fit: BoxFit.fill,
-                                                ),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            ),
+                                          ),
                                         ),
                                         Positioned(
                                           bottom: 5,
