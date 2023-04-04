@@ -8,7 +8,6 @@ class ExploreTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final ciel = TmdbServiceProvider();
     final Future<List<Movie>> lulaFazueli = ciel.fetchMostPopular();
 
@@ -16,28 +15,33 @@ class ExploreTab extends StatelessWidget {
 
     FutureBuilder cardBuilder() {
       return FutureBuilder(
-        future: lulaFazueli, 
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.done){
-            final movieData = snapshot.data! as List<Movie>;
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-              itemCount: movieData.length,
-              itemBuilder: ((context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(7),
-                  child: SizedBox(
-                    child: Center(
-                      child: Text(movieData[index].title),
-                    ),
-                  ),
-                );
-              }
-            ));
-          } else {
-            return const CircularProgressIndicator();
-          }
-      });
+          future: lulaFazueli,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              final movieData = snapshot.data! as List<Movie>;
+              return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 140,
+                      childAspectRatio: 0.65,
+                      crossAxisSpacing: 4,
+                      mainAxisSpacing: 2),
+                  itemCount: movieData.length,
+                  itemBuilder: ((context, index) {
+                    return Card(
+                        child: Column(children: [
+                      // Adicione a imagem aqui
+                      Expanded(
+                        child: Image.network(
+                          "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ]));
+                  }));
+            } else {
+              return const CircularProgressIndicator();
+            }
+          });
     }
 
     return Column(
@@ -47,10 +51,11 @@ class ExploreTab extends StatelessWidget {
           child: Text(
             "Mais Populares",
             style: TextStyle(
-              fontSize: 24,
-              //fontWeight: FontWeight.bold,
-              color: Colors.white),
-            ),
+                decoration: TextDecoration.none,
+                fontSize: 22,
+                //fontWeight: FontWeight.bold,
+                color: Colors.white),
+          ),
         ),
         Expanded(child: cardBuilder())
       ],
