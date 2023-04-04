@@ -21,6 +21,7 @@ def distComp(filmes, tag):
     return lista
 
 
+
 df = pd.read_csv('data/archive/tmdb_3000_movies.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval,})
 movies = df.values.tolist()
 

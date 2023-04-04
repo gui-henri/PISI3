@@ -50,7 +50,7 @@ def custom():
         sel_keyword = st.multiselect('Escolha uma palavra-chave', keywords)
         sel_director = st.multiselect('Escolha um diretor', director)
     with cl2:
-        sel_date = st.selectbox('Escolha o ano de lançamento', range(1916, 2017), index=100)
+        sel_date = st.multiselect('Escolha o ano de lançamento', range(1916, 2017), max_selections=1)
         sel_cast = st.multiselect('Escolha um ator', cast)
     with cl3:
         sel_production_countries = st.multiselect('Escolha um país de produção', production_countries)

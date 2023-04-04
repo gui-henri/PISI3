@@ -14,6 +14,7 @@ from sklearn.metrics import pairwise_distances
 import numpy as np
 import plotly.express as ply
 import plotly.graph_objects as go
+from math import sqrt
 
 
 from pathlib import Path
@@ -53,12 +54,12 @@ cl1, cl2 = st.columns(2)
 
 with cl1:
     #select_data = st.multiselect("Selecione o DataFrame:", c , default= "3 Faixas" , max_selections=1)
-    select_data = st.radio("Selecione o DataFrame:", c , index=1)
+    select_data = st.radio("Selecione o DataFrame:", c , index=0)
     
     
 with cl2:
     #select_compare = st.multiselect("Selecione a função de comparação:", cc , default= "vizinhos" , max_selections=1)
-    select_compare = st.radio("Selecione a função de comparação:", cc , index=1)
+    select_compare = st.radio("Selecione a função de comparação:", cc , index=0)
 
 if select_compare[:] == cc[0]:
     fun = "A"
@@ -80,29 +81,29 @@ if len(movies) > 1:
     layout = ""
 
     with c1:
-        cut_value = st.slider("Valor mínimo para conexão: ", 0.0, 1.0, step=0.01)
+        cut_value = st.slider("Valor mínimo para conexão: ", 0.0, 1.0, step=0.01, value=0.4)
 
     with c2:
         possibilities = ["Shell", "Spiral", "Random", "Spring"]
-        layout = st.selectbox("Selecionar formato do grafo", possibilities)
+        layout = st.selectbox("Selecionar formato do grafo", possibilities, index=3)
 
     cl1, cl2, cl3 = st.columns(3)
     
     with cl1:
-        gen = int(st.checkbox("Gêneros"))
+        gen = int(st.checkbox("Gêneros", value=True))
         pop = int(st.checkbox("Popularidade"))
         pdc = int(st.checkbox("Produtoras"))
         o = int(st.checkbox("Orçamento"))
     with cl2:
-        pc = int(st.checkbox("Palavras-chave"))
-        at = int(st.checkbox("Atores"))
-        dt = int(st.checkbox("Diretores"))
+        pc = int(st.checkbox("Palavras-chave", value = True))
+        at = int(st.checkbox("Atores", value = True))
+        dt = int(st.checkbox("Diretores", value = True))
         lc = int(st.checkbox("Lucro"))
     with cl3:
         vt = int(st.checkbox("Votos"))
         tv = int(st.checkbox("total de votos"))
-        dr = int(st.checkbox("Tempo de duração"))
-        dt = int(st.checkbox("Data de lançamento"))
+        dr = int(st.checkbox("Tempo de duração", value = True))
+        dt = int(st.checkbox("Data de lançamento", value = True))
     
         
     pesos = {'index': 0, 'movie_id': 0, 'title': 0, 'genres': gen, 'keywords': pc, 'budget': o, 'revenue': lc, 'popularity': pop,
@@ -148,34 +149,54 @@ if len(movies) > 1:
 
     matrix_to_show = pd.DataFrame(lista_matriz, columns=(x := [i[2] for i in movies]), index=x)
     
-    st.write(matrix_to_show)
+    #st.write(matrix_to_show)
+    
+    heatMap = ply.imshow(matrix_to_show, aspect='auto')
+    heatMap.update_layout(title='Matriz de similaridade', height= 800)
+    st.plotly_chart(heatMap, use_container_width=True)
 
     nodes_and_index = G.nodes.data('name')
 
-    st.write(f'Número de arestas: {G.number_of_edges()}')
-    st.write(f'Número de nós: {G.number_of_nodes()}')
-    st.write(f'Média de graus dos nós: {sum(dict(G.degree()).values()) / float(len(G))}')
-
-    st.subheader('Grau médio dos vizinhos')
-    st.write('Representa a média da quantidade de vizinhos de cada nó. ')
-    st.write(nx.average_neighbor_degree(G))
-
+    cl1, cl2 = st.columns(2)
     
-    st.subheader('Conectividade média')
-    st.write('Representa a média da conectividade de cada nó. A conectividade entre dois nós é a quantidade de arestas que devem ser removidas até que não haja um caminho entre dois nós.')
-    st.write(nx.average_node_connectivity(G))
+    with cl1:
+        st.write(f'Número de arestas: {G.number_of_edges()}')
+        st.write(f'Número de nós: {G.number_of_nodes()}')
+        st.write(f'Média de graus dos nós: {round(sum(dict(G.degree()).values()) / float(len(G)),2)}')
 
-    st.subheader('Centralidade de grau')
-    st.write('Representa a centralidade de grau de cada nó. A centralidade de grau de um nó é calculada dividindo o grau de um nó pelo grau máximo possível.')
-    st.write(nx.degree_centrality(G))
+    with cl2:
+        st.subheader('Grau médio dos vizinhos')
+        st.write('Representa a média da quantidade de vizinhos de cada nó. ')
+        z = zip(x, nx.average_neighbor_degree(G).values())
+        st.write(pd.DataFrame(z, columns=['Nó', 'Grau médio dos vizinhos']))
+        #st.write(pd.DataFrame(z, columns=['Nó', 'Grau médio dos vizinhos']))
 
-    st.subheader('Centralidade por betweeness')
-    st.write('Representa a centralidade de grau de cada nó. A centralidade por betweeness de um nó é calculada buscando os nós onde há o maior número de caminhos mais curtos.')
-    st.write(nx.eigenvector_centrality(G))
+    cl1, cl2 = st.columns(2)
+    
+    with cl1:
+        st.subheader('Conectividade média')
+        st.write('Representa a média da conectividade de cada nó. A conectividade entre dois nós é a quantidade de arestas que devem ser removidas até que não haja um caminho entre dois nós.')
+        st.write(round(nx.average_node_connectivity(G), 2))
 
-    st.subheader('Densidade')
-    st.write('Representa o quão denso é o grafo. O valor é 0 para grafos sem conexões e 1 para um grafo completo.')
-    st.write(nx.density(G))
+    with cl2:
+        st.subheader('Centralidade de grau')
+        st.write('Representa a centralidade de grau de cada nó. A centralidade de grau de um nó é calculada dividindo o grau de um nó pelo grau máximo possível.')
+        z = zip(x, nx.degree_centrality(G).values())
+        st.write(pd.DataFrame(z, columns=['Nó', 'Conectividade média']))
+    
+
+    cl1, cl2 = st.columns(2)
+    
+    with cl1:
+        st.subheader('Centralidade por betweeness')
+        st.write('Representa a centralidade de grau de cada nó. A centralidade por betweeness de um nó é calculada buscando os nós onde há o maior número de caminhos mais curtos.')
+        z = zip(x, nx.betweenness_centrality(G).values())
+        st.write(pd.DataFrame(z, columns=['Nó', 'Conectividade média']))
+
+    with cl2:
+        st.subheader('Densidade')
+        st.write('Representa o quão denso é o grafo. O valor é 0 para grafos sem conexões e 1 para um grafo completo.')
+        st.write(round(nx.density(G), 2))
 
     apply_node2vec = st.checkbox("Deseja aplicar Node2Vec a este grafo?")
 
@@ -207,7 +228,7 @@ if len(movies) > 1:
         with c5:
             BATCH_WORDS = st.slider("Tamanho do lote (tamanho dos conjunto de nós que serão passados para serem processados paralelamente): ", 1, 25, step=1)
         with c6:
-            DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 2, 256, step=1)
+            DIMENSIONS = st.slider("Dimensões (número de dimensões usadas para representar cada nó): ", 2, 256, step=1, value=4)
 
         g_emb = n2v(G, dimensions=DIMENSIONS, seed=128, weight_key='weight', walk_length=120, num_walks=15)
         mdl = g_emb.fit(
@@ -322,7 +343,7 @@ if len(movies) > 1:
 
         ks = range(1, len(film_names))
 
-        NUM_CLUSTERS = st.selectbox('Número de clusters: ', ks)
+        NUM_CLUSTERS = st.selectbox('Número de clusters: ', ks, index=round(sqrt(len(film_names)/2)))
 
         clustering = SpectralClustering(
             n_clusters=NUM_CLUSTERS,
