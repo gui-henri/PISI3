@@ -1,4 +1,6 @@
 from .comparar import comp
+import pandas as pd
+
 
 def generate_matrix(filmes, pesos, maxPeso, fun):
     if maxPeso == 0:
@@ -20,6 +22,38 @@ def generate_matrix(filmes, pesos, maxPeso, fun):
         temp = []
         
     return matriz
+
+
+def generate_sim(df, pesos, maxPeso, fun, custom):
+    
+    filmes = df.values.tolist()
+    
+    if maxPeso == 0:
+        maxPeso = 1
+        
+    lista = []
+    tags = [i for i in pesos]
+    
+    for i, filmeA in enumerate(filmes):
+        lista.append(comp(filmeA, custom, tags, pesos, maxPeso, fun))
+    
+    for i, v in enumerate(filmes):
+        v.insert(0, lista[i])
+       
+    tags.insert(0, 'Score')
+    
+    df = pd.DataFrame(filmes, columns=tags)
+    df.sort_values(by=['Score'], inplace=True, ascending=False)
+    
+    return df
+    
+    
+    
+    
+        
+    
+    
+    
 
 """
 temp = df['original_title']

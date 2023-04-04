@@ -41,7 +41,7 @@ g = plt.bar(data, x=[i[0] for i in data], y = [i[1] for i in data], log_y= log)
 g.update_layout(xaxis_title="Genero", yaxis_title="Incidência")
 st.plotly_chart(g)
 
-tag = 'keywords_dist'
+tag = 'new_keywords'
 
 filehandle = open(f'streamlit_project/data/distData/{tag}.txt', 'r')
 data = json.load(filehandle)
