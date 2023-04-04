@@ -16,23 +16,23 @@ class HomeTab extends StatelessWidget {
 
   Widget buildCards(BuildContext context) {
     final provider = Provider.of<CardProvider>(context);
-    final urlImages = provider.urlImages;
+    final movies = provider.movies;
 
-    return urlImages.isEmpty
+    return movies.isEmpty
           ? Center(
             child: ElevatedButton(
               child: const Text('Restart'),
             onPressed: () {
               final provider = Provider.of<CardProvider>(context, listen: false);
-              provider.resetUsers();
+              provider.fetchRecomendations();
             }
             )
           ) :
     
     Stack(
-      children: urlImages.map((urlImage) => TinderCard(
-        urlImage: urlImage,
-        isFront: urlImages.last == urlImage
+      children: movies.map((movie) => TinderCard(
+        urlImage: "https://image.tmdb.org/t/p/w500$movie.posterPath",
+        isFront: movies.last == movie
       )).toList(),
     );
   }

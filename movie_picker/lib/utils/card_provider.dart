@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:movie_picker/models/movie.dart';
+import 'package:movie_picker/services/tmdb_service_provider.dart';
+import '../services/firestore_services_provider.dart';
+import 'dart:math';
 
 enum CardStatus { favorite, description, watchLater, nope }
 
 class CardProvider extends ChangeNotifier {
-  List<String> _urlImages = [];
+  List<Movie> _movies = [];
   bool _isDragging = false;
   double _angle = 0;
   Offset _position = Offset.zero;
   Size _screenSize = Size.zero;
 
-  List<String> get urlImages => _urlImages;
+  final yuri = TmdbServiceProvider();
+  final db = FiresStoreServiceProvider();
+
+  List<Movie> get movies => _movies;
   Offset get position => _position;
   bool get isDragging => _isDragging;
   double get angle => _angle;
 
   CardProvider() {
-    resetUsers(); //???
+   fetchRecomendations(); //???
   }
 
   get status => null;
@@ -126,23 +133,34 @@ class CardProvider extends ChangeNotifier {
   }
 
   Future _nextCard() async {
-    if (_urlImages.isEmpty) return;
+    if (_movies.isEmpty) return;
 
     // ignore: todo
     // TODO: Adicionar filme no banco de dados
     await Future.delayed(const Duration(milliseconds: 200));
-    _urlImages.removeLast();
+    _movies.removeLast();
     resetPosition();
   }
 
-  void resetUsers() {
-    _urlImages = <String>[
-      'https://i.pinimg.com/236x/e9/11/6c/e9116ce13f29f747d8cc5b2c94a6d556.jpg',
-      'https://i.pinimg.com/236x/c9/fc/9d/c9fc9dc8306e8ed2ad87ddf0634a2c08.jpg',
-      'https://i.pinimg.com/236x/75/ed/7b/75ed7ba2028bb8cf777235a52f2ecb9e.jpg',
-      'https://assets.reedpopcdn.com/glados1.jpg/BROK/resize/1200x1200%3E/format/jpg/quality/70/glados1.jpg',
-      'https://i.pinimg.com/564x/03/59/69/0359694907a32c63610b8e7d72b3ed05.jpg'
-    ].reversed.toList();
+  Future<void> fetchRecomendations() async {
+
+    // pega os favoritos do usuário
+      // se o usuário não tem favoritos, pega os mais populares
+    // pega um id aleatório entre os favoritos do usuáiro
+    // recomenda 15 filmes com base nesse filme
+    // quando estiver nos últimos 5 filmes, pega mais 15 de outro filme
+
+    final favorites = await db.obterFilmes();
+
+    if (favorites.isNotEmpty) {
+      final randIndex = Random().nextInt(favorites.length);
+      _movies = await yuri.fetchMovieRecommendationsById(favorites[randIndex].id.toString());
+    } else {
+      final ciel = TmdbServiceProvider();
+      final lulaFazueli = await ciel.fetchMostPopular();
+      final randi = Random().nextInt(lulaFazueli.length);
+      _movies = await yuri.fetchMovieRecommendationsById(favorites[randi].id.toString());
+    }
 
     notifyListeners();
   }

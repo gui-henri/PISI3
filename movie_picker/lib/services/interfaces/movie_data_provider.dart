@@ -19,4 +19,8 @@ class MovieDataProvider {
   Future<List<Movie>> fetchMostPopular() {
     return Future.value(<Movie>[]);
   }
+
+  Future<List<Movie>> fetchMovieRecommendationsById(String id){
+    return Future.value(<Movie> []);
+  }
 }
