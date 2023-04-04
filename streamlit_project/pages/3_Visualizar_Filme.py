@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 import ast
 
-df = pd.read_csv('data/archive/tmdb_5000_movies.csv')
+df = pd.read_csv('data/archive/all/tmdb_5000_movies.csv')
 
 st.title("Visualização de filmes")
 filme = st.selectbox(
