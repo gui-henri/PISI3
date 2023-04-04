@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_picker/services/tmdb_service_provider.dart';
 
 import '../../models/movie.dart';
+import '../movie_page.dart';
 
 class ExploreTab extends StatelessWidget {
   const ExploreTab({super.key});
@@ -27,16 +28,27 @@ class ExploreTab extends StatelessWidget {
                       mainAxisSpacing: 2),
                   itemCount: movieData.length,
                   itemBuilder: ((context, index) {
-                    return Card(
-                        child: Column(children: [
-                      // Adicione a imagem aqui
-                      Expanded(
-                        child: Image.network(
-                          "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ]));
+                    return GestureDetector(
+                        onTap: () async {
+                          final provider = TmdbServiceProvider();
+                          provider
+                              .fetchMovieById(
+                                  snapshot.data![index].id.toString())
+                              .then((value) {
+                            Navigator.pushNamed(context, MoviePage.routeName,
+                                arguments: value);
+                          });
+                        },
+                        child: Card(
+                            child: Column(children: [
+                          // Adicione a imagem aqui
+                          Expanded(
+                            child: Image.network(
+                              "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ])));
                   }));
             } else {
               return const CircularProgressIndicator();
