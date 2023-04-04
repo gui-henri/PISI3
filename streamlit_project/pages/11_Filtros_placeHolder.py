@@ -53,7 +53,7 @@ radio = st.radio('Escolha uma opção', tagFiltro)
 select = st.selectbox('Escolha uma opção', eval(radio))
 
 new_df = df[df[radio].apply(lambda x: select in x)]
-new_df.drop(columns=['Unnamed: 0'], inplace=True)
+#new_df.drop(columns=['Unnamed: 0'], inplace=True)
 
 # Criar grafos de gêneros, keywords, production_countries e companies, diretores e cast
 
