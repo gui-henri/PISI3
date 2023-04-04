@@ -27,7 +27,7 @@ class _MyButtonState extends State<MyButton> {
           ? const Icon(Icons.favorite)
           : const Icon(Icons.favorite_border),
       color: Colors.white,
-      iconSize: 30,
+      iconSize: 28,
       onPressed: () {
         setState(() {
           if (!isFavorite) {
@@ -75,7 +75,7 @@ class MoviePage extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: 387.4,
-                                height: 300,
+                                height: 290,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
