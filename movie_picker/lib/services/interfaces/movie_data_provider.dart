@@ -23,4 +23,8 @@ class MovieDataProvider {
   Future<List<Movie>> fetchMovieRecommendationsById(String id){
     return Future.value(<Movie> []);
   }
+
+  Future<String> fetchMovieDirector(String id){
+    return Future.value('');
+  }
 }

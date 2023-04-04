@@ -21,7 +21,7 @@ class MoviePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => CardProvider(),
+      create: (context) => CardProvider(context),
       child: MaterialApp(
         title: 'Flutter Demo',
         initialRoute: '/',

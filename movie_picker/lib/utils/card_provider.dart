@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_picker/models/movie.dart';
+import 'package:movie_picker/pages/movie_page.dart';
 import 'package:movie_picker/services/tmdb_service_provider.dart';
 import '../services/firestore_services_provider.dart';
 import 'dart:math';
@@ -13,6 +14,7 @@ class CardProvider extends ChangeNotifier {
   double _angle = 0;
   Offset _position = Offset.zero;
   Size _screenSize = Size.zero;
+  final BuildContext context;
 
   final yuri = TmdbServiceProvider();
   final db = FiresStoreServiceProvider();
@@ -22,7 +24,7 @@ class CardProvider extends ChangeNotifier {
   bool get isDragging => _isDragging;
   double get angle => _angle;
 
-  CardProvider() {
+  CardProvider(this.context) {
    fetchRecomendations(); //???
   }
 
@@ -51,8 +53,9 @@ class CardProvider extends ChangeNotifier {
 
     if (status != null) {
       Fluttertoast.cancel();
+      final statusType = status.toString().split('.').last.toUpperCase();
       Fluttertoast.showToast(
-        msg: status.toString().split('.').last.toUpperCase(),
+        msg: statusType,
         fontSize: 36,
       );
     }
@@ -108,11 +111,11 @@ class CardProvider extends ChangeNotifier {
     }
   }
 
-  void favorite() {
+  Future<void> favorite() async {
     _angle = 20;
     _position += Offset(2 * _screenSize.width, 0);
-    _nextCard();
-
+    final movie = await _nextCard();
+    db.adicionarFilme(movie);
     notifyListeners();
   }
 
@@ -127,39 +130,37 @@ class CardProvider extends ChangeNotifier {
   void description() {
     _angle = 0;
     _position -= Offset(0, _screenSize.height);
-    _nextCard();
+    final juao = _nextCard();
 
-    notifyListeners();
+    notifyListeners();     
+    Navigator.pushNamed(context, MoviePage.routeName, arguments: juao);
   }
 
-  Future _nextCard() async {
-    if (_movies.isEmpty) return;
+  Future<Movie> _nextCard() async {
+    if (_movies.isEmpty) return Movie(id: -1, title: 'untitled');
 
     // ignore: todo
     // TODO: Adicionar filme no banco de dados
     await Future.delayed(const Duration(milliseconds: 200));
-    _movies.removeLast();
+    final movie = _movies.removeLast();
     resetPosition();
+    return movie;
   }
 
   Future<void> fetchRecomendations() async {
-
-    // pega os favoritos do usuário
-      // se o usuário não tem favoritos, pega os mais populares
-    // pega um id aleatório entre os favoritos do usuáiro
-    // recomenda 15 filmes com base nesse filme
-    // quando estiver nos últimos 5 filmes, pega mais 15 de outro filme
 
     final favorites = await db.obterFilmes();
 
     if (favorites.isNotEmpty) {
       final randIndex = Random().nextInt(favorites.length);
-      _movies = await yuri.fetchMovieRecommendationsById(favorites[randIndex].id.toString());
+      final victor = await yuri.fetchMovieRecommendationsById(favorites[randIndex].id.toString());
+      _movies.addAll(victor);
     } else {
       final ciel = TmdbServiceProvider();
       final lulaFazueli = await ciel.fetchMostPopular();
       final randi = Random().nextInt(lulaFazueli.length);
-      _movies = await yuri.fetchMovieRecommendationsById(favorites[randi].id.toString());
+      final victor = await yuri.fetchMovieRecommendationsById(favorites[randi].id.toString());
+      _movies.addAll(victor);
     }
 
     notifyListeners();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_picker/components/tinder_card.dart';
+import 'package:movie_picker/services/tmdb_service_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/card_provider.dart';
@@ -18,21 +19,17 @@ class HomeTab extends StatelessWidget {
     final provider = Provider.of<CardProvider>(context);
     final movies = provider.movies;
 
-    return movies.isEmpty
-          ? Center(
-            child: ElevatedButton(
-              child: const Text('Restart'),
-            onPressed: () {
-              final provider = Provider.of<CardProvider>(context, listen: false);
-              provider.fetchRecomendations();
-            }
-            )
-          ) :
-    
-    Stack(
+    if (movies.length <= 5) {
+      final provider = Provider.of<CardProvider>(context, listen: false);
+      provider.fetchRecomendations();
+    }
+
+    return Stack(
       children: movies.map((movie) => TinderCard(
         urlImage: "https://image.tmdb.org/t/p/w500${movie.posterPath}",
-        isFront: movies.last == movie
+        isFront: movies.last == movie,
+        title: movie.title,
+        director: TmdbServiceProvider().fetchMovieDirector(movie.id.toString()),//diretor aqui
       )).toList(),
     );
   }
