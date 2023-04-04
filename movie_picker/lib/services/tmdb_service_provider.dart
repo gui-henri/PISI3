@@ -70,7 +70,14 @@ class TmdbServiceProvider implements MovieDataProvider{
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      return Movie.fromJsonToObjectList(json['results']);
+      final movies = Movie.fromJsonToObjectList(json['results']);
+      Iterator<Movie> iterador = movies.iterator;
+      while (iterador.moveNext()) {
+        if (iterador.current.posterPath == "") {
+          movies.remove(iterador.current);
+        }
+      }
+
     }
 
     return Future.error(Exception(
@@ -90,6 +97,7 @@ class TmdbServiceProvider implements MovieDataProvider{
           return pearson['name'];
         }
       }
+      return 'Unavailable';
     }
 
     return Future.error(Exception(

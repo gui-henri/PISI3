@@ -153,14 +153,24 @@ class CardProvider extends ChangeNotifier {
 
     if (favorites.isNotEmpty) {
       final randIndex = Random().nextInt(favorites.length);
+      debugPrint(favorites[randIndex].title);
       final victor = await yuri.fetchMovieRecommendationsById(favorites[randIndex].id.toString());
       _movies.addAll(victor);
+      _movies.toSet().toList();
+      if(_movies.length > 15) {
+        _movies.removeRange(0, _movies.length - 15);
+      }
     } else {
       final ciel = TmdbServiceProvider();
       final lulaFazueli = await ciel.fetchMostPopular();
       final randi = Random().nextInt(lulaFazueli.length);
-      final victor = await yuri.fetchMovieRecommendationsById(favorites[randi].id.toString());
+      debugPrint(lulaFazueli[randi].title);
+      final victor = await yuri.fetchMovieRecommendationsById(lulaFazueli[randi].id.toString());
       _movies.addAll(victor);
+      _movies.toSet().toList();
+      if(_movies.length > 15) {
+        _movies.removeRange(15, _movies.length);
+      }
     }
 
     notifyListeners();

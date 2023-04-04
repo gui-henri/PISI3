@@ -3,7 +3,7 @@ import streamlit as st
 import plotly.express as plt
 
 
-df = pd.read_csv(r'data\archive\tmdb_3000_movies_merged.csv')
+df = pd.read_csv('streamlit_project/data/archive/all/tmdb_3000_movies_merged_old.csv')
 
 st.title("Visão global")
 
