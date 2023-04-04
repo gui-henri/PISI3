@@ -21,7 +21,8 @@ class ExploreTab extends StatelessWidget {
           if(snapshot.connectionState == ConnectionState.done){
             final movieData = snapshot.data! as List<Movie>;
             return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3), 
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              itemCount: movieData.length,
               itemBuilder: ((context, index) {
                 return Card(
                   margin: const EdgeInsets.all(7),
@@ -39,7 +40,7 @@ class ExploreTab extends StatelessWidget {
       });
     }
 
-    return ListView(
+    return Column(
       children: [
         const Padding(
           padding: EdgeInsets.all(8),
@@ -51,7 +52,7 @@ class ExploreTab extends StatelessWidget {
               color: Colors.white),
             ),
         ),
-        cardBuilder()
+        Expanded(child: cardBuilder())
       ],
     );
   }
