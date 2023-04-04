@@ -31,7 +31,7 @@ class HomeTab extends StatelessWidget {
     
     Stack(
       children: movies.map((movie) => TinderCard(
-        urlImage: "https://image.tmdb.org/t/p/w500$movie.posterPath",
+        urlImage: "https://image.tmdb.org/t/p/w500${movie.posterPath}",
         isFront: movies.last == movie
       )).toList(),
     );
