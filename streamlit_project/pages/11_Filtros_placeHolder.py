@@ -7,12 +7,48 @@ import json
 from collections import Counter
 import networkx as nx 
 import streamlit.components.v1 as components
+import plotly.express as ply
 
 from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from matrix_generation.matriz_de_similaridade import generate_matrix
+
+def plotar_grafo(df, lista_matriz, layout):
+        
+    cut_value = 0.4
+    
+    G = nx.Graph()
+    for i, node in enumerate(df['title']):
+        G.add_node(i, name=f'{node}')
+    
+    for i, column in enumerate(lista_matriz):
+        for j, item in enumerate(column):
+            if item != None and item > cut_value and i != j:
+                G.add_edge(i, j, weight=item)
+
+    fig, ax = plt.subplots()
+
+    layouts = {
+        "Shell": nx.shell_layout(G),
+        "Random": nx.random_layout(G),
+        "Spiral": nx.spiral_layout(G),
+        "Spring": nx.spring_layout(G)
+    }
+    pos=layouts[layout]
+
+    film_names = df['title']
+    node_names = dict(zip(range(len(df['title'])), film_names))
+    nx.draw(G, pos=pos, labels=node_names, with_labels=True, edge_color= 'b', font_weight='bold', font_size=16)
+
+    labels = nx.get_edge_attributes(G,'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=8, label_pos=0.4, font_weight='bold', )
+    
+    html = mpld3.fig_to_html(fig)
+    components.html(html, height=500)
+
+
 
 filehandle = open(f'streamlit_project/data/filtros/genres.txt', 'r')
 genres = json.load(filehandle)
@@ -41,9 +77,6 @@ filehandle.close()
 
 df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
-tagCompleta = ['index', 'movie_id', 'title', 'genres', 'keywords', 'budget', 'revenue', 'popularity',
-         'vote_average', 'vote_count', 'runtime', 'release_date', 'original_language',
-         'production_countries', 'production_companies', 'director', 'cast']
 
 tagFiltro = ['genres', 'keywords', 'production_countries', 'production_companies', 'director', 'cast']
 
@@ -53,21 +86,67 @@ radio = st.radio('Escolha uma opção', tagFiltro)
 select = st.selectbox('Escolha uma opção', eval(radio))
 
 new_df = df[df[radio].apply(lambda x: select in x)]
-#new_df.drop(columns=['Unnamed: 0'], inplace=True)
+new_df.reset_index(drop=True)
+
 
 # Criar grafos de gêneros, keywords, production_countries e companies, diretores e cast
 
+pg = 0
+pk = 0
+pc = 0
+pco = 0
+pdc = 0
+pcast = 0
+
+
+radio = st.radio('Escolha uma opção', tagFiltro, key='1')
+st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
+pesos = {'index': 0, 'movie_id': 0, 'title': 0, 'genres': pg, 'keywords': pk, 'budget': 0, 'revenue': 0, 'popularity': 0,
+         'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': 0, 'original_language': 0,
+         'production_countries': pc, 'production_companies': pco, 'director':pdc, 'cast': pcast}
+
+pesos[radio] = 1
+possibilities = ["Shell", "Spiral", "Random", "Spring"]
+
 st.write(new_df)
 
-df_to_matrix = new_df[['genres']]
-pesos_matrix = {'genres': 1}
-lista_matriz = generate_matrix(df_to_matrix.values.tolist(), pesos_matrix, 1, "C")
+lista_matriz = generate_matrix(new_df.values.tolist(), pesos, 1, "A")
+
+
+matrix_to_show = pd.DataFrame(lista_matriz, columns=(x := new_df['title']), index=x)
+
+
+
+cl1, cl2 = st.columns(2)
+
+with cl1:
+    call = st.button('Gerar grafo')
+    layout = st.selectbox("Selecionar formato do grafo", possibilities, index=3)
+with cl2:
+    call_heat = st.button('Gerar heatmap')
+
+
+
+if call_heat:
+    heatMap = ply.imshow(matrix_to_show, aspect='auto')
+    heatMap.update_layout(title='Matriz de similaridade', height= 800)
+    st.plotly_chart(heatMap, use_container_width=True)
+
+
+
+
+if call:
+        components.html(plotar_grafo(new_df, lista_matriz, layout), height=500)
+
+
 
 def createdf(data, tag):
     tmp = []
     lista = data[tag].values.tolist()
 
     for i in lista:
+
         tmp = tmp + i
 
     tmp = Counter(tmp)

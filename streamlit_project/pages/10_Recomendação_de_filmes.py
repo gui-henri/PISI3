@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from ast import literal_eval
 import json 
+import networkx as nx
+import matplotlib.pyplot as plt
 
 from pathlib import Path
 import sys
@@ -15,7 +17,6 @@ st.write('É isso mesmo que você leu, essa é a página de recomendação de re
 df = pd.read_csv('streamlit_project/data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 radio = st.radio('Escolha uma opção', ['Recomendação a partir de filmes', 'Recomendação customizada'])
-
 
 def custom():
 
@@ -92,10 +93,16 @@ def custom():
                  'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': p_date, 'original_language': 0,
                  'production_countries': p_production_countries, 'production_companies': p_production_companies, 'director': p_director, 'cast': p_cast}
 
+    plota = st.button('Plotar gráfico')
+        
     call = st.button('Gerar recomendação')
-
+    
     if call:
         st.write(generate_sim(df, pesos, sum(pesos.values()), 'C', custom))
+        
+        
+        if plota:
+            plotar_grafico(df)
        
 def mk_set(df, tag):
     lista = []

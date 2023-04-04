@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import ast
 
-df = pd.read_csv('data/archive/all/tmdb_5000_movies.csv')
+df = pd.read_csv('streamlit_project/data/archive/all/tmdb_5000_movies.csv')
 
 st.title("Pré-Processamento")
 
