@@ -15,4 +15,8 @@ class MovieDataProvider {
   Future<String> fetchMovieProviders(int id, {String country = 'BR'}) {
     return Future.value('');
   }
+
+  Future<List<Movie>> fetchMostPopular() {
+    return Future.value(<Movie>[]);
+  }
 }
