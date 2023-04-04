@@ -29,7 +29,7 @@ class HomeTab extends StatelessWidget {
         urlImage: "https://image.tmdb.org/t/p/w500${movie.posterPath}",
         isFront: movies.last == movie,
         title: movie.title,
-        director: TmdbServiceProvider().fetchMovieDirector(movie.id.toString()),//diretor aqui
+        /*director: Future.value('unavailable'),*///diretor aqui
       )).toList(),
     );
   }

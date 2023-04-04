@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 class TinderCard extends StatefulWidget {
   final String urlImage;
   final String title;
-  final Future<String> director;
+  /*final Future<String> director;*/
   final bool isFront;
 
-  const TinderCard({Key? key, required this.urlImage, required this.isFront, required this.title, required this.director})
+  const TinderCard({Key? key, required this.urlImage, required this.isFront, required this.title, /*required this.director*/})
       : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class _TinderCardState extends State<TinderCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-      child: widget.isFront ? buildFrontCard() : buildCard(widget.director),
+      child: widget.isFront ? buildFrontCard() : buildCard(/*widget.director*/),
     );
   }
 
@@ -68,14 +68,14 @@ class _TinderCardState extends State<TinderCard> {
                 duration: Duration(milliseconds: milliseconds),
                 transform: rotatedMatrix..translate(position.dx, position.dy),
                 child: Stack(children: [
-                  buildCard(widget.director),
+                  buildCard(/*widget.director*/),
                   buildStamps(),
                 ]));
           },
         ),
       );
 
-  Widget buildCard(Future<String> director) => ClipRRect(
+  Widget buildCard(/*Future<String> director*/) => ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Container(
           decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class _TinderCardState extends State<TinderCard> {
                       const Spacer(),
                       buildName(),
                       const SizedBox(height: 8),
-                      buildDirector(director),
+                      buildDirector(/*director*/),
                     ],
                   ))),
         ),
@@ -124,8 +124,28 @@ class _TinderCardState extends State<TinderCard> {
         ],
       );
 
-  Widget buildDirector(Future<String> director) => 
-    FutureBuilder(
+  Widget buildDirector(/*Future<String> director*/) => 
+    Row(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              width: 12,
+              height: 12,
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              'unavailable',
+              style: TextStyle(
+                fontSize: 20,
+                decoration: TextDecoration.none,
+                color: Colors.white,
+                ),
+              ),
+            ],);
+    /*FutureBuilder(
       future: director,
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done) {
@@ -140,9 +160,9 @@ class _TinderCardState extends State<TinderCard> {
               height: 12,
             ),
             const SizedBox(width: 8),
-            Text(
-              snapshot.data!,
-              style:const TextStyle(
+            const Text(
+              'unavailable',
+              style: TextStyle(
                 fontSize: 20,
                 decoration: TextDecoration.none,
                 color: Colors.white,
@@ -154,7 +174,7 @@ class _TinderCardState extends State<TinderCard> {
           return const Text('Obtendo diretor...');
         }
       }
-    );
+    );*/
       
 
   Widget buildStamps() {
