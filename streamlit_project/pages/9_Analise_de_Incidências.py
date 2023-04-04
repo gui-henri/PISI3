@@ -1,6 +1,7 @@
 import plotly.express as plt
 import json
 import streamlit as st
+from statistics import median
 
 st.title("Incidência de similaridade")
 st.markdown("Para auxiliar na definição dos pesos de cada atributo, utilizamos essa seção para observar a incidência dos gráus de similaridade para cada atributo. A similaridade é calculada com base na distância entre os valores dos atributos do par de filmes comparados. A distância é normalizada para que fique entre 0 e 1 sendo limitada a duas casas decimais.")
@@ -18,6 +19,8 @@ def loadFile(file):
 def plotDist(data, nome):
     st.header(nome)
     log = st.checkbox("Incidência em log", key=nome)
+    st.write(f'Média: {sum([i[0] for i in data])/len(data):.2f}')
+    st.write(f'Mediana: {median([i[0] for i in data]):.2f}')
     g = plt.line(data, x=[i[0] for i in data], y = [i[1] for i in data], log_y= log)
     g.update_layout(xaxis_title="Similaridade", yaxis_title="Incidência")
     st.plotly_chart(g)
