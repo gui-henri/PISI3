@@ -63,48 +63,57 @@ class _FavoritesTabState extends State<FavoritesTab> {
                                   children: [
                                     Stack(
                                       children: [
-                                        snapshot.data != null
-                                            ? GestureDetector(
-                                                onTap: () async {
-                                                  final provider =
-                                                      TmdbServiceProvider();
-                                                  provider
-                                                      .fetchMovieById(snapshot
-                                                          .data![index].id
-                                                          .toString())
-                                                      .then((value) {
-                                                    Navigator.pushNamed(context,
-                                                        MoviePage.routeName,
-                                                        arguments: value);
-                                                  });
-                                                },
-                                                child: Image.network(
+                                        GestureDetector(
+                                          onTap: () async {
+                                            final provider =
+                                                TmdbServiceProvider();
+                                            provider
+                                                .fetchMovieById(snapshot
+                                                    .data![index].id
+                                                    .toString())
+                                                .then((value) {
+                                              Navigator.pushNamed(
+                                                  context, MoviePage.routeName,
+                                                  arguments: value);
+                                            });
+                                          },
+                                          child: snapshot.data != null
+                                              ? Image.network(
                                                   "https://image.tmdb.org/t/p/w500${snapshot.data![index].posterPath}",
                                                   fit: BoxFit.fill,
+                                                  errorBuilder: (BuildContext
+                                                          context,
+                                                      Object exception,
+                                                      StackTrace? stackTrace) {
+                                                    return Image.network(
+                                                      "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg", // caminho para a imagem padrão
+                                                      fit: BoxFit.fill,
+                                                    );
+                                                  },
+                                                )
+                                              : Image.network(
+                                                  "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg", // caminho para a imagem padrão
+                                                  fit: BoxFit.fill,
                                                 ),
-                                              )
-                                            : Image.network(
-                                                "https://ih1.redbubble.net/image.1304795334.8057/fposter,small,wall_texture,product,750x1000.jpg",
-                                                fit: BoxFit.fill,
-                                              ),
+                                        ),
                                         Positioned(
-                                            bottom: 5,
-                                            right: 5,
-                                            child: IconButton(
-                                              onPressed: () async {
-                                                await db.removerFilme(
-                                                    snapshot.data![index]);
-                                                setState(() {});
-                                              },
-                                              icon: const Icon(Icons.favorite,
-                                                  color: Color.fromARGB(
-                                                      255, 201, 43, 32)),
-                                              padding: EdgeInsets.zero,
-                                              constraints:
-                                                  const BoxConstraints(),
-                                              splashRadius: 15,
-                                              iconSize: 22,
-                                            ))
+                                          bottom: 5,
+                                          right: 5,
+                                          child: IconButton(
+                                            onPressed: () async {
+                                              await db.removerFilme(
+                                                  snapshot.data![index]);
+                                              setState(() {});
+                                            },
+                                            icon: const Icon(Icons.favorite,
+                                                color: Color.fromARGB(
+                                                    255, 201, 43, 32)),
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                            splashRadius: 15,
+                                            iconSize: 22,
+                                          ),
+                                        ),
                                       ],
                                     )
                                   ],
