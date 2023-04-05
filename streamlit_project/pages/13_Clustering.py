@@ -72,7 +72,6 @@ emb_df_PCA.reset_index(inplace=True, level=1)
 emb_df_PCA.rename(columns={'level_1': 'Title'}, inplace=True)
 
 fig = ply.scatter(emb_df_PCA, x='x', y='y', color=clustering.labels_.astype(str), hover_name='Title', title="Representação em 2 dimensões", color_discrete_sequence=ply.colors.qualitative.Dark24)
-fig.update_layout(height= 1500)
 fig.update_xaxes(showgrid=False, zeroline=False, showticklabels=False,)
 fig.update_yaxes(showgrid=False, zeroline=False, showticklabels=False,)
         
