@@ -12,7 +12,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from matrix_generation.matriz_de_similaridade import generate_sim
 
 
-st.write('É isso mesmo que você leu, essa é a página de recomendação de recomendação, até que alguém mude o nome.')
+st.write('Recomendação de filmes baseadas na comparação do alvo ou critérios personalisados.')
 
 df = pd.read_csv('streamlit_project/data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
