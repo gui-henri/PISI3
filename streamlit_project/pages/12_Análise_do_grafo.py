@@ -20,6 +20,7 @@ st.write(f'Número de vértices: {G.number_of_nodes()}')
 st.write(f'Número de arestas: {G.number_of_edges()}')
 centrality = nx.degree_centrality(G)
 list = list(centrality.values())
+st.write(f'Grau médio dos vértices: {round(G.number_of_edges()/G.number_of_nodes())}')
 st.write(f'Centralidade de grau média: {np.mean(list)}')
 st.write(f'Maiores centralidades de grau: ')
 

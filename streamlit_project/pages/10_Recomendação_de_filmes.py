@@ -93,16 +93,12 @@ def custom():
                  'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': p_date, 'original_language': 0,
                  'production_countries': p_production_countries, 'production_companies': p_production_companies, 'director': p_director, 'cast': p_cast}
 
-    plota = st.button('Plotar gráfico')
+    
         
     call = st.button('Gerar recomendação')
     
     if call:
         st.write(generate_sim(df, pesos, sum(pesos.values()), 'C', custom))
-        
-        
-        if plota:
-            plotar_grafico(df)
        
 def mk_set(df, tag):
     lista = []
