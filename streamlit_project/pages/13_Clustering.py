@@ -15,7 +15,7 @@ def get_graph() -> Graph:
     G = nx.read_gpickle(f'grafo.pickle')
     return G
 
-df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+df = pd.read_csv(f'data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 G = get_graph()
 nodes_and_index = G.nodes.data('name')
 
