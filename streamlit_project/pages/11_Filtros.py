@@ -50,32 +50,32 @@ def plotar_grafo(df, lista_matriz, layout):
 
 
 
-filehandle = open(f'data/filtros/genres.txt', 'r')
+filehandle = open(f'streamlit_project/data/filtros/genres.txt', 'r')
 genres = json.load(filehandle)
 filehandle.close()
 
-filehandle = open(f'data/filtros/keywords.txt', 'r')
+filehandle = open(f'streamlit_project/data/filtros/keywords.txt', 'r')
 keywords = json.load(filehandle)
 filehandle.close()
 
-filehandle = open(f'data/filtros/production_countries.txt', 'r')
+filehandle = open(f'streamlit_project/data/filtros/production_countries.txt', 'r')
 production_countries = json.load(filehandle)
 filehandle.close()
 
-filehandle = open(f'data/filtros/production_companies.txt', 'r')
+filehandle = open(f'streamlit_project/data/filtros/production_companies.txt', 'r')
 production_companies = json.load(filehandle)
 filehandle.close()
 
-filehandle = open(f'data/filtros/director.txt', 'r')
+filehandle = open(f'streamlit_project/data/filtros/director.txt', 'r')
 director = json.load(filehandle)
 filehandle.close()
 
-filehandle = open(f'data/filtros/cast.txt', 'r')
+filehandle = open(f'streamlit_project/data/filtros/cast.txt', 'r')
 cast = json.load(filehandle)
 filehandle.close()
 
 
-df = pd.read_csv(f'data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_discreto.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 
 tagFiltro = ['genres', 'keywords', 'production_countries', 'production_companies', 'director', 'cast']

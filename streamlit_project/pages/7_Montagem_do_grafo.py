@@ -44,7 +44,7 @@ st.markdown(
 
     """
 )
-t = pd.read_csv('data/archive/tmdb_3000_binario.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+t = pd.read_csv('streamlit_project/data/archive/tmdb_3000_binario.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 
 c = ["binario", "trinario", "discreto"]
@@ -69,7 +69,7 @@ else:
     fun = "C"
 
 
-df = pd.read_csv(f'data/archive/tmdb_3000_{select_data}.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+df = pd.read_csv(f'streamlit_project/data/archive/tmdb_3000_{select_data}.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 
 selected_movies = st.multiselect("Selecione filmes para comparar: ", t['title'])
 movies = df[t['title'].isin(selected_movies)].values.tolist()

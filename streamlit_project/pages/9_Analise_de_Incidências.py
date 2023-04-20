@@ -40,7 +40,7 @@ def plotDist(data, nome):
 
 tag = 'genres_dist'
 
-filehandle = open(f'data/distData/{tag}.txt', 'r')
+filehandle = open(f'streamlit_project/data/distData/{tag}.txt', 'r')
 data = json.load(filehandle)
 filehandle.close()
 
@@ -54,7 +54,7 @@ st.plotly_chart(g)
 
 tag = 'new_keywords'
 
-filehandle = open(f'data/distData/{tag}.txt', 'r')
+filehandle = open(f'streamlit_project/data/distData/{tag}.txt', 'r')
 data = json.load(filehandle)
 filehandle.close()
 
