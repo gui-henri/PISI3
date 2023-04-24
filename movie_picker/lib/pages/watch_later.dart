@@ -121,7 +121,7 @@ class _WatchLaterTabState extends State<WatchLaterTab> {
                                           right: 5,
                                           child: IconButton(
                                             onPressed: () async {
-                                              await db.removerFilme(
+                                              await db.removerFilmeWatchLater(
                                                   snapshot.data![index]);
                                               setState(() {});
                                             },

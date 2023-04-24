@@ -14,6 +14,7 @@ class MyButton extends StatefulWidget {
 
 class _MyButtonState extends State<MyButton> {
   bool isFavorite = false;
+  bool isWatchLater = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +23,43 @@ class _MyButtonState extends State<MyButton> {
     final db = FiresStoreServiceProvider();
 
 //Falta deixar o ícone preenchido ao atualizar a pag caso o filme esteja favoritado
-    return IconButton(
-      icon: isFavorite
-          ? const Icon(Icons.favorite)
-          : const Icon(Icons.favorite_border),
-      color: Colors.white,
-      iconSize: 28,
-      onPressed: () {
-        setState(() {
-          if (!isFavorite) {
-            db.adicionarFilme(movie);
-          } else {
-            db.removerFilme(movie);
-          }
-          isFavorite = !isFavorite;
-        });
-      },
+    return Row(
+      children: [
+        IconButton(
+          icon: isWatchLater
+              ? const Icon(Icons.watch_later)
+              : const Icon(Icons.watch_later_outlined),
+          color: Colors.white,
+          iconSize: 28,
+          onPressed: () {
+            setState(() {
+              if (!isWatchLater) {
+                db.adicionarFilmeWatchLater(movie);
+              } else {
+                db.removerFilmeWatchLater(movie);
+              }
+              isWatchLater = !isWatchLater;
+            });
+          },
+        ),
+        IconButton(
+          icon: isFavorite
+              ? const Icon(Icons.favorite)
+              : const Icon(Icons.favorite_border),
+          color: Colors.white,
+          iconSize: 28,
+          onPressed: () {
+            setState(() {
+              if (!isFavorite) {
+                db.adicionarFilme(movie);
+              } else {
+                db.removerFilme(movie);
+              }
+              isFavorite = !isFavorite;
+            });
+          },
+        ),
+      ],
     );
   }
 }
