@@ -27,7 +27,7 @@ class FiresStoreServiceProvider implements DbProvider {
           .set(daoMovie);
     }
   }
-
+  @override
   Future<void> adicionarFilmeWatchLater(Movie movie) async {
     final daoMovie = <String, String>{
       "img_url": movie.posterPath,
@@ -74,7 +74,7 @@ class FiresStoreServiceProvider implements DbProvider {
       })).toList();
     return movies;
   }
-
+  @override
   Future<List<Movie>> obterFilmesWatchLater() async {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -116,7 +116,7 @@ class FiresStoreServiceProvider implements DbProvider {
           .delete();
     }
   }
-
+  @override
   Future<void> removerFilmeWatchLater(Movie movie) async {
     final user = FirebaseAuth.instance.currentUser;
 
