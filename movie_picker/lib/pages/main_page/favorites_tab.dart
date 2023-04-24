@@ -21,6 +21,10 @@ class _FavoritesTabState extends State<FavoritesTab> {
 
     final Future<List<Movie>> userMovies = db.obterFilmes();
 
+    return showFaves(userMovies, db);
+  }
+
+  Widget showFaves(Future<List<Movie>> userMovies, FiresStoreServiceProvider db){
     return FutureBuilder(
         future: userMovies,
         builder: (context, snapshot) {
@@ -40,6 +44,13 @@ class _FavoritesTabState extends State<FavoritesTab> {
               );
             } else {
               return Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  backgroundColor: Colors.orange,
+                  child: const Icon(Icons.watch_later),
+                  onPressed: (){
+                    ////////////////////////////////
+                  },
+                ),
                   body: Ink(
                       decoration: mpDefaultBackgroundDecoration(),
                       child: GridView.builder(
