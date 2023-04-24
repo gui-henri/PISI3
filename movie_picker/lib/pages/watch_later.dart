@@ -126,7 +126,7 @@ class _WatchLaterTabState extends State<WatchLaterTab> {
                                               setState(() {});
                                             },
                                             icon: const Icon(Icons.watch_later,
-                                                color: Color.fromARGB(255, 26, 146, 216)),
+                                                color: Color.fromARGB(255, 216, 165, 26)),
                                             padding: EdgeInsets.zero,
                                             constraints: const BoxConstraints(),
                                             splashRadius: 15,
