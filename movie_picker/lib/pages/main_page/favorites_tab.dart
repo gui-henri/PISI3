@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_picker/models/movie.dart';
+import 'package:movie_picker/pages/watch_later.dart';
 import 'package:movie_picker/services/firestore_services_provider.dart';
 import 'package:movie_picker/services/tmdb_service_provider.dart';
 import 'package:movie_picker/styles/default_background_decoration.dart';
@@ -48,7 +49,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                   backgroundColor: Colors.orange,
                   child: const Icon(Icons.watch_later),
                   onPressed: (){
-                    ////////////////////////////////
+                    Navigator.pushNamed(context, WatchLaterTab.routeName);
                   },
                 ),
                   body: Ink(

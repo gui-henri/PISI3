@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WatchLaterTab extends StatefulWidget {
+  static const routeName = '/watch_later';
   const WatchLaterTab({super.key});
 
   @override
@@ -12,9 +13,27 @@ class _WatchLaterTabState extends State<WatchLaterTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Assistir mais tarde'),
+        leading: const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              child: Icon(Icons.movie, size: 40),
+            ),
+            leadingWidth: 52,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                child: IconButton(
+                  icon: const Icon(Icons.cancel, size: 40),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+        title: const Text('Assistir mais tarde'),
       ),
-      body: Center(
+      body: const Center(
       ),
     );;
   }
