@@ -25,10 +25,11 @@ st.write(f'Centralidade de grau média: {np.mean(list)}')
 st.write(f'Maiores centralidades de grau: ')
 
 centrality_ordenada = sorted(centrality.items(), key=lambda x: x[1], reverse=True)
-st.write(centrality_ordenada[:20])
+# pick the values in centrality_ordenada and use them to make a df
+names = [G.nodes[centrality_ordenada[i][0]]['name'] for i, node in enumerate(centrality_ordenada[:20])]
+names_df = pd.DataFrame(names, columns=['title'])
 
-for i, node in enumerate(centrality_ordenada[:20]):
-    st.write(G.nodes[centrality_ordenada[i][0]]['name'])
+st.write(names_df)
 
 name = G.nodes[centrality_ordenada[0][0]]['name']
 st.write(f'Filme com maior centralidade de grau: {name}')

@@ -4,6 +4,8 @@ from ast import literal_eval
 import json 
 import networkx as nx
 import matplotlib.pyplot as plt
+from gensim.models import Word2Vec
+
 
 from pathlib import Path
 import sys
@@ -115,30 +117,71 @@ def media(df, tag):
     
     
 def filmeBased():
-    sel_filmes = st.multiselect('Escolha um filme', df['title'], max_selections=3)
+    radio = st.radio('Escolha um método de recomendação', ['Baseado em similaridade', 'Baseado em cluster'])
+    sel_filmes = []
+    if radio == 'Baseado em similaridade':
+        sel_filmes = st.multiselect('Escolha um filme', df['title'], max_selections=3)
+    else:
+        sel_filmes = st.multiselect('Escolha um filme', df['title'], max_selections=1)
     
-    sel_df = df[df['title'].isin(sel_filmes)]   
-    
-    m_genres = mk_set(sel_df, 'genres')
-    m_keywords = mk_set(sel_df, 'keywords')
-    m_contries = mk_set(sel_df, 'production_countries')
-    m_companies = mk_set(sel_df, 'production_companies')
-    m_director = mk_set(sel_df, 'director')
-    m_cast = mk_set(sel_df, 'cast')
+    if radio == 'Baseado em similaridade':
+        sel_df = df[df['title'].isin(sel_filmes)]   
+        st.write(sel_df)
+        m_genres = mk_set(sel_df, 'genres')
+        m_keywords = mk_set(sel_df, 'keywords')
+        m_contries = mk_set(sel_df, 'production_countries')
+        m_companies = mk_set(sel_df, 'production_companies')
+        m_director = mk_set(sel_df, 'director')
+        m_cast = mk_set(sel_df, 'cast')
+            
         
-    
-    pesos = {'index': 0, 'movie_id': 0, 'title': 0, 'genres': 1, 'keywords': 1, 'budget': 0, 'revenue': 0, 'popularity': 0,
-                 'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': 1, 'original_language': 0,
-                 'production_countries': 1, 'production_companies': 1, 'director': 1, 'cast': 1}
-    
-    s_df = df[~df['title'].isin(sel_filmes)]
-    
-    call = st.button('Gerar recomendação')
+        pesos = {'index': 0, 'movie_id': 0, 'title': 0, 'genres': 1, 'keywords': 1, 'budget': 0, 'revenue': 0, 'popularity': 0,
+                    'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': 1, 'original_language': 0,
+                    'production_countries': 1, 'production_companies': 1, 'director': 1, 'cast': 1}
+        
+        s_df = df[~df['title'].isin(sel_filmes)]
+        st.write(s_df)
+        call = st.button('Gerar recomendação')
 
-    if call:
-        m_date = media(sel_df, 'release_date')
-        frank = [0, 0, 0, m_genres, m_keywords, 0, 0, 0, 0, 0, 0, m_date, 0, m_contries, m_companies, m_director, m_cast]
-        st.write(generate_sim(s_df, pesos, sum(pesos.values()), 'C', frank))
+        if call:
+            m_date = media(sel_df, 'release_date')
+            frank = [0, 0, 0, m_genres, m_keywords, 0, 0, 0, 0, 0, 0, m_date, 0, m_contries, m_companies, m_director, m_cast]
+            st.write(generate_sim(s_df, pesos, sum(pesos.values()), 'C', frank))
+    else:
+
+        df_cluster = pd.read_csv('streamlit_project/data/archive/clustered_movies.csv')
+        df_cluster = pd.merge(df, df_cluster, how='inner', left_on='title', right_on='Unnamed: 1')
+        df_cluster = df_cluster.drop(['index', 'Unnamed: 0', 'Unnamed: 1'], axis=1)
+        df_cluster = df_cluster.rename(columns={'0': 'cluster_id'})
+
+        # get the cluster id of the selected movies
+        sel_df = df_cluster[df_cluster['title'].isin(sel_filmes)]
+        cluster_id = sel_df['cluster_id'].tolist()
+
+        # get the movies of the same cluster
+        s_df = df_cluster[df_cluster['cluster_id'].isin(cluster_id)]
+        s_df = s_df[~s_df['title'].isin(sel_filmes)]
+        s_df = s_df.drop(['cluster_id'], axis=1)
+
+        m_genres = mk_set(sel_df, 'genres')
+        m_keywords = mk_set(sel_df, 'keywords')
+        m_contries = mk_set(sel_df, 'production_countries')
+        m_companies = mk_set(sel_df, 'production_companies')
+        m_director = mk_set(sel_df, 'director')
+        m_cast = mk_set(sel_df, 'cast')
+            
+        
+        pesos = {'movie_id': 0, 'title': 0, 'genres': 1, 'keywords': 1, 'budget': 0, 'revenue': 0, 'popularity': 0,
+                    'vote_average': 0, 'vote_count': 0, 'runtime': 0, 'release_date': 1, 'original_language': 0,
+                    'production_countries': 1, 'production_companies': 1, 'director': 1, 'cast': 1}
+        
+        call = st.button('Gerar recomendação')
+
+        if call:
+            m_date = media(sel_df, 'release_date')
+            frank = [0, 0, m_genres, m_keywords, 0, 0, 0, 0, 0, 0, m_date, 0, m_contries, m_companies, m_director, m_cast]
+            st.write(generate_sim(s_df, pesos, sum(pesos.values()), 'C', frank))
+
 
 
 if radio == 'Recomendação a partir de filmes':
