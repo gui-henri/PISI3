@@ -67,7 +67,7 @@ st.markdown(
     """
 )
 
-dfc = pd.read_csv('data/archive/tmdb_5000_credits.csv')
+dfc = pd.read_csv('streamlit_project/data/archive/all/tmdb_5000_credits.csv')
 
 df["cast"] = dfc["cast"]
 df["crew"] = dfc["crew"]

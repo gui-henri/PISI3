@@ -8,4 +8,11 @@ class DbProvider {
   Future<List<Movie>> obterFilmes() async {
     return Future.value(<Movie>[]);
   }
+  Future<void> adicionarFilmeWatchLater(Movie movie) async {}
+  Future<List<Movie>> obterFilmesWatchLater() async {
+    return Future.value(<Movie>[]);
+  }
+  Future<void> removerFilmeWatchLater(Movie movie) async {}
+
+
 }
