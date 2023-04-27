@@ -29,3 +29,14 @@ tags = ['genres', 'keywords', 'budget', 'revenue', 'popularity',
              'vote_average', 'vote_count', 'runtime', 'release_date', 'original_language',
              'production_countries', 'production_companies', 'director', 'cast']
 
+for tag in tags:
+    print(tag, end='\r')
+    data = distComp(movies, tag, 'A')
+    tmp = Counter(data)
+    
+    s = sorted(tmp.items())
+    
+    with open(f'data/distData/{tag}.txt', 'w+') as filehandle:
+        json.dump(s, filehandle)
+    filehandle.close()
+
