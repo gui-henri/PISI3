@@ -3,7 +3,7 @@ from ast import literal_eval
 from collections import Counter
 import json
 
-df = pd.read_csv(r'/data/archive/5k_movies_bin.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
+df = pd.read_csv('streamlit_project/data/archive/5k_movies_bin.csv', converters={'genres': literal_eval, 'keywords': literal_eval, 'production_companies': literal_eval, 'production_countries': literal_eval, 'cast': literal_eval, 'director': literal_eval})
 movies = df.values.tolist()
 
 def distComp(filmes, tag , fun):
@@ -36,7 +36,7 @@ for tag in tags:
     
     s = sorted(tmp.items())
     
-    with open(f'data/distData/{tag}.txt', 'w+') as filehandle:
+    with open(f'streamlit_project/data/distData/{tag}.txt', 'w+') as filehandle:
         json.dump(s, filehandle)
     filehandle.close()
 
