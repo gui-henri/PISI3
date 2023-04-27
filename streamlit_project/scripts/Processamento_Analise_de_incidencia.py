@@ -23,3 +23,9 @@ def distComp(filmes, tag , fun):
             lista.append(round(f(filmeA[ind], filmeB[ind], fun), 2))
     
     return lista
+
+
+tags = ['genres', 'keywords', 'budget', 'revenue', 'popularity',
+             'vote_average', 'vote_count', 'runtime', 'release_date', 'original_language',
+             'production_countries', 'production_companies', 'director', 'cast']
+
