@@ -74,5 +74,5 @@ radiodic = {'contínuo': 'cont', 'binário': 'bin'}
 
 
 for tag in lista:
-    data = loadFile(f'data/distData/{radiodic[radio]}/{tag}.txt')
+    data = loadFile(f'streamlit_project/data/distData/{radiodic[radio]}/{tag}.txt')
     plotDist(data, tag)
